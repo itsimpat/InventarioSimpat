@@ -22,7 +22,8 @@
       "Bash(gh --version 2>&1)",
       "Bash(gh auth:*)",
       "Bash(cd C:/Proyectos/InventarioSimpat && gh repo create InventarioSimpat --private --source=. --remote=origin --push 2>&1)",
-      "Bash(cd C:/Proyectos/InventarioSimpat && rm -rf .agent .agents .augment .kilocode .qoder .qwen .roo .trae .windsurf skills-lock.json)"
+      "Bash(cd C:/Proyectos/InventarioSimpat && rm -rf .agent .agents .augment .kilocode .qoder .qwen .roo .trae .windsurf skills-lock.json)",
+      "Bash(insforge metadata:*)"
     ]
   }
 }

@@ -107,12 +107,12 @@
 
 ### PRIORIDAD 2 — Autenticación
 
-- [ ] **2.1** Configurar InsForge Auth en el frontend
-- [ ] **2.2** Pantalla de Login (email + password)
-- [ ] **2.3** Proteger rutas: redirigir a login si no autenticado
-- [ ] **2.4** Guardar sesión y manejar token/refresh
-- [ ] **2.5** Pantalla de logout
-- [ ] **2.6** Manejo de roles: campo `role` en el usuario (admin | viewer — solo admins usan la app por ahora pero la arquitectura lo soporta)
+- [x] **2.1** Configurar InsForge Auth en el frontend
+- [x] **2.2** Pantalla de Login (email + password)
+- [x] **2.3** Proteger rutas: redirigir a login si no autenticado
+- [x] **2.4** Guardar sesión y manejar token/refresh
+- [x] **2.5** Pantalla de logout
+- [x] **2.6** Manejo de roles: campo `role` en el usuario (admin | viewer — solo admins usan la app por ahora pero la arquitectura lo soporta)
 
 ---
 

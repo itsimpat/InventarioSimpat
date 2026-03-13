@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm list:*)",
+      "Bash(npm search:*)",
+      "Bash(npm install:*)",
+      "Bash(insforge --version 2>&1)",
+      "Bash(insforge login:*)",
+      "Bash(insforge project:*)",
+      "Bash(insforge create:*)",
+      "Bash(insforge list:*)",
+      "Bash(cd C:/Proyectos/InventarioSimpat && insforge link --project-id \"4f87db87-15c5-44dd-b7cc-4acefeba1a8e\" --json 2>&1)",
+      "Bash(cd C:/Proyectos/InventarioSimpat && npm create vite@latest . -- --template react-ts --yes 2>&1)",
+      "Bash(cd C:/Proyectos/InventarioSimpat && echo y | npm create vite@latest . -- --template react-ts 2>&1)",
+      "Bash(cd C:/Proyectos/InventarioSimpat && npx create-vite@latest . --template react-ts --force 2>&1)",
+      "Bash(npx create-vite@latest /tmp/vite-temp --template react-ts 2>&1 && echo \"OK\")",
+      "Bash(cp -r \"C:/Proyectos/InventarioSimpat/C/Users/inggu/AppData/Local/Temp/vite-temp/.\" \"C:/Proyectos/InventarioSimpat/\" && rm -rf \"C:/Proyectos/InventarioSimpat/C\" && ls C:/Proyectos/InventarioSimpat/)",
+      "Bash(cd C:/Proyectos/InventarioSimpat && insforge metadata --json 2>&1)",
+      "Bash(cd C:/Proyectos/InventarioSimpat && insforge current --json 2>&1)",
+      "Bash(insforge docs:*)",
+      "Bash(cd C:/Proyectos/InventarioSimpat && npx tsc --noEmit 2>&1)",
+      "Bash(gh --version 2>&1)",
+      "Bash(gh auth:*)"
+    ]
+  }
+}

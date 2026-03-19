@@ -1,0 +1,287 @@
+import { useEffect, useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+import { Layout } from '../../components/Layout'
+import { FormField } from '../../components/shared/FormField'
+import { CurrencyInput } from '../../components/shared/CurrencyInput'
+import { IYBudgetCard } from '../../components/shared/IYBudgetCard'
+import { useToast } from '../../components/shared/Toast'
+import { useLicense, useCreateLicense, useUpdateLicense } from '../../hooks/useLicenses'
+import { useCollaborators } from '../../hooks/useCollaborators'
+import { useIYBudgetSummary } from '../../hooks/useIYBudgetSummary'
+import { convertMXNtoUSD } from '../../utils/currency'
+import { fetchExchangeRate } from '../../utils/banxico'
+
+const licenseSchema = z.object({
+  nombre_producto: z.string().min(1, 'El nombre del producto es requerido'),
+  tipo: z.enum(['Mensual', 'Anual'], { error: 'Selecciona un tipo' }),
+  categoria: z.enum(['IY', 'General'], { error: 'Selecciona una categoría' }),
+  costo_mxn: z.number({ error: 'El costo es requerido' }).min(0.01, 'El costo debe ser mayor a 0'),
+  fecha_renovacion: z.string().min(1, 'La fecha de renovación es requerida'),
+  colaborador_id: z.string().min(1, 'El colaborador es requerido'),
+  activa: z.boolean(),
+})
+
+type FormValues = z.infer<typeof licenseSchema>
+
+
+export function LicenseFormPage() {
+  const navigate = useNavigate()
+  const { id } = useParams<{ id: string }>()
+  const isEdit = !!id
+  const { toast } = useToast()
+
+  const { data: existing, isLoading: isLoadingExisting } = useLicense(id ?? '')
+  const createMutation = useCreateLicense()
+  const updateMutation = useUpdateLicense()
+  const { data: collaborators = [] } = useCollaborators({ activo: true })
+
+  const [iyBudgetError, setIyBudgetError] = useState<string | null>(null)
+
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    setValue,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<FormValues>({
+    resolver: zodResolver(licenseSchema),
+    defaultValues: {
+      nombre_producto: '',
+      tipo: 'Mensual',
+      categoria: 'General',
+      costo_mxn: 0,
+      fecha_renovacion: '',
+      colaborador_id: '',
+      activa: true,
+    },
+  })
+
+  useEffect(() => {
+    if (existing) {
+      reset({
+        nombre_producto: existing.nombre_producto,
+        tipo: existing.tipo,
+        categoria: existing.categoria,
+        costo_mxn: existing.costo_mxn,
+        fecha_renovacion: existing.fecha_renovacion.substring(0, 10),
+        colaborador_id: existing.colaborador_id,
+        activa: existing.activa,
+      })
+    }
+  }, [existing, reset])
+
+  const watchedCategoria = watch('categoria')
+  const watchedCollaboradorId = watch('colaborador_id')
+
+  const { montoDisponible, isLoading: isLoadingBudget } = useIYBudgetSummary(
+    watchedCategoria === 'IY' && watchedCollaboradorId ? watchedCollaboradorId : ''
+  )
+
+  async function onSubmit(values: FormValues) {
+    setIyBudgetError(null)
+
+    // Validate IY budget if categoria = IY
+    if (values.categoria === 'IY' && values.colaborador_id) {
+      try {
+        const rate = await fetchExchangeRate()
+        const costoUSD = convertMXNtoUSD(values.costo_mxn, rate)
+        if (!isLoadingBudget && costoUSD > montoDisponible) {
+          setIyBudgetError(
+            `El costo excede el presupuesto IY disponible. Disponible: $${montoDisponible.toFixed(2)} USD`
+          )
+          return
+        }
+      } catch {
+        // If we can't get the rate, allow submit — service will handle
+      }
+    }
+
+    try {
+      if (isEdit && id) {
+        const updated = await updateMutation.mutateAsync({
+          id,
+          data: {
+            nombre_producto: values.nombre_producto,
+            tipo: values.tipo,
+            categoria: values.categoria,
+            fecha_renovacion: values.fecha_renovacion,
+            colaborador_id: values.colaborador_id,
+            activa: values.activa,
+          },
+        })
+        toast('Licencia actualizada correctamente', 'success')
+        navigate(`/licencias/${updated.id}`)
+      } else {
+        const created = await createMutation.mutateAsync({
+          nombre_producto: values.nombre_producto,
+          tipo: values.tipo,
+          categoria: values.categoria,
+          costo_mxn: values.costo_mxn,
+          costo_usd: 0, // will be overwritten by service
+          fecha_renovacion: values.fecha_renovacion,
+          colaborador_id: values.colaborador_id,
+          activa: values.activa,
+        })
+        toast('Licencia creada correctamente', 'success')
+        navigate(`/licencias/${created.id}`)
+      }
+    } catch (err) {
+      toast(
+        err instanceof Error ? err.message : 'Error al guardar la licencia',
+        'error'
+      )
+    }
+  }
+
+  if (isEdit && isLoadingExisting) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center h-48 text-gray-400">
+          Cargando...
+        </div>
+      </Layout>
+    )
+  }
+
+  return (
+    <Layout>
+      <div className="max-w-xl">
+        <div className="flex items-center gap-3 mb-6">
+          <button
+            onClick={() => navigate(-1)}
+            className="text-gray-400 hover:text-gray-600 transition-colors"
+            aria-label="Volver"
+          >
+            ←
+          </button>
+          <h1 className="text-2xl font-semibold text-gray-900">
+            {isEdit ? 'Editar Licencia' : 'Nueva Licencia'}
+          </h1>
+        </div>
+
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="bg-white rounded-xl border border-gray-200 p-6 space-y-4"
+        >
+          <FormField label="Nombre del producto" error={errors.nombre_producto?.message} required>
+            <input
+              {...register('nombre_producto')}
+              type="text"
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
+              placeholder="Ej: GitHub Copilot, Figma..."
+            />
+          </FormField>
+
+          <FormField label="Tipo" error={errors.tipo?.message} required>
+            <select
+              {...register('tipo')}
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full bg-white"
+            >
+              <option value="Mensual">Mensual</option>
+              <option value="Anual">Anual</option>
+            </select>
+          </FormField>
+
+          <FormField label="Categoría" error={errors.categoria?.message} required>
+            <select
+              {...register('categoria')}
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full bg-white"
+            >
+              <option value="General">General</option>
+              <option value="IY">IY (Improve Yourself)</option>
+            </select>
+          </FormField>
+
+          <FormField label="Colaborador" error={errors.colaborador_id?.message} required>
+            <select
+              {...register('colaborador_id')}
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full bg-white"
+            >
+              <option value="">Seleccionar colaborador...</option>
+              {collaborators.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.nombre}
+                </option>
+              ))}
+            </select>
+          </FormField>
+
+          {/* IY Budget Card when categoria = IY and collaborator selected */}
+          {watchedCategoria === 'IY' && watchedCollaboradorId && (
+            <div className="pt-1">
+              <IYBudgetCard collaboratorId={watchedCollaboradorId} compact />
+            </div>
+          )}
+
+          {!isEdit && (
+            <Controller
+              name="costo_mxn"
+              control={control}
+              render={({ field }) => (
+                <CurrencyInput
+                  valueMXN={field.value}
+                  onChange={(mxn) => {
+                    setValue('costo_mxn', mxn)
+                  }}
+                  label="Costo"
+                  error={errors.costo_mxn?.message}
+                />
+              )}
+            />
+          )}
+
+          {iyBudgetError && (
+            <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg p-3">
+              {iyBudgetError}
+            </p>
+          )}
+
+          <FormField label="Fecha de renovación" error={errors.fecha_renovacion?.message} required>
+            <input
+              {...register('fecha_renovacion')}
+              type="date"
+              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
+            />
+          </FormField>
+
+          <FormField label="Estado" error={errors.activa?.message}>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input
+                {...register('activa')}
+                type="checkbox"
+                className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+              />
+              <span className="text-sm text-gray-700">Licencia activa</span>
+            </label>
+          </FormField>
+
+          <div className="flex gap-3 pt-2">
+            <button
+              type="button"
+              onClick={() => navigate(-1)}
+              className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
+            >
+              Cancelar
+            </button>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="flex-1 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
+            >
+              {isSubmitting
+                ? 'Guardando...'
+                : isEdit
+                ? 'Guardar cambios'
+                : 'Crear licencia'}
+            </button>
+          </div>
+        </form>
+      </div>
+    </Layout>
+  )
+}

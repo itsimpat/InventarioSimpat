@@ -6,6 +6,7 @@ type PeripheralFilters = {
   tipo?: string
   status?: string
   ownership?: 'Bodega' | 'Colaborador'
+  collaboratorId?: string
 }
 
 export function usePeripheralList(filters?: PeripheralFilters) {

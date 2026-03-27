@@ -8,6 +8,7 @@ type PeripheralFilters = {
   tipo?: string
   status?: string
   ownership?: 'Bodega' | 'Colaborador'
+  collaboratorId?: string
 }
 
 export const peripheralService = {
@@ -20,7 +21,9 @@ export const peripheralService = {
     if (filters?.status) {
       query = query.eq('estatus', filters.status)
     }
-    if (filters?.ownership === 'Bodega') {
+    if (filters?.collaboratorId) {
+      query = query.eq('colaborador_id', filters.collaboratorId)
+    } else if (filters?.ownership === 'Bodega') {
       query = query.is('colaborador_id', null)
     } else if (filters?.ownership === 'Colaborador') {
       query = query.not('colaborador_id', 'is', null)

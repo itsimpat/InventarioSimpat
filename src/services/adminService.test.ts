@@ -20,11 +20,10 @@ beforeEach(() => vi.clearAllMocks())
 
 describe('adminService.listAdmins', () => {
   it('retorna la lista de admins', async () => {
-    const builder = makeBuilder({ data: [adminBase], error: null })
-    mockFrom.mockReturnValue(builder)
+    mockFrom.mockReturnValue(makeBuilder({ data: [adminBase], error: null }))
     const result = await adminService.listAdmins()
     expect(result).toEqual([adminBase])
-    expect(builder.eq).toHaveBeenCalledWith('role', 'admin')
+    expect(mockFrom).toHaveBeenCalledWith('admins')
   })
 
   it('retorna arreglo vacío cuando no hay admins', async () => {
@@ -41,7 +40,8 @@ describe('adminService.listAdmins', () => {
 
 describe('adminService.inviteAdmin', () => {
   it('llama a signUp con el email y nombre proporcionados', async () => {
-    mockSignUp.mockResolvedValue({ error: null } as never)
+    mockSignUp.mockResolvedValue({ data: { user: { id: 'new-uid' } }, error: null } as never)
+    mockFrom.mockReturnValue(makeBuilder({ data: null, error: null }))
     await adminService.inviteAdmin('nuevo@simpat.com', 'Nuevo Admin')
     expect(mockSignUp).toHaveBeenCalledWith(
       expect.objectContaining({ email: 'nuevo@simpat.com', name: 'Nuevo Admin' })
@@ -49,15 +49,38 @@ describe('adminService.inviteAdmin', () => {
   })
 
   it('genera una contraseña aleatoria para el nuevo admin', async () => {
-    mockSignUp.mockResolvedValue({ error: null } as never)
+    mockSignUp.mockResolvedValue({ data: { user: { id: 'new-uid' } }, error: null } as never)
+    mockFrom.mockReturnValue(makeBuilder({ data: null, error: null }))
     await adminService.inviteAdmin('otro@simpat.com', 'Otro Admin')
     const call = mockSignUp.mock.calls[0][0] as { password: string }
     expect(typeof call.password).toBe('string')
     expect(call.password.length).toBeGreaterThan(0)
   })
 
+  it('inserta el usuario en la tabla admins después del signUp', async () => {
+    const builder = makeBuilder({ data: null, error: null })
+    mockSignUp.mockResolvedValue({ data: { user: { id: 'new-uid' } }, error: null } as never)
+    mockFrom.mockReturnValue(builder)
+    await adminService.inviteAdmin('nuevo@simpat.com', 'Nuevo Admin')
+    expect(mockFrom).toHaveBeenCalledWith('admins')
+    expect(builder.insert).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 'new-uid', email: 'nuevo@simpat.com' })
+    )
+  })
+
   it('lanza error cuando signUp falla', async () => {
     mockSignUp.mockResolvedValue({ error: { message: 'signup error' } } as never)
     await expect(adminService.inviteAdmin('x@y.com', 'X')).rejects.toThrow('signup error')
+  })
+
+  it('lanza error cuando signUp no devuelve user id', async () => {
+    mockSignUp.mockResolvedValue({ data: { user: null }, error: null } as never)
+    await expect(adminService.inviteAdmin('x@y.com', 'X')).rejects.toThrow('ID del usuario')
+  })
+
+  it('lanza error cuando falla el insert en la tabla admins', async () => {
+    mockSignUp.mockResolvedValue({ data: { user: { id: 'uid' } }, error: null } as never)
+    mockFrom.mockReturnValue(makeBuilder({ data: null, error: { message: 'insert error' } }))
+    await expect(adminService.inviteAdmin('x@y.com', 'X')).rejects.toThrow('insert error')
   })
 })

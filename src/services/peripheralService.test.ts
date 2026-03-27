@@ -68,6 +68,21 @@ describe('peripheralService.getAll', () => {
     expect(builder.not).toHaveBeenCalledWith('colaborador_id', 'is', null)
   })
 
+  it('aplica filtro de collaboratorId en el query', async () => {
+    const builder = makeBuilder({ data: [periBase], error: null })
+    mockFrom.mockReturnValue(builder)
+    await peripheralService.getAll({ collaboratorId: 'c1' })
+    expect(builder.eq).toHaveBeenCalledWith('colaborador_id', 'c1')
+  })
+
+  it('collaboratorId tiene precedencia sobre ownership Bodega', async () => {
+    const builder = makeBuilder({ data: [], error: null })
+    mockFrom.mockReturnValue(builder)
+    await peripheralService.getAll({ collaboratorId: 'c1', ownership: 'Bodega' })
+    expect(builder.eq).toHaveBeenCalledWith('colaborador_id', 'c1')
+    expect(builder.is).not.toHaveBeenCalled()
+  })
+
   it('lanza error cuando InsForge falla', async () => {
     mockFrom.mockReturnValue(makeBuilder({ data: null, error: { message: 'DB error' } }))
     await expect(peripheralService.getAll()).rejects.toThrow('DB error')

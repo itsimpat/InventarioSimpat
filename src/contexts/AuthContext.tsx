@@ -39,17 +39,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    insforge.auth.getCurrentSession().then(({ data }) => {
-      if (data.session) {
-        setUser({
-          id: data.session.user.id,
-          email: data.session.user.email,
-          emailVerified: data.session.user.emailVerified,
-          profile: (data.session.user.profile as AuthUser['profile']) ?? {},
-        })
-      }
-      setIsLoading(false)
-    })
+    insforge.auth.getCurrentUser()
+      .then(({ data }) => {
+        if (data.user) {
+          setUser({
+            id: data.user.id,
+            email: data.user.email,
+            emailVerified: data.user.emailVerified,
+            profile: (data.user.profile as AuthUser['profile']) ?? {},
+          })
+        }
+      })
+      .catch(() => {
+        // Token inválido o expirado — tratar como sesión cerrada
+      })
+      .finally(() => {
+        setIsLoading(false)
+      })
   }, [])
 
   async function signIn(email: string, password: string): Promise<SignInResult> {

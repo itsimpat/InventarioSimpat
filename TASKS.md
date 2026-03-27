@@ -118,108 +118,108 @@
 
 ### PRIORIDAD 3 — Gestión de Administradores y Colaboradores
 
-- [ ] **3.1** Crear esquema `Collaborator` en InsForge
-- [ ] **3.2** Pantalla: listado de colaboradores (con búsqueda y filtro por área/estatus)
-- [ ] **3.3** Pantalla: crear colaborador (nombre, área, puesto, email, fecha de ingreso)
-- [ ] **3.4** Pantalla: detalle/editar colaborador
-- [ ] **3.5** Acción: desactivar colaborador (soft delete — conserva historial)
-- [ ] **3.6** Al desactivar: notificación/alerta al admin sobre licencias IY activas del colaborador
-- [ ] **3.7** Pantalla de Administradores: crear cuentas de admin desde la app (máx ~5)
-- [ ] **3.8** Crear esquema `IYBudget` en InsForge, asociado a colaborador
+- [x] **3.1** Crear esquema `Collaborator` en InsForge
+- [x] **3.2** Pantalla: listado de colaboradores (con búsqueda y filtro por área/estatus)
+- [x] **3.3** Pantalla: crear colaborador (nombre, área, puesto, email, fecha de ingreso)
+- [x] **3.4** Pantalla: detalle/editar colaborador
+- [x] **3.5** Acción: desactivar colaborador (soft delete — conserva historial)
+- [x] **3.6** Al desactivar: notificación/alerta al admin sobre licencias IY activas del colaborador
+- [x] **3.7** Pantalla de Administradores: crear cuentas de admin desde la app (máx ~5)
+- [x] **3.8** Crear esquema `IYBudget` en InsForge, asociado a colaborador
 
 ---
 
 ### PRIORIDAD 4 — Equipos (Computadoras)
 
-- [ ] **4.1** Crear esquema `Equipment` en InsForge
-- [ ] **4.2** Integración con Banxico API para obtener tipo de cambio al registrar
-- [ ] **4.3** Pantalla: listado de equipos (filtros por estatus, colaborador, marca; paginación)
-- [ ] **4.4** Pantalla: crear equipo (con conversión automática MXN↔USD)
-- [ ] **4.5** Pantalla: detalle de equipo (info completa + historial + colaborador asignado)
-- [ ] **4.6** Pantalla: editar equipo
-- [ ] **4.7** Acción: cambiar estatus del equipo
-- [ ] **4.8** Acción: asignar/reasignar equipo a colaborador (genera evento en historial)
-- [ ] **4.9** Crear esquema `HistoryEvent` en InsForge
-- [ ] **4.10** Al reasignar: registrar automáticamente evento de reasignación en historial
+- [x] **4.1** Crear esquema `Equipment` en InsForge
+- [x] **4.2** Integración con Banxico API para obtener tipo de cambio al registrar
+- [x] **4.3** Pantalla: listado de equipos (filtros por estatus, colaborador, marca; paginación)
+- [x] **4.4** Pantalla: crear equipo (con conversión automática MXN↔USD)
+- [x] **4.5** Pantalla: detalle de equipo (info completa + historial + colaborador asignado)
+- [x] **4.6** Pantalla: editar equipo
+- [x] **4.7** Acción: cambiar estatus del equipo
+- [x] **4.8** Acción: asignar/reasignar equipo a colaborador (genera evento en historial)
+- [x] **4.9** Crear esquema `HistoryEvent` en InsForge
+- [x] **4.10** Al reasignar: registrar automáticamente evento de reasignación en historial
 
 ---
 
 ### PRIORIDAD 5 — Periféricos
 
-- [ ] **5.1** Crear esquema `Peripheral` en InsForge
-- [ ] **5.2** Pantalla: listado de periféricos (filtros por tipo, estatus, ownership; paginación)
-- [ ] **5.3** Pantalla: crear periférico (tipo, marca, modelo, costo con conversión automática)
-- [ ] **5.4** Pantalla: detalle de periférico (info + historial + ownership actual)
-- [ ] **5.5** Pantalla: editar periférico
-- [ ] **5.6** Acción: mover periférico de Bodega a Colaborador (actualiza ownership + genera historial)
-- [ ] **5.7** Acción: cambiar estatus del periférico (independiente del ownership)
-- [ ] **5.8** Acción: regresar periférico a Bodega (genera historial)
+- [x] **5.1** Crear esquema `Peripheral` en InsForge
+- [x] **5.2** Pantalla: listado de periféricos (filtros por tipo, estatus, ownership; paginación)
+- [x] **5.3** Pantalla: crear periférico (tipo, marca, modelo, costo con conversión automática)
+- [x] **5.4** Pantalla: detalle de periférico (info + historial + ownership actual)
+- [x] **5.5** Pantalla: editar periférico
+- [x] **5.6** Acción: mover periférico de Bodega a Colaborador (actualiza ownership + genera historial)
+- [x] **5.7** Acción: cambiar estatus del periférico (independiente del ownership)
+- [x] **5.8** Acción: regresar periférico a Bodega (genera historial)
 
 ---
 
 ### PRIORIDAD 6 — Licencias
 
-- [ ] **6.1** Crear esquema `License` en InsForge
-- [ ] **6.2** Pantalla: listado de licencias (filtros por colaborador, tipo, categoría; paginación)
-- [ ] **6.3** Pantalla: crear licencia (con conversión automática MXN↔USD, indicar si es IY)
-- [ ] **6.4** Pantalla: detalle/editar licencia
-- [ ] **6.5** Acción: desactivar licencia (sin eliminar)
-- [ ] **6.6** Acción: reasignar licencia a otro colaborador
-- [ ] **6.7** Cálculo automático de monto gastado vs disponible del budget IY al asignar licencias IY
+- [x] **6.1** Crear esquema `License` en InsForge
+- [x] **6.2** Pantalla: listado de licencias (filtros por colaborador, tipo, categoría; paginación)
+- [x] **6.3** Pantalla: crear licencia (con conversión automática MXN↔USD, indicar si es IY)
+- [x] **6.4** Pantalla: detalle/editar licencia
+- [x] **6.5** Acción: desactivar licencia (sin eliminar)
+- [x] **6.6** Acción: reasignar licencia a otro colaborador
+- [x] **6.7** Cálculo automático de monto gastado vs disponible del budget IY al asignar licencias IY
 
 ---
 
 ### PRIORIDAD 7 — Notificaciones
 
-- [ ] **7.1** Crear esquema `NotificationConfig` en InsForge (días de anticipación, default 7)
-- [ ] **7.2** Pantalla de configuración de notificaciones (solo admin)
-- [ ] **7.3** Lógica: al cargar la app, verificar licencias próximas a vencer según config
-- [ ] **7.4** Mostrar alerta/banner en el dashboard con licencias próximas a renovarse
-- [ ] **7.5** Alerta especial cuando un colaborador se desactiva y tiene licencias IY activas
+- [x] **7.1** Crear esquema `NotificationConfig` en InsForge (días de anticipación, default 7)
+- [x] **7.2** Pantalla de configuración de notificaciones (solo admin)
+- [x] **7.3** Lógica: al cargar la app, verificar licencias próximas a vencer según config
+- [x] **7.4** Mostrar alerta/banner en el dashboard con licencias próximas a renovarse
+- [x] **7.5** Alerta especial cuando un colaborador se desactiva y tiene licencias IY activas
 
 ---
 
 ### PRIORIDAD 8 — Inventario de Oficina
 
-- [ ] **8.1** Crear esquema `OfficeItem` en InsForge
-- [ ] **8.2** Pantalla: listado de inventario de oficina (filtros por categoría; paginación)
-- [ ] **8.3** Pantalla: crear artículo (nombre, categoría, marca, costo con conversión, fecha de compra, cantidad)
-- [ ] **8.4** Pantalla: detalle/editar artículo (actualizar cantidad)
-- [ ] **8.5** Acción: registrar mantenimiento de artículo de oficina (genera historial)
-- [ ] **8.6** Vista de historial de mantenimientos por artículo
+- [x] **8.1** Crear esquema `OfficeItem` en InsForge
+- [x] **8.2** Pantalla: listado de inventario de oficina (filtros por categoría; paginación)
+- [x] **8.3** Pantalla: crear artículo (nombre, categoría, marca, costo con conversión, fecha de compra, cantidad)
+- [x] **8.4** Pantalla: detalle/editar artículo (actualizar cantidad)
+- [x] **8.5** Acción: registrar mantenimiento de artículo de oficina (genera historial)
+- [x] **8.6** Vista de historial de mantenimientos por artículo
 
 ---
 
 ### PRIORIDAD 9 — Historial y Eventos
 
-- [ ] **9.1** Pantalla: historial completo de un equipo (reasignaciones + reparaciones + mantenimientos)
-- [ ] **9.2** Pantalla: historial completo de un periférico
-- [ ] **9.3** Formulario: registrar evento manual (reparación, mantenimiento) con técnico, teléfono, fechas, costo
-- [ ] **9.4** Formulario: cerrar evento de reparación (registrar fecha de salida)
-- [ ] **9.5** Timeline visual de eventos por equipo/periférico
+- [x] **9.1** Pantalla: historial completo de un equipo (reasignaciones + reparaciones + mantenimientos)
+- [x] **9.2** Pantalla: historial completo de un periférico
+- [x] **9.3** Formulario: registrar evento manual (reparación, mantenimiento) con técnico, teléfono, fechas, costo
+- [x] **9.4** Formulario: cerrar evento de reparación (registrar fecha de salida)
+- [x] **9.5** Timeline visual de eventos por equipo/periférico
 
 ---
 
 ### PRIORIDAD 10 — Reportes y Dashboard
 
-- [ ] **10.1** Dashboard principal: KPIs globales (total equipos, licencias activas, alertas, inversión total en USD)
-- [ ] **10.2** Dashboard: últimas actividades / movimientos recientes
-- [ ] **10.3** Sección de reportes: selector de reporte (por colaborador / por área / global empresa)
-- [ ] **10.4** Reporte por colaborador: equipos asignados + periféricos + licencias + IY budget (todo en USD)
-- [ ] **10.5** Reporte por área/equipo: total de inversión del área
-- [ ] **10.6** Reporte global empresa: total equipos, total licencias, total periféricos, total oficina (en USD)
-- [ ] **10.7** Reporte IY: seguimiento del budget IY por colaborador (gastado vs disponible)
+- [x] **10.1** Dashboard principal: KPIs globales (total equipos, licencias activas, alertas, inversión total en USD)
+- [x] **10.2** Dashboard: últimas actividades / movimientos recientes
+- [x] **10.3** Sección de reportes: selector de reporte (por colaborador / por área / global empresa)
+- [x] **10.4** Reporte por colaborador: equipos asignados + periféricos + licencias + IY budget (todo en USD)
+- [x] **10.5** Reporte por área/equipo: total de inversión del área
+- [x] **10.6** Reporte global empresa: total equipos, total licencias, total periféricos, total oficina (en USD)
+- [x] **10.7** Reporte IY: seguimiento del budget IY por colaborador (gastado vs disponible)
 
 ---
 
 ### PRIORIDAD 11 — Pulido y UX
 
-- [ ] **11.1** Diseño visual consistente con TailwindCSS (paleta de colores Simpat Tech)
-- [ ] **11.2** Componentes reutilizables: Table, Modal, Form, Badge de estatus, Card
-- [ ] **11.3** Estados de carga (skeletons/spinners) y manejo de errores
-- [ ] **11.4** Responsive básico (desktop primero)
-- [ ] **11.5** Confirmaciones antes de eliminar o desactivar registros
-- [ ] **11.6** Mensajes de éxito/error (toasts)
+- [x] **11.1** Diseño visual consistente con TailwindCSS (paleta de colores Simpat Tech)
+- [x] **11.2** Componentes reutilizables: Table, Modal, Form, Badge de estatus, Card
+- [x] **11.3** Estados de carga (skeletons/spinners) y manejo de errores
+- [x] **11.4** Responsive básico (desktop primero)
+- [x] **11.5** Confirmaciones antes de eliminar o desactivar registros
+- [x] **11.6** Mensajes de éxito/error (toasts)
 
 ---
 

@@ -43,7 +43,7 @@ export const peripheralService = {
     return data as Peripheral
   },
 
-  async create(data: Omit<Peripheral, 'id' | 'created_at' | 'updated_at'>): Promise<Peripheral> {
+  async create(data: Omit<Peripheral, 'id' | 'created_at' | 'updated_at' | 'costo_usd'>): Promise<Peripheral> {
     const rate = await fetchExchangeRate()
     const costo_usd = convertMXNtoUSD(data.costo_mxn, rate)
 

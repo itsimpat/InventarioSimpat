@@ -50,7 +50,7 @@ export const equipmentService = {
     return data as Equipment
   },
 
-  async create(data: Omit<Equipment, 'id' | 'created_at' | 'updated_at'>): Promise<Equipment> {
+  async create(data: Omit<Equipment, 'id' | 'created_at' | 'updated_at' | 'costo_usd'>): Promise<Equipment> {
     const rate = await fetchExchangeRate()
     const costo_usd = convertMXNtoUSD(data.costo_mxn, rate)
 

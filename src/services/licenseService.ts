@@ -79,7 +79,7 @@ export const licenseService = {
     return (data ?? []) as License[]
   },
 
-  async create(data: Omit<License, 'id' | 'created_at' | 'updated_at'>): Promise<License> {
+  async create(data: Omit<License, 'id' | 'created_at' | 'updated_at' | 'costo_usd'>): Promise<License> {
     const rate = await fetchExchangeRate()
     const costo_usd = convertMXNtoUSD(data.costo_mxn, rate)
 

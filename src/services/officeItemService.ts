@@ -32,7 +32,7 @@ export const officeItemService = {
     return data as OfficeItem
   },
 
-  async create(data: Omit<OfficeItem, 'id' | 'created_at' | 'updated_at'>): Promise<OfficeItem> {
+  async create(data: Omit<OfficeItem, 'id' | 'created_at' | 'updated_at' | 'costo_usd'>): Promise<OfficeItem> {
     const rate = await fetchExchangeRate()
     const costo_usd = convertMXNtoUSD(data.costo_mxn, rate)
 

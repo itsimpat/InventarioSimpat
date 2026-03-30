@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { Layout } from '../../components/Layout'
 import { StatusBadge } from '../../components/shared/StatusBadge'
@@ -167,6 +167,21 @@ export function EquipmentDetailPage() {
           </div>
         </div>
 
+        {/* Admin credentials section */}
+        {(equipment.admin_user || equipment.admin_password) && (
+          <div className="bg-white rounded-xl border border-gray-200 p-6">
+            <h2 className="text-base font-semibold text-gray-900 mb-4">Cuenta de Administrador IT</h2>
+            <div className="grid grid-cols-2 gap-6">
+              {equipment.admin_user && (
+                <InfoItem label="Usuario administrador" value={equipment.admin_user} />
+              )}
+              {equipment.admin_password && (
+                <AdminPasswordItem password={equipment.admin_password} />
+              )}
+            </div>
+          </div>
+        )}
+
         {/* Collaborator section */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <h2 className="text-base font-semibold text-gray-900 mb-4">Colaborador Asignado</h2>
@@ -324,6 +339,28 @@ function InfoItem({ label, value }: { label: string; value: string }) {
     <div>
       <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">{label}</p>
       <p className="mt-1 text-sm font-medium text-gray-900">{value}</p>
+    </div>
+  )
+}
+
+function AdminPasswordItem({ password }: { password: string }) {
+  const [visible, setVisible] = useState(false)
+  const toggle = useCallback(() => setVisible((v) => !v), [])
+  return (
+    <div>
+      <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Contraseña administrador</p>
+      <div className="mt-1 flex items-center gap-2">
+        <p className="text-sm font-medium text-gray-900 font-mono">
+          {visible ? password : '••••••••'}
+        </p>
+        <button
+          type="button"
+          onClick={toggle}
+          className="text-xs text-indigo-600 hover:text-indigo-800 transition-colors"
+        >
+          {visible ? 'Ocultar' : 'Mostrar'}
+        </button>
+      </div>
     </div>
   )
 }

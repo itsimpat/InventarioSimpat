@@ -9,9 +9,9 @@ export interface AdminUser {
 export const adminService = {
   async listAdmins(): Promise<AdminUser[]> {
     const { data, error } = await insforge.database
-      .from('profiles')
+      .from('admins')
       .select('id, email, name')
-      .eq('role', 'admin')
+      .order('created_at', { ascending: true })
 
     if (error) throw new Error(error.message)
 
@@ -19,12 +19,21 @@ export const adminService = {
   },
 
   async inviteAdmin(email: string, name: string): Promise<void> {
-    const { error } = await insforge.auth.signUp({
+    const { data, error } = await insforge.auth.signUp({
       email,
       password: Math.random().toString(36).slice(-12),
       name,
     })
 
     if (error) throw new Error(error.message)
+
+    const userId = data?.user?.id
+    if (!userId) throw new Error('No se pudo obtener el ID del usuario creado')
+
+    const { error: insertError } = await insforge.database
+      .from('admins')
+      .insert({ id: userId, email, name })
+
+    if (insertError) throw new Error(insertError.message)
   },
 }

@@ -12,6 +12,17 @@ npm run preview    # Preview production build
 npx tsc --noEmit   # Type-check only
 ```
 
+### E2E Tests (Playwright)
+
+```bash
+npx playwright test           # Run all e2e tests (starts dev server automatically)
+npx playwright test --ui      # Open interactive UI mode
+npx playwright test --headed  # Run with visible browser
+npx playwright show-report    # Open last HTML report
+```
+
+Tests live in `e2e/`. Config in `playwright.config.ts` — runs against `localhost:5173`, Chromium only.
+
 ## Architecture
 
 **Stack:** Vite + React 19 + TypeScript + TailwindCSS v4 + InsForge (BaaS)

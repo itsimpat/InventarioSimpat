@@ -41,6 +41,8 @@ export interface Equipment {
   estatus: EquipmentStatus
   colaborador_id: string | null
   fecha_compra: string
+  admin_user: string | null
+  admin_password: string | null
   created_at: string
   updated_at: string
 }

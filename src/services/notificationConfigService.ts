@@ -4,7 +4,7 @@ import type { NotificationConfig } from '../types'
 export const notificationConfigService = {
   async get(): Promise<NotificationConfig | null> {
     const { data, error } = await insforge.database
-      .from('notification_config')
+      .from('notification_configs')
       .select()
       .single()
 
@@ -26,7 +26,7 @@ export const notificationConfigService = {
 
     if (existing) {
       const { data, error } = await insforge.database
-        .from('notification_config')
+        .from('notification_configs')
         .update({ dias_anticipacion: diasAnticipacion })
         .eq('id', existing.id)
         .select()
@@ -38,7 +38,7 @@ export const notificationConfigService = {
     }
 
     const { data, error } = await insforge.database
-      .from('notification_config')
+      .from('notification_configs')
       .insert({ dias_anticipacion: diasAnticipacion, admin_id: null })
       .select()
       .single()

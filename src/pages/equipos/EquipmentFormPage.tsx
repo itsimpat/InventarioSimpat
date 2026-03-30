@@ -33,6 +33,8 @@ type FormState = {
     almacenamiento: string
     pantalla: string
   }
+  admin_user: string
+  admin_password: string
 }
 
 type FormErrors = Partial<Record<string, string>>
@@ -51,6 +53,8 @@ const INITIAL_STATE: FormState = {
     almacenamiento: '',
     pantalla: '',
   },
+  admin_user: '',
+  admin_password: '',
 }
 
 function validate(values: FormState, isEditing: boolean): FormErrors {
@@ -99,6 +103,8 @@ export function EquipmentFormPage() {
           almacenamiento: specs.almacenamiento ?? '',
           pantalla: specs.pantalla ?? '',
         },
+        admin_user: existing.admin_user ?? '',
+        admin_password: existing.admin_password ?? '',
       })
     }
   }, [existing, isEditing])
@@ -147,6 +153,8 @@ export function EquipmentFormPage() {
           estatus: values.estatus,
           colaborador_id: values.colaborador_id || null,
           especificaciones: specs,
+          admin_user: values.admin_user.trim() || null,
+          admin_password: values.admin_password || null,
         }
         if (values.costo_mxn > 0) {
           updateData.costo_mxn = values.costo_mxn
@@ -165,6 +173,8 @@ export function EquipmentFormPage() {
           colaborador_id: values.colaborador_id || null,
           especificaciones: specs,
           fecha_compra: new Date().toISOString(),
+          admin_user: values.admin_user.trim() || null,
+          admin_password: values.admin_password || null,
         })
         toast('Equipo creado correctamente', 'success')
         navigate(`/equipos/${created.id}`)
@@ -278,6 +288,36 @@ export function EquipmentFormPage() {
               ))}
             </select>
           </FormField>
+
+          {/* Cuenta de Administrador IT */}
+          <div>
+            <p className="text-sm font-medium text-gray-700 mb-3">Cuenta de Administrador IT (opcional)</p>
+            <div className="grid grid-cols-2 gap-4">
+              <FormField label="Usuario administrador">
+                <input
+                  type="text"
+                  name="admin_user"
+                  value={values.admin_user}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="admin, Administrator..."
+                  autoComplete="off"
+                />
+              </FormField>
+
+              <FormField label="Contraseña administrador">
+                <input
+                  type="password"
+                  name="admin_password"
+                  value={values.admin_password}
+                  onChange={handleChange}
+                  className={inputClass}
+                  placeholder="••••••••"
+                  autoComplete="new-password"
+                />
+              </FormField>
+            </div>
+          </div>
 
           {/* Especificaciones */}
           <div>

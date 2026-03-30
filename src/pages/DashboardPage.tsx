@@ -10,8 +10,8 @@ import { formatRelative, formatDate } from '../utils/dates'
 // Safe import — Agente 3 may or may not have created this yet
 const NotificationBanner = React.lazy(() =>
   import('../components/shared/NotificationBanner')
-    .then((m) => ({ default: (m as unknown as { default: React.ComponentType }).default }))
-    .catch(() => ({ default: (() => null) as unknown as React.ComponentType<Record<string, never>> }))
+    .then((m) => ({ default: m.NotificationBanner }))
+    .catch(() => ({ default: () => null }))
 )
 
 function KPISkeleton() {

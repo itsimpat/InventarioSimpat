@@ -26,12 +26,12 @@ function RenewalBadge({ fecha }: { fecha: string }) {
 
   const label =
     days < 0
-      ? `Venció hace ${Math.abs(days)} días`
+      ? `Expired ${Math.abs(days)} day${Math.abs(days) === 1 ? '' : 's'} ago`
       : days === 0
-      ? 'Vence hoy'
+      ? 'Expires today'
       : days === 1
-      ? 'Vence en 1 día'
-      : `Vence en ${days} días`
+      ? 'Expires in 1 day'
+      : `Expires in ${days} days`
 
   return (
     <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${colorClass}`}>
@@ -60,10 +60,10 @@ export function LicenseDetailPage() {
     if (!id) return
     try {
       await deactivateMutation.mutateAsync(id)
-      toast('Licencia desactivada correctamente', 'success')
+      toast('License deactivated successfully', 'success')
       setShowDeactivateModal(false)
     } catch (err) {
-      toast(err instanceof Error ? err.message : 'Error al desactivar la licencia', 'error')
+      toast(err instanceof Error ? err.message : 'Error deactivating license', 'error')
     }
   }
 
@@ -71,18 +71,18 @@ export function LicenseDetailPage() {
     if (!id || !selectedCollaboratorId) return
     try {
       await reassignMutation.mutateAsync({ licenseId: id, newCollaboratorId: selectedCollaboratorId })
-      toast('Licencia reasignada correctamente', 'success')
+      toast('License reassigned successfully', 'success')
       setShowReassignModal(false)
       setSelectedCollaboratorId('')
     } catch (err) {
-      toast(err instanceof Error ? err.message : 'Error al reasignar la licencia', 'error')
+      toast(err instanceof Error ? err.message : 'Error reassigning license', 'error')
     }
   }
 
   if (isLoading) {
     return (
       <Layout>
-        <div className="flex items-center justify-center h-48 text-gray-400">Cargando...</div>
+        <div className="flex items-center justify-center h-48 text-gray-400">Loading...</div>
       </Layout>
     )
   }
@@ -90,7 +90,7 @@ export function LicenseDetailPage() {
   if (!license) {
     return (
       <Layout>
-        <div className="text-center py-12 text-gray-500">Licencia no encontrada.</div>
+        <div className="text-center py-12 text-gray-500">License not found.</div>
       </Layout>
     )
   }
@@ -103,7 +103,7 @@ export function LicenseDetailPage() {
           <button
             onClick={() => navigate(-1)}
             className="text-gray-400 hover:text-gray-600 transition-colors mt-1"
-            aria-label="Volver"
+            aria-label="Go back"
           >
             ←
           </button>
@@ -128,7 +128,7 @@ export function LicenseDetailPage() {
                   license.activa ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-500'
                 }`}
               >
-                {license.activa ? 'Activa' : 'Inactiva'}
+                {license.activa ? 'Active' : 'Inactive'}
               </span>
             </div>
           </div>
@@ -138,13 +138,13 @@ export function LicenseDetailPage() {
         <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
           <div className="grid grid-cols-2 gap-0">
             <div className="px-6 py-4">
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Colaborador</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Collaborator</p>
               <p className="text-sm font-medium text-gray-900">
                 {collaborator?.nombre ?? license.colaborador_id}
               </p>
             </div>
             <div className="px-6 py-4">
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Fecha Renovación</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Renewal Date</p>
               <p className="text-sm font-medium text-gray-900">
                 {formatDate(license.fecha_renovacion)}
               </p>
@@ -152,11 +152,11 @@ export function LicenseDetailPage() {
           </div>
           <div className="grid grid-cols-2 gap-0">
             <div className="px-6 py-4">
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Costo MXN</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Cost (MXN)</p>
               <p className="text-sm font-medium text-gray-900">{formatMXN(license.costo_mxn)}</p>
             </div>
             <div className="px-6 py-4">
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Costo USD</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Cost (USD)</p>
               <p className="text-sm font-medium text-gray-900">{formatUSD(license.costo_usd)}</p>
             </div>
           </div>
@@ -173,14 +173,14 @@ export function LicenseDetailPage() {
             onClick={() => navigate(`/licencias/${id}/editar`)}
             className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
           >
-            Editar
+            Edit
           </button>
           {license.activa && (
             <button
               onClick={() => setShowDeactivateModal(true)}
               className="px-4 py-2 text-sm font-medium text-red-700 bg-red-50 border border-red-200 rounded-lg hover:bg-red-100 transition-colors"
             >
-              Desactivar
+              Deactivate
             </button>
           )}
           <button
@@ -190,7 +190,7 @@ export function LicenseDetailPage() {
             }}
             className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
           >
-            Reasignar
+            Reassign
           </button>
         </div>
       </div>
@@ -198,9 +198,9 @@ export function LicenseDetailPage() {
       {/* Deactivate modal */}
       <ConfirmModal
         isOpen={showDeactivateModal}
-        title="Desactivar licencia"
-        message={`¿Estás seguro de que deseas desactivar la licencia "${license.nombre_producto}"? Esta acción se puede revertir editando la licencia.`}
-        confirmLabel="Desactivar"
+        title="Deactivate license"
+        message={`Are you sure you want to deactivate the license "${license.nombre_producto}"? This action can be undone by editing the license.`}
+        confirmLabel="Deactivate"
         confirmVariant="danger"
         onConfirm={handleDeactivate}
         onCancel={() => setShowDeactivateModal(false)}
@@ -211,20 +211,20 @@ export function LicenseDetailPage() {
       <Modal
         isOpen={showReassignModal}
         onClose={() => setShowReassignModal(false)}
-        title="Reasignar licencia"
+        title="Reassign license"
         size="sm"
       >
         <div className="space-y-4">
           <div>
             <label className="text-sm font-medium text-gray-700 block mb-1">
-              Nuevo colaborador
+              New collaborator
             </label>
             <select
               value={selectedCollaboratorId}
               onChange={(e) => setSelectedCollaboratorId(e.target.value)}
               className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
             >
-              <option value="">Seleccionar colaborador...</option>
+              <option value="">Select a collaborator...</option>
               {allCollaborators.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.nombre}
@@ -237,14 +237,14 @@ export function LicenseDetailPage() {
               onClick={() => setShowReassignModal(false)}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Cancelar
+              Cancel
             </button>
             <button
               onClick={handleReassign}
               disabled={!selectedCollaboratorId || reassignMutation.isPending}
               className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
             >
-              {reassignMutation.isPending ? 'Reasignando...' : 'Confirmar'}
+              {reassignMutation.isPending ? 'Reassigning...' : 'Confirm'}
             </button>
           </div>
         </div>

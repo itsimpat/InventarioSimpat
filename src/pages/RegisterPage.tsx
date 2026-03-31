@@ -7,13 +7,13 @@ import { insforge } from '../lib/insforge'
 
 const schema = z
   .object({
-    name: z.string().min(2, 'El nombre debe tener al menos 2 caracteres'),
-    email: z.string().email('Ingresa un email válido'),
-    password: z.string().min(8, 'La contraseña debe tener al menos 8 caracteres'),
-    confirmPassword: z.string().min(1, 'Confirma tu contraseña'),
+    name: z.string().min(2, 'Name must be at least 2 characters'),
+    email: z.string().email('Enter a valid email'),
+    password: z.string().min(8, 'Password must be at least 8 characters'),
+    confirmPassword: z.string().min(1, 'Please confirm your password'),
   })
   .refine((d) => d.password === d.confirmPassword, {
-    message: 'Las contraseñas no coinciden',
+    message: 'Passwords do not match',
     path: ['confirmPassword'],
   })
 
@@ -49,13 +49,13 @@ export function RegisterPage() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
           <div className="mb-8 text-center">
             <h1 className="text-2xl font-semibold text-gray-900">Simpat Tech</h1>
-            <p className="text-sm text-gray-500 mt-1">Crear cuenta</p>
+            <p className="text-sm text-gray-500 mt-1">Create account</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                Nombre completo
+                Full name
               </label>
               <input
                 id="name"
@@ -89,7 +89,7 @@ export function RegisterPage() {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Contraseña
+                Password
               </label>
               <input
                 id="password"
@@ -106,7 +106,7 @@ export function RegisterPage() {
 
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1">
-                Confirmar contraseña
+                Confirm password
               </label>
               <input
                 id="confirmPassword"
@@ -132,14 +132,14 @@ export function RegisterPage() {
               disabled={isSubmitting}
               className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-medium rounded-lg transition-colors"
             >
-              {isSubmitting ? 'Creando cuenta...' : 'Crear cuenta'}
+              {isSubmitting ? 'Creating account...' : 'Create account'}
             </button>
           </form>
 
           <p className="mt-6 text-center text-sm text-gray-500">
-            ¿Ya tienes cuenta?{' '}
+            Already have an account?{' '}
             <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">
-              Iniciar sesión
+              Sign in
             </Link>
           </p>
         </div>

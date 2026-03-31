@@ -61,7 +61,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function signIn(email: string, password: string): Promise<SignInResult> {
     const { data, error } = await insforge.auth.signInWithPassword({ email, password })
     if (error) return { error: error.message }
-    if (!data) return { error: 'Error al iniciar sesión' }
+    if (!data) return { error: 'Sign in error' }
 
     const authUser: AuthUser = {
       id: data.user.id,
@@ -72,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (authUser.profile.role !== 'admin') {
       await insforge.auth.signOut()
-      return { error: 'No tienes permisos para acceder a esta aplicación.' }
+      return { error: 'You do not have permission to access this application.' }
     }
 
     setUser(authUser)
@@ -95,6 +95,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
 export function useAuth() {
   const ctx = useContext(AuthContext)
-  if (!ctx) throw new Error('useAuth debe usarse dentro de AuthProvider')
+  if (!ctx) throw new Error('useAuth must be used within AuthProvider')
   return ctx
 }

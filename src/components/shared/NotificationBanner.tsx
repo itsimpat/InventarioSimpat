@@ -15,7 +15,7 @@ export function NotificationBanner() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <span className="text-yellow-600 font-semibold text-sm">
-            ⚠️ {expiringSoon.length} licencia{expiringSoon.length !== 1 ? 's' : ''} próxima{expiringSoon.length !== 1 ? 's' : ''} a vencer en los próximos {daysAhead} días
+            ⚠️ {expiringSoon.length} license{expiringSoon.length !== 1 ? 's' : ''} expiring in the next {daysAhead} day{daysAhead !== 1 ? 's' : ''}
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -23,11 +23,11 @@ export function NotificationBanner() {
             onClick={() => setExpanded((v) => !v)}
             className="text-xs text-yellow-700 underline hover:text-yellow-900 transition-colors"
           >
-            {expanded ? 'Ocultar' : 'Ver detalle'}
+            {expanded ? 'Hide' : 'View details'}
           </button>
           <button
             onClick={() => setDismissed(true)}
-            aria-label="Cerrar alerta"
+            aria-label="Dismiss alert"
             className="text-yellow-500 hover:text-yellow-700 transition-colors leading-none ml-1"
           >
             ✕
@@ -47,9 +47,9 @@ export function NotificationBanner() {
               >
                 <span className="font-medium">{license.nombre_producto}</span>
                 <span className="text-yellow-700 text-xs">
-                  Vence: {formatDate(license.fecha_renovacion)}{' '}
+                  Expires: {formatDate(license.fecha_renovacion)}{' '}
                   <span className="font-semibold">
-                    ({days === 0 ? 'hoy' : days === 1 ? 'en 1 día' : `en ${days} días`})
+                    ({days === 0 ? 'today' : days === 1 ? 'in 1 day' : `in ${days} days`})
                   </span>
                 </span>
               </li>

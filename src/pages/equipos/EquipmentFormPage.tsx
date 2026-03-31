@@ -9,12 +9,12 @@ import { useCollaborators } from '../../hooks/useCollaborators'
 import type { Equipment, EquipmentStatus } from '../../types'
 
 const EQUIPMENT_STATUSES: EquipmentStatus[] = [
-  'Asignado',
-  'En Bodega',
-  'En Reparación',
-  'Vendido',
-  'Dado de Baja',
-  'Solicitado',
+  'Assigned',
+  'In Storage',
+  'Under Repair',
+  'Sold',
+  'Decommissioned',
+  'Requested',
 ]
 
 const CURRENT_YEAR = new Date().getFullYear()
@@ -45,7 +45,7 @@ const INITIAL_STATE: FormState = {
   anio_compra: String(CURRENT_YEAR),
   costo_mxn: 0,
   costo_usd: 0,
-  estatus: 'En Bodega',
+  estatus: 'In Storage',
   colaborador_id: '',
   especificaciones: {
     cpu: '',
@@ -59,16 +59,16 @@ const INITIAL_STATE: FormState = {
 
 function validate(values: FormState, isEditing: boolean): FormErrors {
   const errors: FormErrors = {}
-  if (!values.marca.trim()) errors.marca = 'La marca es requerida'
-  if (!values.modelo.trim()) errors.modelo = 'El modelo es requerido'
+  if (!values.marca.trim()) errors.marca = 'Brand is required'
+  if (!values.modelo.trim()) errors.modelo = 'Model is required'
   const year = parseInt(values.anio_compra)
   if (isNaN(year) || year < 2000 || year > CURRENT_YEAR) {
-    errors.anio_compra = `El año debe estar entre 2000 y ${CURRENT_YEAR}`
+    errors.anio_compra = `Year must be between 2000 and ${CURRENT_YEAR}`
   }
   if (!isEditing && values.costo_mxn <= 0) {
-    errors.costo_mxn = 'El costo es requerido'
+    errors.costo_mxn = 'Cost is required'
   }
-  if (!values.estatus) errors.estatus = 'El estatus es requerido'
+  if (!values.estatus) errors.estatus = 'Status is required'
   return errors
 }
 
@@ -160,8 +160,8 @@ export function EquipmentFormPage() {
           updateData.costo_mxn = values.costo_mxn
         }
         await update({ id, data: updateData })
-        toast('Equipo actualizado correctamente', 'success')
-        navigate(`/equipos/${id}`)
+        toast('Equipment updated successfully', 'success')
+        navigate(`/equipment/${id}`)
       } else {
         const created = await create({
           marca: values.marca.trim(),
@@ -176,11 +176,11 @@ export function EquipmentFormPage() {
           admin_user: values.admin_user.trim() || null,
           admin_password: values.admin_password || null,
         })
-        toast('Equipo creado correctamente', 'success')
-        navigate(`/equipos/${created.id}`)
+        toast('Equipment created successfully', 'success')
+        navigate(`/equipment/${created.id}`)
       }
     } catch (err) {
-      toast(err instanceof Error ? err.message : 'Error al guardar el equipo', 'error')
+      toast(err instanceof Error ? err.message : 'Error saving equipment', 'error')
     }
   }
 
@@ -203,7 +203,7 @@ export function EquipmentFormPage() {
         {/* Header */}
         <div className="flex items-center gap-3">
           <button
-            onClick={() => navigate(isEditing ? `/equipos/${id}` : '/equipos')}
+            onClick={() => navigate(isEditing ? `/equipment/${id}` : '/equipment')}
             className="text-gray-400 hover:text-gray-600 transition-colors"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -211,14 +211,14 @@ export function EquipmentFormPage() {
             </svg>
           </button>
           <h1 className="text-2xl font-bold text-gray-900">
-            {isEditing ? 'Editar Equipo' : 'Nuevo Equipo'}
+            {isEditing ? 'Edit Equipment' : 'New Equipment'}
           </h1>
         </div>
 
         {/* Form */}
         <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-gray-200 p-6 space-y-5">
           <div className="grid grid-cols-2 gap-4">
-            <FormField label="Marca" error={errors.marca} required>
+            <FormField label="Brand" error={errors.marca} required>
               <input
                 type="text"
                 name="marca"
@@ -229,7 +229,7 @@ export function EquipmentFormPage() {
               />
             </FormField>
 
-            <FormField label="Modelo" error={errors.modelo} required>
+            <FormField label="Model" error={errors.modelo} required>
               <input
                 type="text"
                 name="modelo"
@@ -241,7 +241,7 @@ export function EquipmentFormPage() {
             </FormField>
           </div>
 
-          <FormField label="Año de compra" error={errors.anio_compra} required>
+          <FormField label="Purchase year" error={errors.anio_compra} required>
             <input
               type="number"
               name="anio_compra"
@@ -256,11 +256,11 @@ export function EquipmentFormPage() {
           <CurrencyInput
             valueMXN={values.costo_mxn}
             onChange={handleCurrencyChange}
-            label={isEditing ? 'Costo (dejar en 0 para no cambiar)' : 'Costo'}
+            label={isEditing ? 'Cost (leave 0 to keep unchanged)' : 'Cost'}
             error={errors.costo_mxn}
           />
 
-          <FormField label="Estatus" error={errors.estatus} required>
+          <FormField label="Status" error={errors.estatus} required>
             <select
               name="estatus"
               value={values.estatus}
@@ -273,14 +273,14 @@ export function EquipmentFormPage() {
             </select>
           </FormField>
 
-          <FormField label="Colaborador asignado">
+          <FormField label="Assigned collaborator">
             <select
               name="colaborador_id"
               value={values.colaborador_id}
               onChange={handleChange}
               className={inputClass}
             >
-              <option value="">Sin asignar</option>
+              <option value="">Unassigned</option>
               {collaborators.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.nombre} — {c.area}
@@ -291,9 +291,9 @@ export function EquipmentFormPage() {
 
           {/* Cuenta de Administrador IT */}
           <div>
-            <p className="text-sm font-medium text-gray-700 mb-3">Cuenta de Administrador IT (opcional)</p>
+            <p className="text-sm font-medium text-gray-700 mb-3">IT Admin Account (optional)</p>
             <div className="grid grid-cols-2 gap-4">
-              <FormField label="Usuario administrador">
+              <FormField label="Admin username">
                 <input
                   type="text"
                   name="admin_user"
@@ -305,7 +305,7 @@ export function EquipmentFormPage() {
                 />
               </FormField>
 
-              <FormField label="Contraseña administrador">
+              <FormField label="Admin password">
                 <input
                   type="password"
                   name="admin_password"
@@ -321,7 +321,7 @@ export function EquipmentFormPage() {
 
           {/* Especificaciones */}
           <div>
-            <p className="text-sm font-medium text-gray-700 mb-3">Especificaciones (opcional)</p>
+            <p className="text-sm font-medium text-gray-700 mb-3">Specifications (optional)</p>
             <div className="grid grid-cols-2 gap-4">
               <FormField label="CPU">
                 <input
@@ -345,7 +345,7 @@ export function EquipmentFormPage() {
                 />
               </FormField>
 
-              <FormField label="Almacenamiento">
+              <FormField label="Storage">
                 <input
                   type="text"
                   name="almacenamiento"
@@ -356,7 +356,7 @@ export function EquipmentFormPage() {
                 />
               </FormField>
 
-              <FormField label="Pantalla">
+              <FormField label="Display">
                 <input
                   type="text"
                   name="pantalla"
@@ -372,18 +372,18 @@ export function EquipmentFormPage() {
           <div className="flex gap-3 justify-end pt-2 border-t border-gray-100">
             <button
               type="button"
-              onClick={() => navigate(isEditing ? `/equipos/${id}` : '/equipos')}
+              onClick={() => navigate(isEditing ? `/equipment/${id}` : '/equipment')}
               disabled={isPending}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
             >
-              Cancelar
+              Cancel
             </button>
             <button
               type="submit"
               disabled={isPending}
               className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
             >
-              {isPending ? 'Guardando...' : isEditing ? 'Guardar cambios' : 'Crear equipo'}
+              {isPending ? 'Saving...' : isEditing ? 'Save changes' : 'Create equipment'}
             </button>
           </div>
         </form>

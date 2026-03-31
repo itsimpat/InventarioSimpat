@@ -17,7 +17,7 @@ const queryClient = new QueryClient()
 
 // Placeholder for pages not yet created (other agents will replace these)
 const PlaceholderPage = () => (
-  <div className="p-8 text-gray-500">Página en construcción...</div>
+  <div className="p-8 text-gray-500">Page under construction...</div>
 )
 
 // Lazy imports for Agente 2 — Equipos
@@ -74,7 +74,7 @@ const HistorialPage = lazy(() =>
 )
 
 const SuspenseWrapper = ({ children }: { children: React.ReactNode }) => (
-  <Suspense fallback={<div className="p-8 text-gray-400">Cargando...</div>}>
+  <Suspense fallback={<div className="p-8 text-gray-400">Loading...</div>}>
     {children}
   </Suspense>
 )
@@ -101,9 +101,9 @@ function App() {
                 }
               />
 
-              {/* Colaboradores */}
+              {/* Collaborators */}
               <Route
-                path="/colaboradores"
+                path="/collaborators"
                 element={
                   <ProtectedRoute>
                     <CollaboratorsListPage />
@@ -111,7 +111,7 @@ function App() {
                 }
               />
               <Route
-                path="/colaboradores/nuevo"
+                path="/collaborators/new"
                 element={
                   <ProtectedRoute>
                     <CollaboratorFormPage />
@@ -119,7 +119,7 @@ function App() {
                 }
               />
               <Route
-                path="/colaboradores/:id"
+                path="/collaborators/:id"
                 element={
                   <ProtectedRoute>
                     <CollaboratorDetailPage />
@@ -127,7 +127,7 @@ function App() {
                 }
               />
               <Route
-                path="/colaboradores/:id/editar"
+                path="/collaborators/:id/edit"
                 element={
                   <ProtectedRoute>
                     <CollaboratorFormPage />
@@ -145,9 +145,9 @@ function App() {
                 }
               />
 
-              {/* Equipos */}
+              {/* Equipment */}
               <Route
-                path="/equipos"
+                path="/equipment"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><EquipmentListPage /></SuspenseWrapper>
@@ -155,7 +155,7 @@ function App() {
                 }
               />
               <Route
-                path="/equipos/nuevo"
+                path="/equipment/new"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><EquipmentFormPage /></SuspenseWrapper>
@@ -163,7 +163,7 @@ function App() {
                 }
               />
               <Route
-                path="/equipos/:id"
+                path="/equipment/:id"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><EquipmentDetailPage /></SuspenseWrapper>
@@ -171,7 +171,7 @@ function App() {
                 }
               />
               <Route
-                path="/equipos/:id/editar"
+                path="/equipment/:id/edit"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><EquipmentFormPage /></SuspenseWrapper>
@@ -179,9 +179,9 @@ function App() {
                 }
               />
 
-              {/* Periféricos */}
+              {/* Peripherals */}
               <Route
-                path="/perifericos"
+                path="/peripherals"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><PeripheralsListPage /></SuspenseWrapper>
@@ -189,7 +189,7 @@ function App() {
                 }
               />
               <Route
-                path="/perifericos/nuevo"
+                path="/peripherals/new"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><PeripheralFormPage /></SuspenseWrapper>
@@ -197,7 +197,7 @@ function App() {
                 }
               />
               <Route
-                path="/perifericos/:id"
+                path="/peripherals/:id"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><PeripheralDetailPage /></SuspenseWrapper>
@@ -205,7 +205,7 @@ function App() {
                 }
               />
               <Route
-                path="/perifericos/:id/editar"
+                path="/peripherals/:id/edit"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><PeripheralFormPage /></SuspenseWrapper>
@@ -213,9 +213,9 @@ function App() {
                 }
               />
 
-              {/* Licencias */}
+              {/* Licenses */}
               <Route
-                path="/licencias"
+                path="/licenses"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><LicensesListPage /></SuspenseWrapper>
@@ -223,7 +223,7 @@ function App() {
                 }
               />
               <Route
-                path="/licencias/nueva"
+                path="/licenses/new"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><LicenseFormPage /></SuspenseWrapper>
@@ -231,7 +231,7 @@ function App() {
                 }
               />
               <Route
-                path="/licencias/:id"
+                path="/licenses/:id"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><LicenseDetailPage /></SuspenseWrapper>
@@ -239,7 +239,7 @@ function App() {
                 }
               />
               <Route
-                path="/licencias/:id/editar"
+                path="/licenses/:id/edit"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><LicenseFormPage /></SuspenseWrapper>
@@ -247,9 +247,9 @@ function App() {
                 }
               />
 
-              {/* Oficina */}
+              {/* Office */}
               <Route
-                path="/oficina"
+                path="/office"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><OfficeListPage /></SuspenseWrapper>
@@ -257,7 +257,7 @@ function App() {
                 }
               />
               <Route
-                path="/oficina/nuevo"
+                path="/office/new"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><OfficeFormPage /></SuspenseWrapper>
@@ -265,7 +265,7 @@ function App() {
                 }
               />
               <Route
-                path="/oficina/:id"
+                path="/office/:id"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><OfficeDetailPage /></SuspenseWrapper>
@@ -273,9 +273,9 @@ function App() {
                 }
               />
 
-              {/* Configuración */}
+              {/* Settings */}
               <Route
-                path="/configuracion"
+                path="/settings"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><ConfiguracionPage /></SuspenseWrapper>
@@ -283,9 +283,9 @@ function App() {
                 }
               />
 
-              {/* Reportes */}
+              {/* Reports */}
               <Route
-                path="/reportes"
+                path="/reports"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><ReportesPage /></SuspenseWrapper>
@@ -293,9 +293,9 @@ function App() {
                 }
               />
 
-              {/* Historial */}
+              {/* History */}
               <Route
-                path="/historial/:tipo/:id"
+                path="/history/:tipo/:id"
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><HistorialPage /></SuspenseWrapper>

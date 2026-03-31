@@ -9,11 +9,11 @@ import { useToast } from '../../components/shared/Toast'
 import { useCollaborator, useCreateCollaborator, useUpdateCollaborator } from '../../hooks/useCollaborators'
 
 const collaboratorSchema = z.object({
-  nombre: z.string().min(1, 'El nombre es requerido'),
-  area: z.string().min(1, 'El área es requerida'),
-  puesto: z.string().min(1, 'El puesto es requerido'),
-  email: z.string().min(1, 'El email es requerido').email('Formato de email inválido'),
-  fecha_ingreso: z.string().min(1, 'La fecha de ingreso es requerida'),
+  nombre: z.string().min(1, 'Name is required'),
+  area: z.string().min(1, 'Area is required'),
+  puesto: z.string().min(1, 'Position is required'),
+  email: z.string().min(1, 'Email is required').email('Invalid email format'),
+  fecha_ingreso: z.string().min(1, 'Start date is required'),
 })
 
 type FormValues = z.infer<typeof collaboratorSchema>
@@ -60,19 +60,19 @@ export function CollaboratorFormPage() {
     try {
       if (isEdit && id) {
         const updated = await updateMutation.mutateAsync({ id, data: values })
-        toast('Colaborador actualizado correctamente', 'success')
-        navigate(`/colaboradores/${updated.id}`)
+        toast('Collaborator updated successfully', 'success')
+        navigate(`/collaborators/${updated.id}`)
       } else {
         const created = await createMutation.mutateAsync({
           ...values,
           activo: true,
         })
-        toast('Colaborador creado correctamente', 'success')
-        navigate(`/colaboradores/${created.id}`)
+        toast('Collaborator created successfully', 'success')
+        navigate(`/collaborators/${created.id}`)
       }
     } catch (err) {
       toast(
-        err instanceof Error ? err.message : 'Error al guardar el colaborador',
+        err instanceof Error ? err.message : 'Error saving collaborator',
         'error'
       )
     }
@@ -82,7 +82,7 @@ export function CollaboratorFormPage() {
     return (
       <Layout>
         <div className="flex items-center justify-center h-48 text-gray-400">
-          Cargando...
+          Loading...
         </div>
       </Layout>
     )
@@ -95,12 +95,12 @@ export function CollaboratorFormPage() {
           <button
             onClick={() => navigate(-1)}
             className="text-gray-400 hover:text-gray-600 transition-colors"
-            aria-label="Volver"
+            aria-label="Go back"
           >
             ←
           </button>
           <h1 className="text-2xl font-semibold text-gray-900">
-            {isEdit ? 'Editar Colaborador' : 'Nuevo Colaborador'}
+            {isEdit ? 'Edit Collaborator' : 'New Collaborator'}
           </h1>
         </div>
 
@@ -108,30 +108,30 @@ export function CollaboratorFormPage() {
           onSubmit={handleSubmit(onSubmit)}
           className="bg-white rounded-xl border border-gray-200 p-6 space-y-4"
         >
-          <FormField label="Nombre" error={errors.nombre?.message} required>
+          <FormField label="Name" error={errors.nombre?.message} required>
             <input
               {...register('nombre')}
               type="text"
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
-              placeholder="Nombre completo"
+              placeholder="Full name"
             />
           </FormField>
 
-          <FormField label="Área" error={errors.area?.message} required>
+          <FormField label="Area" error={errors.area?.message} required>
             <input
               {...register('area')}
               type="text"
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
-              placeholder="Ej: Desarrollo, Marketing..."
+              placeholder="e.g. Engineering, Marketing..."
             />
           </FormField>
 
-          <FormField label="Puesto" error={errors.puesto?.message} required>
+          <FormField label="Position" error={errors.puesto?.message} required>
             <input
               {...register('puesto')}
               type="text"
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
-              placeholder="Ej: Desarrollador Frontend"
+              placeholder="e.g. Frontend Developer"
             />
           </FormField>
 
@@ -140,11 +140,11 @@ export function CollaboratorFormPage() {
               {...register('email')}
               type="email"
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
-              placeholder="correo@empresa.com"
+              placeholder="email@company.com"
             />
           </FormField>
 
-          <FormField label="Fecha de ingreso" error={errors.fecha_ingreso?.message} required>
+          <FormField label="Start date" error={errors.fecha_ingreso?.message} required>
             <input
               {...register('fecha_ingreso')}
               type="date"
@@ -158,14 +158,14 @@ export function CollaboratorFormPage() {
               onClick={() => navigate(-1)}
               className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Cancelar
+              Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
               className="flex-1 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
             >
-              {isSubmitting ? 'Guardando...' : isEdit ? 'Guardar cambios' : 'Crear colaborador'}
+              {isSubmitting ? 'Saving...' : isEdit ? 'Save changes' : 'Create collaborator'}
             </button>
           </div>
         </form>

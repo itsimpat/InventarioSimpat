@@ -13,7 +13,7 @@ export function ConfirmModal({
   isOpen,
   title,
   message,
-  confirmLabel = 'Confirmar',
+  confirmLabel = 'Confirm',
   confirmVariant = 'primary',
   onConfirm,
   onCancel,
@@ -41,14 +41,14 @@ export function ConfirmModal({
             disabled={isLoading}
             className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
           >
-            Cancelar
+            Cancel
           </button>
           <button
             onClick={onConfirm}
             disabled={isLoading}
             className={`px-4 py-2 text-sm font-medium rounded-lg disabled:opacity-50 transition-colors ${confirmClass}`}
           >
-            {isLoading ? 'Procesando...' : confirmLabel}
+            {isLoading ? 'Processing...' : confirmLabel}
           </button>
         </div>
       </div>

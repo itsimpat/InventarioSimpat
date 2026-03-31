@@ -12,7 +12,7 @@ type Props = {
 }
 
 function EventIcon({ tipo }: { tipo: HistoryEvent['tipo_evento'] }) {
-  if (tipo === 'Reasignación') {
+  if (tipo === 'Reassignment') {
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -30,7 +30,7 @@ function EventIcon({ tipo }: { tipo: HistoryEvent['tipo_evento'] }) {
       </svg>
     )
   }
-  if (tipo === 'Reparación') {
+  if (tipo === 'Repair') {
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -49,7 +49,7 @@ function EventIcon({ tipo }: { tipo: HistoryEvent['tipo_evento'] }) {
       </svg>
     )
   }
-  if (tipo === 'Mantenimiento') {
+  if (tipo === 'Maintenance') {
     return (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -87,12 +87,12 @@ function EventIcon({ tipo }: { tipo: HistoryEvent['tipo_evento'] }) {
 
 function CollaboratorName({ id }: { id: string | null }) {
   const { data } = useCollaborator(id ?? '')
-  if (!id) return <span className="text-gray-400 italic">Bodega</span>
+  if (!id) return <span className="text-gray-400 italic">Storage</span>
   return <span>{data?.nombre ?? id}</span>
 }
 
 function EventCard({ event }: { event: HistoryEvent }) {
-  const isOngoing = event.tipo_evento === 'Reparación' && event.fecha_fin === null
+  const isOngoing = event.tipo_evento === 'Repair' && event.fecha_fin === null
 
   return (
     <div className="bg-white border border-gray-200 rounded-lg p-4 shadow-sm">
@@ -101,7 +101,7 @@ function EventCard({ event }: { event: HistoryEvent }) {
           <span className="text-sm font-semibold text-gray-800">{event.tipo_evento}</span>
           {isOngoing && (
             <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-              En curso
+              In Progress
             </span>
           )}
         </div>
@@ -110,21 +110,21 @@ function EventCard({ event }: { event: HistoryEvent }) {
 
       <p className="text-sm text-gray-600 mb-2">{event.descripcion}</p>
 
-      {event.tipo_evento === 'Reasignación' && (
+      {event.tipo_evento === 'Reassignment' && (
         <div className="text-sm text-gray-600 flex items-center gap-1 flex-wrap">
-          <span className="font-medium">De:</span>
+          <span className="font-medium">From:</span>
           <CollaboratorName id={event.colaborador_anterior_id} />
           <span className="text-gray-400">→</span>
-          <span className="font-medium">A:</span>
+          <span className="font-medium">To:</span>
           <CollaboratorName id={event.colaborador_nuevo_id} />
         </div>
       )}
 
-      {(event.tipo_evento === 'Reparación' || event.tipo_evento === 'Mantenimiento') && (
+      {(event.tipo_evento === 'Repair' || event.tipo_evento === 'Maintenance') && (
         <div className="mt-2 space-y-1">
           {event.tecnico_nombre && (
             <div className="text-sm text-gray-600">
-              <span className="font-medium">Técnico:</span> {event.tecnico_nombre}
+              <span className="font-medium">Technician:</span> {event.tecnico_nombre}
               {event.tecnico_telefono && (
                 <span className="ml-2 text-gray-400">({event.tecnico_telefono})</span>
               )}
@@ -132,18 +132,18 @@ function EventCard({ event }: { event: HistoryEvent }) {
           )}
           {event.fecha_fin && (
             <div className="text-sm text-gray-600">
-              <span className="font-medium">Finalizado:</span> {formatDate(event.fecha_fin)}
+              <span className="font-medium">Completed:</span> {formatDate(event.fecha_fin)}
             </div>
           )}
           {event.costo_mxn !== null && (
             <div className="text-sm text-gray-600">
-              <span className="font-medium">Costo:</span> {formatMXN(event.costo_mxn)}
+              <span className="font-medium">Cost:</span> {formatMXN(event.costo_mxn)}
             </div>
           )}
         </div>
       )}
 
-      <p className="text-xs text-gray-400 mt-3">Registrado por: {event.registrado_por}</p>
+      <p className="text-xs text-gray-400 mt-3">Logged by: {event.registrado_por}</p>
     </div>
   )
 }
@@ -166,8 +166,8 @@ export function HistoryTimeline({ tipo, entityId }: Props) {
   if (!events || events.length === 0) {
     return (
       <EmptyState
-        title="Sin historial"
-        description="No hay eventos registrados para este elemento."
+        title="No history"
+        description="No events have been recorded for this item."
       />
     )
   }

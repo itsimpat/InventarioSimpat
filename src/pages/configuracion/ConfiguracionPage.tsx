@@ -9,10 +9,10 @@ import { useNotificationConfig, useUpdateNotificationConfig } from '../../hooks/
 
 const configSchema = z.object({
   dias_anticipacion: z
-    .number({ error: 'Ingresa un número válido' })
+    .number({ error: 'Enter a valid number' })
     .int()
-    .min(1, 'Mínimo 1 día')
-    .max(90, 'Máximo 90 días'),
+    .min(1, 'Minimum 1 day')
+    .max(90, 'Maximum 90 days'),
 })
 
 type FormValues = z.infer<typeof configSchema>
@@ -43,10 +43,10 @@ export function ConfiguracionPage() {
   async function onSubmit(values: FormValues) {
     try {
       await updateMutation.mutateAsync(values.dias_anticipacion)
-      toast('Configuración guardada correctamente', 'success')
+      toast('Settings saved successfully', 'success')
     } catch (err) {
       toast(
-        err instanceof Error ? err.message : 'Error al guardar la configuración',
+        err instanceof Error ? err.message : 'Error saving settings',
         'error'
       )
     }
@@ -56,9 +56,9 @@ export function ConfiguracionPage() {
     <Layout>
       <div className="max-w-xl space-y-6">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Configuración de Notificaciones</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Notification Settings</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Gestiona las alertas de renovación de licencias
+            Manage license renewal alerts
           </p>
         </div>
 
@@ -73,7 +73,7 @@ export function ConfiguracionPage() {
             className="bg-white rounded-xl border border-gray-200 p-6 space-y-4"
           >
             <FormField
-              label="Días de anticipación para alertas de renovación"
+              label="Days in advance for renewal alerts"
               error={errors.dias_anticipacion?.message}
               required
             >
@@ -89,7 +89,7 @@ export function ConfiguracionPage() {
 
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
               <p className="text-sm text-blue-700">
-                Las alertas se mostrarán en el dashboard cuando una licencia venza dentro del plazo configurado.
+                Alerts will appear on the dashboard when a license expires within the configured period.
               </p>
             </div>
 
@@ -99,7 +99,7 @@ export function ConfiguracionPage() {
                 disabled={isSubmitting}
                 className="px-6 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
               >
-                {isSubmitting ? 'Guardando...' : 'Guardar configuración'}
+                {isSubmitting ? 'Saving...' : 'Save settings'}
               </button>
             </div>
           </form>

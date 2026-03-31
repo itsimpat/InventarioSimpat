@@ -10,8 +10,8 @@ type ReportType = 'colaborador' | 'area' | 'global' | 'iy' | null
 const REPORT_CARDS = [
   {
     type: 'colaborador' as ReportType,
-    title: 'Por Colaborador',
-    description: 'Ver inventario completo asignado a un colaborador',
+    title: 'By Collaborator',
+    description: 'View complete inventory assigned to a collaborator',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -33,8 +33,8 @@ const REPORT_CARDS = [
   },
   {
     type: 'area' as ReportType,
-    title: 'Por Área',
-    description: 'Ver resumen de inversión y activos por área de la empresa',
+    title: 'By Area',
+    description: 'View investment summary and assets by company area',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -56,8 +56,8 @@ const REPORT_CARDS = [
   },
   {
     type: 'global' as ReportType,
-    title: 'Global Empresa',
-    description: 'Resumen completo de todos los activos de Simpat Tech',
+    title: 'Company Global',
+    description: 'Complete summary of all Simpat Tech assets',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -80,7 +80,7 @@ const REPORT_CARDS = [
   {
     type: 'iy' as ReportType,
     title: 'IY Budget',
-    description: 'Seguimiento del presupuesto Improve Yourself por colaborador',
+    description: 'Track Improve Yourself budget per collaborator',
     icon: (
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -110,9 +110,9 @@ export function ReportesPage() {
       <div className="space-y-8">
         {/* Header */}
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">Reportes</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Reports</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Selecciona el tipo de reporte que deseas consultar
+            Select the type of report you want to view
           </p>
         </div>
 
@@ -133,7 +133,7 @@ export function ReportesPage() {
                 <p className="text-sm text-gray-500 leading-snug">{card.description}</p>
                 {isActive && (
                   <p className="text-xs font-medium text-gray-400 mt-3 uppercase tracking-wide">
-                    Activo — click para cerrar
+                    Active — click to close
                   </p>
                 )}
               </button>

@@ -14,7 +14,7 @@ type Props = {
 }
 
 type FormState = {
-  tipo_evento: Exclude<HistoryEventType, 'Reasignación'>
+  tipo_evento: Exclude<HistoryEventType, 'Reassignment'>
   descripcion: string
   fecha_inicio: string
   fecha_fin: string
@@ -24,7 +24,7 @@ type FormState = {
 }
 
 const INITIAL_STATE: FormState = {
-  tipo_evento: 'Reparación',
+  tipo_evento: 'Repair',
   descripcion: '',
   fecha_inicio: new Date().toISOString().split('T')[0],
   fecha_fin: '',
@@ -38,13 +38,13 @@ type FormErrors = Partial<Record<keyof FormState, string>>
 function validate(values: FormState): FormErrors {
   const errors: FormErrors = {}
   if (!values.descripcion.trim()) {
-    errors.descripcion = 'La descripción es requerida'
+    errors.descripcion = 'Description is required'
   }
   if (!values.fecha_inicio) {
-    errors.fecha_inicio = 'La fecha de inicio es requerida'
+    errors.fecha_inicio = 'Start date is required'
   }
   if (values.costo && isNaN(parseFloat(values.costo))) {
-    errors.costo = 'El costo debe ser un número válido'
+    errors.costo = 'Cost must be a valid number'
   }
   return errors
 }
@@ -101,11 +101,11 @@ export function EventFormModal({
         colaborador_nuevo_id: null,
         registrado_por: registradoPor,
       })
-      toast('Evento registrado correctamente', 'success')
+      toast('Event logged successfully', 'success')
       handleClose()
     } catch (err) {
       toast(
-        err instanceof Error ? err.message : 'Error al registrar el evento',
+        err instanceof Error ? err.message : 'Error logging event',
         'error'
       )
     }
@@ -115,34 +115,34 @@ export function EventFormModal({
     'w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500'
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title="Registrar Evento" size="md">
+    <Modal isOpen={isOpen} onClose={handleClose} title="Log Event" size="md">
       <form onSubmit={handleSubmit} className="space-y-4">
-        <FormField label="Tipo de evento" required>
+        <FormField label="Event type" required>
           <select
             name="tipo_evento"
             value={values.tipo_evento}
             onChange={handleChange}
             className={inputClass}
           >
-            <option value="Reparación">Reparación</option>
-            <option value="Mantenimiento">Mantenimiento</option>
-            <option value="Otro">Otro</option>
+            <option value="Repair">Repair</option>
+            <option value="Maintenance">Maintenance</option>
+            <option value="Other">Other</option>
           </select>
         </FormField>
 
-        <FormField label="Descripción" error={errors.descripcion} required>
+        <FormField label="Description" error={errors.descripcion} required>
           <textarea
             name="descripcion"
             value={values.descripcion}
             onChange={handleChange}
             rows={3}
             className={inputClass}
-            placeholder="Describe el evento..."
+            placeholder="Describe the event..."
           />
         </FormField>
 
         <div className="grid grid-cols-2 gap-4">
-          <FormField label="Fecha inicio" error={errors.fecha_inicio} required>
+          <FormField label="Start date" error={errors.fecha_inicio} required>
             <input
               type="date"
               name="fecha_inicio"
@@ -152,7 +152,7 @@ export function EventFormModal({
             />
           </FormField>
 
-          <FormField label="Fecha fin">
+          <FormField label="End date">
             <input
               type="date"
               name="fecha_fin"
@@ -164,18 +164,18 @@ export function EventFormModal({
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <FormField label="Técnico">
+          <FormField label="Technician">
             <input
               type="text"
               name="tecnico_nombre"
               value={values.tecnico_nombre}
               onChange={handleChange}
               className={inputClass}
-              placeholder="Nombre del técnico"
+              placeholder="Technician name"
             />
           </FormField>
 
-          <FormField label="Teléfono">
+          <FormField label="Phone">
             <input
               type="text"
               name="tecnico_telefono"
@@ -187,7 +187,7 @@ export function EventFormModal({
           </FormField>
         </div>
 
-        <FormField label="Costo (MXN)" error={errors.costo}>
+        <FormField label="Cost (MXN)" error={errors.costo}>
           <div className="relative">
             <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-sm">$</span>
             <input
@@ -210,14 +210,14 @@ export function EventFormModal({
             disabled={isPending}
             className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
           >
-            Cancelar
+            Cancel
           </button>
           <button
             type="submit"
             disabled={isPending}
             className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
           >
-            {isPending ? 'Guardando...' : 'Registrar evento'}
+            {isPending ? 'Saving...' : 'Log event'}
           </button>
         </div>
       </form>

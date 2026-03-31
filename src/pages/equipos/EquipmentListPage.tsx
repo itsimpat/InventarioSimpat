@@ -8,49 +8,49 @@ import { formatUSD } from '../../utils/currency'
 import type { Equipment, EquipmentStatus } from '../../types'
 
 const EQUIPMENT_STATUSES: EquipmentStatus[] = [
-  'Asignado',
-  'En Bodega',
-  'En Reparación',
-  'Vendido',
-  'Dado de Baja',
-  'Solicitado',
+  'Assigned',
+  'In Storage',
+  'Under Repair',
+  'Sold',
+  'Decommissioned',
+  'Requested',
 ]
 
 const columns: Column<Equipment>[] = [
   {
     key: 'marca',
-    header: 'Marca',
+    header: 'Brand',
     sortable: true,
   },
   {
     key: 'modelo',
-    header: 'Modelo',
+    header: 'Model',
     sortable: true,
   },
   {
     key: 'estatus',
-    header: 'Estatus',
+    header: 'Status',
     render: (row) => <StatusBadge status={row.estatus} />,
   },
   {
     key: 'colaborador_id',
-    header: 'Colaborador',
+    header: 'Collaborator',
     render: (row) =>
       row.colaborador_id ? (
         <span className="text-gray-700">{row.colaborador_id}</span>
       ) : (
-        <span className="text-gray-400 italic">Sin asignar</span>
+        <span className="text-gray-400 italic">Unassigned</span>
       ),
   },
   {
     key: 'costo_usd',
-    header: 'Costo (USD)',
+    header: 'Cost (USD)',
     sortable: true,
     render: (row) => <span className="font-medium">{formatUSD(row.costo_usd)}</span>,
   },
   {
     key: 'anio_compra',
-    header: 'Año compra',
+    header: 'Purchase year',
     sortable: true,
   },
 ]
@@ -71,17 +71,16 @@ export function EquipmentListPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Equipos</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Equipment</h1>
             <p className="text-sm text-gray-500 mt-1">
-              {equipment.length} equipo{equipment.length !== 1 ? 's' : ''} registrado
-              {equipment.length !== 1 ? 's' : ''}
+              {equipment.length} item{equipment.length !== 1 ? 's' : ''} registered
             </p>
           </div>
           <button
-            onClick={() => navigate('/equipos/nuevo')}
+            onClick={() => navigate('/equipment/new')}
             className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
           >
-            + Nuevo Equipo
+            + New Equipment
           </button>
         </div>
 
@@ -92,7 +91,7 @@ export function EquipmentListPage() {
             onChange={(e) => setStatusFilter(e.target.value as EquipmentStatus | '')}
             className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
           >
-            <option value="">Todos los estatus</option>
+            <option value="">All statuses</option>
             {EQUIPMENT_STATUSES.map((s) => (
               <option key={s} value={s}>
                 {s}
@@ -104,7 +103,7 @@ export function EquipmentListPage() {
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            placeholder="Buscar por marca o modelo..."
+            placeholder="Search by brand or model..."
             className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64"
           />
         </div>
@@ -114,9 +113,9 @@ export function EquipmentListPage() {
           columns={columns}
           data={equipment}
           isLoading={isLoading}
-          emptyMessage="No hay equipos registrados"
+          emptyMessage="No equipment registered"
           keyExtractor={(row) => row.id}
-          onRowClick={(row) => navigate(`/equipos/${row.id}`)}
+          onRowClick={(row) => navigate(`/equipment/${row.id}`)}
         />
       </div>
     </Layout>

@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { insforge } from '../lib/insforge'
 
 const schema = z.object({
-  otp: z.string().length(6, 'El código debe tener 6 dígitos').regex(/^\d+$/, 'Solo números'),
+  otp: z.string().length(6, 'Code must be 6 digits').regex(/^\d+$/, 'Numbers only'),
 })
 
 type FormData = z.infer<typeof schema>
@@ -45,9 +45,9 @@ export function VerifyEmailPage() {
       <div className="w-full max-w-sm">
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
           <div className="mb-6 text-center">
-            <h1 className="text-xl font-semibold text-gray-900">Verificar email</h1>
+            <h1 className="text-xl font-semibold text-gray-900">Verify email</h1>
             <p className="text-sm text-gray-500 mt-2">
-              Ingresa el código de 6 dígitos enviado a{' '}
+              Enter the 6-digit code sent to{' '}
               <span className="font-medium text-gray-700">{email}</span>
             </p>
           </div>
@@ -75,7 +75,7 @@ export function VerifyEmailPage() {
 
             {resent && (
               <div className="rounded-lg bg-green-50 border border-green-200 px-3 py-2 text-sm text-green-700">
-                Código reenviado
+                Code resent
               </div>
             )}
 
@@ -84,7 +84,7 @@ export function VerifyEmailPage() {
               disabled={isSubmitting}
               className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-medium rounded-lg transition-colors"
             >
-              {isSubmitting ? 'Verificando...' : 'Verificar'}
+              {isSubmitting ? 'Verifying...' : 'Verify'}
             </button>
 
             <button
@@ -92,7 +92,7 @@ export function VerifyEmailPage() {
               onClick={handleResend}
               className="w-full text-sm text-gray-500 hover:text-gray-700 transition-colors"
             >
-              Reenviar código
+              Resend code
             </button>
           </form>
         </div>

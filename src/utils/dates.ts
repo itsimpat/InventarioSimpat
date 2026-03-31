@@ -1,12 +1,12 @@
-const MONTHS_ES = [
-  'ene', 'feb', 'mar', 'abr', 'may', 'jun',
-  'jul', 'ago', 'sep', 'oct', 'nov', 'dic',
+const MONTHS = [
+  'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec',
 ]
 
 export function formatDate(iso: string): string {
   const date = new Date(iso)
   const day = date.getUTCDate()
-  const month = MONTHS_ES[date.getUTCMonth()]
+  const month = MONTHS[date.getUTCMonth()]
   const year = date.getUTCFullYear()
   return `${day} ${month} ${year}`
 }
@@ -26,18 +26,18 @@ export function daysUntil(iso: string): number {
 
 export function formatRelative(iso: string): string {
   const days = daysUntil(iso)
-  if (days === 0) return 'hoy'
+  if (days === 0) return 'today'
   if (days > 0) {
-    if (days === 1) return 'en 1 día'
-    if (days < 30) return `en ${days} días`
-    if (days < 60) return 'en 1 mes'
+    if (days === 1) return 'in 1 day'
+    if (days < 30) return `in ${days} days`
+    if (days < 60) return 'in 1 month'
     const months = Math.round(days / 30)
-    return `en ${months} meses`
+    return `in ${months} months`
   }
   const absDays = Math.abs(days)
-  if (absDays === 1) return 'hace 1 día'
-  if (absDays < 30) return `hace ${absDays} días`
-  if (absDays < 60) return 'hace 1 mes'
+  if (absDays === 1) return '1 day ago'
+  if (absDays < 30) return `${absDays} days ago`
+  if (absDays < 60) return '1 month ago'
   const months = Math.round(absDays / 30)
-  return `hace ${months} meses`
+  return `${months} months ago`
 }

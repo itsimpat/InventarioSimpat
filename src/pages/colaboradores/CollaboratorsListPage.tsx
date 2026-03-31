@@ -24,7 +24,7 @@ export function CollaboratorsListPage() {
   const columns: Column<Collaborator>[] = [
     {
       key: 'nombre',
-      header: 'Nombre',
+      header: 'Name',
       sortable: true,
       render: (row) => (
         <span className="font-medium text-gray-900">{row.nombre}</span>
@@ -32,12 +32,12 @@ export function CollaboratorsListPage() {
     },
     {
       key: 'area',
-      header: 'Área',
+      header: 'Area',
       sortable: true,
     },
     {
       key: 'puesto',
-      header: 'Puesto',
+      header: 'Position',
       sortable: true,
     },
     {
@@ -46,14 +46,14 @@ export function CollaboratorsListPage() {
     },
     {
       key: 'activo',
-      header: 'Estado',
+      header: 'Status',
       render: (row) => (
-        <StatusBadge status={row.activo ? 'Asignado' : 'Dado de Baja'} size="sm" />
+        <StatusBadge status={row.activo ? 'Assigned' : 'Decommissioned'} size="sm" />
       ),
     },
     {
       key: 'fecha_ingreso',
-      header: 'Fecha ingreso',
+      header: 'Start date',
       sortable: true,
       render: (row) => formatDate(row.fecha_ingreso),
     },
@@ -64,12 +64,12 @@ export function CollaboratorsListPage() {
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-gray-900">Colaboradores</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Collaborators</h1>
           <button
-            onClick={() => navigate('/colaboradores/nuevo')}
+            onClick={() => navigate('/collaborators/new')}
             className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 transition-colors"
           >
-            + Nuevo Colaborador
+            + New Collaborator
           </button>
         </div>
 
@@ -77,14 +77,14 @@ export function CollaboratorsListPage() {
         <div className="flex flex-wrap gap-3">
           <input
             type="text"
-            placeholder="Buscar por nombre o email..."
+            placeholder="Search by name or email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-64"
           />
           <input
             type="text"
-            placeholder="Filtrar por área..."
+            placeholder="Filter by area..."
             value={area}
             onChange={(e) => setArea(e.target.value)}
             className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-48"
@@ -98,7 +98,7 @@ export function CollaboratorsListPage() {
                   : 'bg-white text-gray-600 hover:bg-gray-50'
               } transition-colors`}
             >
-              Activos
+              Active
             </button>
             <button
               onClick={() => setActivo(false)}
@@ -108,7 +108,7 @@ export function CollaboratorsListPage() {
                   : 'bg-white text-gray-600 hover:bg-gray-50'
               } transition-colors`}
             >
-              Inactivos
+              Inactive
             </button>
             <button
               onClick={() => setActivo(undefined)}
@@ -118,7 +118,7 @@ export function CollaboratorsListPage() {
                   : 'bg-white text-gray-600 hover:bg-gray-50'
               } transition-colors`}
             >
-              Todos
+              All
             </button>
           </div>
         </div>
@@ -126,18 +126,18 @@ export function CollaboratorsListPage() {
         {/* Table */}
         {!isLoading && collaborators.length === 0 && !search && !area ? (
           <EmptyState
-            title="No hay colaboradores"
-            description="Crea el primer colaborador para comenzar"
-            action={{ label: '+ Nuevo Colaborador', onClick: () => navigate('/colaboradores/nuevo') }}
+            title="No collaborators"
+            description="Create the first collaborator to get started"
+            action={{ label: '+ New Collaborator', onClick: () => navigate('/collaborators/new') }}
           />
         ) : (
           <Table
             columns={columns}
             data={collaborators}
             isLoading={isLoading}
-            emptyMessage="No se encontraron colaboradores"
+            emptyMessage="No collaborators found"
             keyExtractor={(row) => row.id}
-            onRowClick={(row) => navigate(`/colaboradores/${row.id}`)}
+            onRowClick={(row) => navigate(`/collaborators/${row.id}`)}
           />
         )}
       </div>

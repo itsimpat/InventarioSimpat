@@ -15,12 +15,12 @@ import { convertMXNtoUSD } from '../../utils/currency'
 import { fetchExchangeRate } from '../../utils/banxico'
 
 const licenseSchema = z.object({
-  nombre_producto: z.string().min(1, 'El nombre del producto es requerido'),
-  tipo: z.enum(['Mensual', 'Anual'], { error: 'Selecciona un tipo' }),
-  categoria: z.enum(['IY', 'General'], { error: 'Selecciona una categoría' }),
-  costo_mxn: z.number({ error: 'El costo es requerido' }).min(0.01, 'El costo debe ser mayor a 0'),
-  fecha_renovacion: z.string().min(1, 'La fecha de renovación es requerida'),
-  colaborador_id: z.string().min(1, 'El colaborador es requerido'),
+  nombre_producto: z.string().min(1, 'Product name is required'),
+  tipo: z.enum(['Mensual', 'Anual'], { error: 'Select a type' }),
+  categoria: z.enum(['IY', 'General'], { error: 'Select a category' }),
+  costo_mxn: z.number({ error: 'Cost is required' }).min(0.01, 'Cost must be greater than 0'),
+  fecha_renovacion: z.string().min(1, 'Renewal date is required'),
+  colaborador_id: z.string().min(1, 'Collaborator is required'),
   activa: z.boolean(),
 })
 
@@ -92,7 +92,7 @@ export function LicenseFormPage() {
         const costoUSD = convertMXNtoUSD(values.costo_mxn, rate)
         if (!isLoadingBudget && costoUSD > montoDisponible) {
           setIyBudgetError(
-            `El costo excede el presupuesto IY disponible. Disponible: $${montoDisponible.toFixed(2)} USD`
+            `Cost exceeds available IY budget. Available: $${montoDisponible.toFixed(2)} USD`
           )
           return
         }
@@ -114,7 +114,7 @@ export function LicenseFormPage() {
             activa: values.activa,
           },
         })
-        toast('Licencia actualizada correctamente', 'success')
+        toast('License updated successfully', 'success')
         navigate(`/licencias/${updated.id}`)
       } else {
         const created = await createMutation.mutateAsync({
@@ -127,12 +127,12 @@ export function LicenseFormPage() {
           colaborador_id: values.colaborador_id,
           activa: values.activa,
         })
-        toast('Licencia creada correctamente', 'success')
+        toast('License created successfully', 'success')
         navigate(`/licencias/${created.id}`)
       }
     } catch (err) {
       toast(
-        err instanceof Error ? err.message : 'Error al guardar la licencia',
+        err instanceof Error ? err.message : 'Error saving license',
         'error'
       )
     }
@@ -142,7 +142,7 @@ export function LicenseFormPage() {
     return (
       <Layout>
         <div className="flex items-center justify-center h-48 text-gray-400">
-          Cargando...
+          Loading...
         </div>
       </Layout>
     )
@@ -155,12 +155,12 @@ export function LicenseFormPage() {
           <button
             onClick={() => navigate(-1)}
             className="text-gray-400 hover:text-gray-600 transition-colors"
-            aria-label="Volver"
+            aria-label="Go back"
           >
             ←
           </button>
           <h1 className="text-2xl font-semibold text-gray-900">
-            {isEdit ? 'Editar Licencia' : 'Nueva Licencia'}
+            {isEdit ? 'Edit License' : 'New License'}
           </h1>
         </div>
 
@@ -168,7 +168,7 @@ export function LicenseFormPage() {
           onSubmit={handleSubmit(onSubmit)}
           className="bg-white rounded-xl border border-gray-200 p-6 space-y-4"
         >
-          <FormField label="Nombre del producto" error={errors.nombre_producto?.message} required>
+          <FormField label="Product name" error={errors.nombre_producto?.message} required>
             <input
               {...register('nombre_producto')}
               type="text"
@@ -177,7 +177,7 @@ export function LicenseFormPage() {
             />
           </FormField>
 
-          <FormField label="Tipo" error={errors.tipo?.message} required>
+          <FormField label="Type" error={errors.tipo?.message} required>
             <select
               {...register('tipo')}
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full bg-white"
@@ -187,7 +187,7 @@ export function LicenseFormPage() {
             </select>
           </FormField>
 
-          <FormField label="Categoría" error={errors.categoria?.message} required>
+          <FormField label="Category" error={errors.categoria?.message} required>
             <select
               {...register('categoria')}
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full bg-white"
@@ -197,12 +197,12 @@ export function LicenseFormPage() {
             </select>
           </FormField>
 
-          <FormField label="Colaborador" error={errors.colaborador_id?.message} required>
+          <FormField label="Collaborator" error={errors.colaborador_id?.message} required>
             <select
               {...register('colaborador_id')}
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full bg-white"
             >
-              <option value="">Seleccionar colaborador...</option>
+              <option value="">Select a collaborator...</option>
               {collaborators.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.nombre}
@@ -228,7 +228,7 @@ export function LicenseFormPage() {
                   onChange={(mxn) => {
                     setValue('costo_mxn', mxn)
                   }}
-                  label="Costo"
+                  label="Cost"
                   error={errors.costo_mxn?.message}
                 />
               )}
@@ -241,7 +241,7 @@ export function LicenseFormPage() {
             </p>
           )}
 
-          <FormField label="Fecha de renovación" error={errors.fecha_renovacion?.message} required>
+          <FormField label="Renewal date" error={errors.fecha_renovacion?.message} required>
             <input
               {...register('fecha_renovacion')}
               type="date"
@@ -249,14 +249,14 @@ export function LicenseFormPage() {
             />
           </FormField>
 
-          <FormField label="Estado" error={errors.activa?.message}>
+          <FormField label="Status" error={errors.activa?.message}>
             <label className="flex items-center gap-2 cursor-pointer">
               <input
                 {...register('activa')}
                 type="checkbox"
                 className="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
               />
-              <span className="text-sm text-gray-700">Licencia activa</span>
+              <span className="text-sm text-gray-700">Active license</span>
             </label>
           </FormField>
 
@@ -266,7 +266,7 @@ export function LicenseFormPage() {
               onClick={() => navigate(-1)}
               className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Cancelar
+              Cancel
             </button>
             <button
               type="submit"
@@ -274,10 +274,10 @@ export function LicenseFormPage() {
               className="flex-1 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
             >
               {isSubmitting
-                ? 'Guardando...'
+                ? 'Saving...'
                 : isEdit
-                ? 'Guardar cambios'
-                : 'Crear licencia'}
+                ? 'Save changes'
+                : 'Create license'}
             </button>
           </div>
         </form>

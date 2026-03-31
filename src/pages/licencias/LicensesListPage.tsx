@@ -51,7 +51,7 @@ export function LicensesListPage() {
     },
     {
       key: 'categoria',
-      header: 'Categoría',
+      header: 'Category',
       render: (row: License) => (
         <span
           className={`inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium ${
@@ -75,7 +75,7 @@ export function LicensesListPage() {
     },
     {
       key: 'costo_usd',
-      header: 'Costo USD',
+      header: 'Cost (USD)',
       sortable: true,
       render: (row: License) => (
         <span className="text-gray-700">{formatUSD(row.costo_usd)}</span>
@@ -83,7 +83,7 @@ export function LicensesListPage() {
     },
     {
       key: 'fecha_renovacion',
-      header: 'Próx. Renovación',
+      header: 'Next Renewal',
       sortable: true,
       render: (row: License) => {
         const days = daysUntil(row.fecha_renovacion)
@@ -97,14 +97,14 @@ export function LicensesListPage() {
     },
     {
       key: 'activa',
-      header: 'Activa',
+      header: 'Active',
       render: (row: License) => (
         <span
           className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium ${
             row.activa ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-500'
           }`}
         >
-          {row.activa ? 'Sí' : 'No'}
+          {row.activa ? 'Yes' : 'No'}
         </span>
       ),
     },
@@ -115,12 +115,12 @@ export function LicensesListPage() {
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-gray-900">Licencias</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Licenses</h1>
           <button
             onClick={() => navigate('/licencias/nueva')}
             className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
           >
-            + Nueva Licencia
+            + New License
           </button>
         </div>
 
@@ -131,7 +131,7 @@ export function LicensesListPage() {
             onChange={(e) => setCollaboratorId(e.target.value)}
             className={INPUT_CLASS}
           >
-            <option value="">Todos los colaboradores</option>
+            <option value="">All collaborators</option>
             {collaborators.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.nombre}
@@ -144,7 +144,7 @@ export function LicensesListPage() {
             onChange={(e) => setTipo(e.target.value as LicenseType | '')}
             className={INPUT_CLASS}
           >
-            <option value="">Todos los tipos</option>
+            <option value="">All types</option>
             <option value="Mensual">Mensual</option>
             <option value="Anual">Anual</option>
           </select>
@@ -154,7 +154,7 @@ export function LicensesListPage() {
             onChange={(e) => setCategoria(e.target.value as LicenseCategory | '')}
             className={INPUT_CLASS}
           >
-            <option value="">Todas las categorías</option>
+            <option value="">All categories</option>
             <option value="IY">IY</option>
             <option value="General">General</option>
           </select>
@@ -164,9 +164,9 @@ export function LicensesListPage() {
             onChange={(e) => setActivaFilter(e.target.value as '' | 'true' | 'false')}
             className={INPUT_CLASS}
           >
-            <option value="">Activa e inactiva</option>
-            <option value="true">Solo activas</option>
-            <option value="false">Solo inactivas</option>
+            <option value="">Active &amp; inactive</option>
+            <option value="true">Active only</option>
+            <option value="false">Inactive only</option>
           </select>
         </div>
 
@@ -176,7 +176,7 @@ export function LicensesListPage() {
           data={licenses}
           isLoading={isLoading}
           keyExtractor={(row) => row.id}
-          emptyMessage="No hay licencias que coincidan con los filtros"
+          emptyMessage="No licenses match the selected filters"
           onRowClick={(row) => navigate(`/licencias/${row.id}`)}
         />
       </div>

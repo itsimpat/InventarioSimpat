@@ -64,7 +64,7 @@ export function PeripheralDetailPage() {
   if (!peripheral) {
     return (
       <Layout>
-        <div className="text-center py-20 text-gray-500">Periférico no encontrado.</div>
+        <div className="text-center py-20 text-gray-500">Peripheral not found.</div>
       </Layout>
     )
   }
@@ -75,10 +75,10 @@ export function PeripheralDetailPage() {
     if (!id) return
     try {
       await changeStatus.mutateAsync({ id, status: selectedStatus })
-      toast('Estatus actualizado', 'success')
+      toast('Status updated', 'success')
       setShowStatusModal(false)
     } catch (err) {
-      toast(err instanceof Error ? err.message : 'Error al cambiar estatus', 'error')
+      toast(err instanceof Error ? err.message : 'Error changing status', 'error')
     }
   }
 
@@ -90,11 +90,11 @@ export function PeripheralDetailPage() {
         collaboratorId: selectedCollaborator,
         registradoPor,
       })
-      toast('Periférico asignado correctamente', 'success')
+      toast('Peripheral assigned successfully', 'success')
       setShowAssignModal(false)
       setSelectedCollaborator('')
     } catch (err) {
-      toast(err instanceof Error ? err.message : 'Error al asignar periférico', 'error')
+      toast(err instanceof Error ? err.message : 'Error assigning peripheral', 'error')
     }
   }
 
@@ -102,10 +102,10 @@ export function PeripheralDetailPage() {
     if (!id) return
     try {
       await returnToBodega.mutateAsync({ peripheralId: id, registradoPor })
-      toast('Periférico regresado a bodega', 'success')
+      toast('Peripheral returned to storage', 'success')
       setShowReturnModal(false)
     } catch (err) {
-      toast(err instanceof Error ? err.message : 'Error al regresar a bodega', 'error')
+      toast(err instanceof Error ? err.message : 'Error returning to storage', 'error')
     }
   }
 
@@ -140,7 +140,7 @@ export function PeripheralDetailPage() {
               onClick={() => navigate(`/perifericos/${id}/editar`)}
               className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Editar
+              Edit
             </button>
             <button
               onClick={() => {
@@ -149,28 +149,28 @@ export function PeripheralDetailPage() {
               }}
               className="px-3 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
             >
-              Cambiar Estatus
+              Change Status
             </button>
           </div>
         </div>
 
         {/* Info grid */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Información</h2>
+          <h2 className="text-base font-semibold text-gray-900 mb-4">Information</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            <InfoItem label="Tipo" value={peripheral.tipo} />
-            <InfoItem label="Marca" value={peripheral.marca} />
-            <InfoItem label="Modelo" value={peripheral.modelo} />
-            <InfoItem label="Fecha de compra" value={formatDate(peripheral.fecha_compra)} />
-            <InfoItem label="Costo (MXN)" value={formatMXN(peripheral.costo_mxn)} />
-            <InfoItem label="Costo (USD)" value={formatUSD(peripheral.costo_usd)} />
+            <InfoItem label="Type" value={peripheral.tipo} />
+            <InfoItem label="Brand" value={peripheral.marca} />
+            <InfoItem label="Model" value={peripheral.modelo} />
+            <InfoItem label="Purchase date" value={formatDate(peripheral.fecha_compra)} />
+            <InfoItem label="Cost (MXN)" value={formatMXN(peripheral.costo_mxn)} />
+            <InfoItem label="Cost (USD)" value={formatUSD(peripheral.costo_usd)} />
             <InfoItem label="Ownership" value={ownership} />
           </div>
         </div>
 
         {/* Ownership / assignment section */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Asignación</h2>
+          <h2 className="text-base font-semibold text-gray-900 mb-4">Assignment</h2>
           {peripheral.colaborador_id && collaborator ? (
             <div className="flex items-center justify-between">
               <div>
@@ -185,19 +185,19 @@ export function PeripheralDetailPage() {
                   }}
                   className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  Reasignar
+                  Reassign
                 </button>
                 <button
                   onClick={() => setShowReturnModal(true)}
                   className="px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
                 >
-                  Regresar a Bodega
+                  Return to Storage
                 </button>
               </div>
             </div>
           ) : (
             <div className="flex items-center justify-between">
-              <p className="text-gray-400 italic">En Bodega — sin colaborador asignado</p>
+              <p className="text-gray-400 italic">In Storage — no collaborator assigned</p>
               <button
                 onClick={() => {
                   setSelectedCollaborator('')
@@ -205,7 +205,7 @@ export function PeripheralDetailPage() {
                 }}
                 className="px-3 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
               >
-                Asignar a Colaborador
+                Assign to Collaborator
               </button>
             </div>
           )}
@@ -214,12 +214,12 @@ export function PeripheralDetailPage() {
         {/* History section */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-semibold text-gray-900">Historial</h2>
+            <h2 className="text-base font-semibold text-gray-900">History</h2>
             <button
               onClick={() => setShowEventModal(true)}
               className="px-3 py-2 text-sm font-medium text-indigo-600 border border-indigo-300 rounded-lg hover:bg-indigo-50 transition-colors"
             >
-              + Registrar Evento
+              + Log Event
             </button>
           </div>
           <HistoryTimeline tipo="Peripheral" entityId={id ?? ''} />
@@ -227,7 +227,7 @@ export function PeripheralDetailPage() {
       </div>
 
       {/* Change status modal */}
-      <Modal isOpen={showStatusModal} onClose={() => setShowStatusModal(false)} title="Cambiar Estatus" size="sm">
+      <Modal isOpen={showStatusModal} onClose={() => setShowStatusModal(false)} title="Change Status" size="sm">
         <div className="space-y-4">
           <select
             value={selectedStatus}

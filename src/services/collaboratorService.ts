@@ -44,7 +44,7 @@ export const collaboratorService = {
       .single()
 
     if (error) throw new Error(error.message)
-    if (!data) throw new Error(`Colaborador ${id} no encontrado`)
+    if (!data) throw new Error(`Collaborator ${id} not found`)
     return data as Collaborator
   },
 
@@ -56,7 +56,7 @@ export const collaboratorService = {
       .single()
 
     if (error) throw new Error(error.message)
-    if (!created) throw new Error('No se pudo crear el colaborador')
+    if (!created) throw new Error('Failed to create collaborator')
     return created as Collaborator
   },
 
@@ -69,7 +69,7 @@ export const collaboratorService = {
       .single()
 
     if (error) throw new Error(error.message)
-    if (!updated) throw new Error('No se pudo actualizar el colaborador')
+    if (!updated) throw new Error('Failed to update collaborator')
     return updated as Collaborator
   },
 

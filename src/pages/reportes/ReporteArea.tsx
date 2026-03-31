@@ -30,15 +30,15 @@ export function ReporteArea() {
       {/* Selector */}
       <div className="bg-white rounded-xl border border-gray-200 p-5">
         <label className="block text-sm font-medium text-gray-700 mb-2">
-          Seleccionar área
+          Select area
         </label>
         <select
           value={selectedArea}
           onChange={(e) => setSelectedArea(e.target.value)}
           className="w-full sm:w-80 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
         >
-          <option value="">— Selecciona un área —</option>
-          {collabLoading && <option disabled>Cargando...</option>}
+          <option value="">— Select an area —</option>
+          {collabLoading && <option disabled>Loading...</option>}
           {areas.map((a) => (
             <option key={a} value={a}>
               {a}
@@ -53,27 +53,27 @@ export function ReporteArea() {
           {reportLoading ? (
             <ReportSkeleton />
           ) : !report ? (
-            <EmptyState title="No se pudo cargar el reporte" />
+            <EmptyState title="Could not load the report" />
           ) : (
             <div className="space-y-5">
               {/* Summary Cards */}
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="bg-white rounded-xl border border-gray-200 p-4">
-                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Colaboradores</p>
+                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Collaborators</p>
                   <p className="text-2xl font-bold text-indigo-600">
                     {report.colaboradores.length}
                   </p>
                 </div>
                 <div className="bg-white rounded-xl border border-gray-200 p-4">
-                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Equipos</p>
+                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Equipment</p>
                   <p className="text-2xl font-bold text-gray-800">{report.totalEquipos}</p>
                 </div>
                 <div className="bg-white rounded-xl border border-gray-200 p-4">
-                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Periféricos</p>
+                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Peripherals</p>
                   <p className="text-2xl font-bold text-gray-800">{report.totalPerifericos}</p>
                 </div>
                 <div className="bg-white rounded-xl border border-gray-200 p-4">
-                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Licencias</p>
+                  <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Licenses</p>
                   <p className="text-2xl font-bold text-gray-800">{report.totalLicencias}</p>
                 </div>
               </div>
@@ -81,14 +81,14 @@ export function ReporteArea() {
               {/* Collaborators List */}
               {report.colaboradores.length === 0 ? (
                 <EmptyState
-                  title="Sin colaboradores en esta área"
-                  description="No hay colaboradores activos en el área seleccionada"
+                  title="No collaborators in this area"
+                  description="There are no active collaborators in the selected area"
                 />
               ) : (
                 <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
                   <div className="px-5 py-3 border-b border-gray-100 bg-gray-50">
                     <h3 className="text-sm font-semibold text-gray-700">
-                      Colaboradores del área — {selectedArea}
+                      Collaborators in area — {selectedArea}
                     </h3>
                   </div>
                   <div className="divide-y divide-gray-50">
@@ -105,7 +105,7 @@ export function ReporteArea() {
                           to={`/colaboradores/${c.id}`}
                           className="text-xs text-indigo-600 hover:underline"
                         >
-                          Ver perfil
+                          View profile
                         </Link>
                       </div>
                     ))}
@@ -116,11 +116,11 @@ export function ReporteArea() {
               {/* Total */}
               <div className="bg-blue-600 rounded-xl p-5 text-white">
                 <p className="text-sm font-medium text-blue-200 uppercase tracking-wide mb-1">
-                  Inversión total del área {selectedArea}
+                  Total investment for area {selectedArea}
                 </p>
                 <p className="text-4xl font-bold">{formatUSD(report.totalInversionUSD)}</p>
                 <p className="text-sm text-blue-200 mt-1">
-                  {report.totalEquipos} equipos · {report.totalPerifericos} periféricos · {report.totalLicencias} licencias activas
+                  {report.totalEquipos} equipment · {report.totalPerifericos} peripherals · {report.totalLicencias} active licenses
                 </p>
               </div>
             </div>

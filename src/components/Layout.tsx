@@ -8,14 +8,14 @@ type Props = {
 
 const NAV_ITEMS = [
   { to: '/', label: 'Dashboard', exact: true },
-  { to: '/colaboradores', label: 'Colaboradores' },
-  { to: '/admins', label: 'Administradores' },
-  { to: '/equipos', label: 'Equipos' },
-  { to: '/perifericos', label: 'Periféricos' },
-  { to: '/licencias', label: 'Licencias' },
-  { to: '/oficina', label: 'Inventario Oficina' },
-  { to: '/reportes', label: 'Reportes' },
-  { to: '/configuracion', label: 'Configuración' },
+  { to: '/collaborators', label: 'Collaborators' },
+  { to: '/admins', label: 'Administrators' },
+  { to: '/equipment', label: 'Equipment' },
+  { to: '/peripherals', label: 'Peripherals' },
+  { to: '/licenses', label: 'Licenses' },
+  { to: '/office', label: 'Office Inventory' },
+  { to: '/reports', label: 'Reports' },
+  { to: '/settings', label: 'Settings' },
 ]
 
 export function Layout({ children }: Props) {
@@ -33,7 +33,7 @@ export function Layout({ children }: Props) {
       <aside className="w-64 bg-gray-900 text-white flex flex-col fixed inset-y-0 left-0">
         {/* Logo */}
         <div className="px-6 py-5 border-b border-gray-700">
-          <span className="text-lg font-semibold tracking-tight">Simpat Inventario</span>
+          <span className="text-lg font-semibold tracking-tight">Simpat Inventory</span>
         </div>
 
         {/* Navigation */}

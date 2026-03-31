@@ -6,8 +6,8 @@ import { z } from 'zod'
 import { useAuth } from '../contexts/AuthContext'
 
 const schema = z.object({
-  email: z.string().email('Ingresa un email válido'),
-  password: z.string().min(1, 'Ingresa tu contraseña'),
+  email: z.string().email('Enter a valid email'),
+  password: z.string().min(1, 'Enter your password'),
 })
 
 type FormData = z.infer<typeof schema>
@@ -39,7 +39,7 @@ export function LoginPage() {
         <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
           <div className="mb-8 text-center">
             <h1 className="text-2xl font-semibold text-gray-900">Simpat Tech</h1>
-            <p className="text-sm text-gray-500 mt-1">Inventario</p>
+            <p className="text-sm text-gray-500 mt-1">Inventory</p>
           </div>
 
           <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-4">
@@ -62,7 +62,7 @@ export function LoginPage() {
 
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
-                Contraseña
+                Password
               </label>
               <input
                 id="password"
@@ -88,13 +88,13 @@ export function LoginPage() {
               disabled={isSubmitting}
               className="w-full py-2 px-4 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white text-sm font-medium rounded-lg transition-colors"
             >
-              {isSubmitting ? 'Iniciando sesión...' : 'Iniciar sesión'}
+              {isSubmitting ? 'Signing in...' : 'Sign in'}
             </button>
           </form>
           <p className="mt-6 text-center text-sm text-gray-500">
-            ¿No tienes cuenta?{' '}
+            Don't have an account?{' '}
             <Link to="/register" className="text-blue-600 hover:text-blue-700 font-medium">
-              Crear cuenta
+              Create account
             </Link>
           </p>
         </div>

@@ -45,10 +45,10 @@ const INITIAL_STATE: FormState = {
 
 function validate(values: FormState, isEditing: boolean): FormErrors {
   const errors: FormErrors = {}
-  if (!values.marca.trim()) errors.marca = 'La marca es requerida'
-  if (!values.modelo.trim()) errors.modelo = 'El modelo es requerido'
-  if (!isEditing && values.costo_mxn <= 0) errors.costo_mxn = 'El costo es requerido'
-  if (!values.fecha_compra) errors.fecha_compra = 'La fecha de compra es requerida'
+  if (!values.marca.trim()) errors.marca = 'Brand is required'
+  if (!values.modelo.trim()) errors.modelo = 'Model is required'
+  if (!isEditing && values.costo_mxn <= 0) errors.costo_mxn = 'Cost is required'
+  if (!values.fecha_compra) errors.fecha_compra = 'Purchase date is required'
   return errors
 }
 
@@ -120,7 +120,7 @@ export function PeripheralFormPage() {
           updateData.costo_mxn = values.costo_mxn
         }
         await update({ id, data: updateData })
-        toast('Periférico actualizado correctamente', 'success')
+        toast('Peripheral updated successfully', 'success')
         navigate(`/perifericos/${id}`)
       } else {
         const created = await create({
@@ -133,11 +133,11 @@ export function PeripheralFormPage() {
           estatus: values.estatus,
           colaborador_id: values.colaborador_id || null,
         })
-        toast('Periférico creado correctamente', 'success')
+        toast('Peripheral created successfully', 'success')
         navigate(`/perifericos/${created.id}`)
       }
     } catch (err) {
-      toast(err instanceof Error ? err.message : 'Error al guardar el periférico', 'error')
+      toast(err instanceof Error ? err.message : 'Error saving peripheral', 'error')
     }
   }
 
@@ -168,7 +168,7 @@ export function PeripheralFormPage() {
             </svg>
           </button>
           <h1 className="text-2xl font-bold text-gray-900">
-            {isEditing ? 'Editar Periférico' : 'Nuevo Periférico'}
+            {isEditing ? 'Edit Peripheral' : 'New Peripheral'}
           </h1>
         </div>
 
@@ -214,11 +214,11 @@ export function PeripheralFormPage() {
           <CurrencyInput
             valueMXN={values.costo_mxn}
             onChange={handleCurrencyChange}
-            label={isEditing ? 'Costo (dejar en 0 para no cambiar)' : 'Costo'}
+            label={isEditing ? 'Cost (leave 0 to keep unchanged)' : 'Cost'}
             error={errors.costo_mxn}
           />
 
-          <FormField label="Fecha de compra" error={errors.fecha_compra} required>
+          <FormField label="Purchase date" error={errors.fecha_compra} required>
             <input
               type="date"
               name="fecha_compra"
@@ -243,7 +243,7 @@ export function PeripheralFormPage() {
 
           <FormField label="Ownership">
             <p className="text-sm text-gray-500 mb-2">
-              Ownership actual: <span className="font-medium">{ownership}</span>
+              Current ownership: <span className="font-medium">{ownership}</span>
             </p>
             <select
               name="colaborador_id"
@@ -251,7 +251,7 @@ export function PeripheralFormPage() {
               onChange={handleChange}
               className={inputClass}
             >
-              <option value="">Bodega (sin colaborador)</option>
+              <option value="">Storage (no collaborator)</option>
               {collaborators.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.nombre} — {c.area}
@@ -267,14 +267,14 @@ export function PeripheralFormPage() {
               disabled={isPending}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
             >
-              Cancelar
+              Cancel
             </button>
             <button
               type="submit"
               disabled={isPending}
               className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
             >
-              {isPending ? 'Guardando...' : isEditing ? 'Guardar cambios' : 'Crear periférico'}
+              {isPending ? 'Saving...' : isEditing ? 'Save changes' : 'Create peripheral'}
             </button>
           </div>
         </form>

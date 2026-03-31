@@ -9,12 +9,12 @@ import { useToast } from '../../components/shared/Toast'
 import { useCreateOfficeItem } from '../../hooks/useOfficeItems'
 
 const officeItemSchema = z.object({
-  nombre: z.string().min(1, 'El nombre es requerido'),
-  categoria: z.enum(['Silla', 'Mesa', 'TV', 'Otro'], { error: 'Selecciona una categoría' }),
+  nombre: z.string().min(1, 'Name is required'),
+  categoria: z.enum(['Silla', 'Mesa', 'TV', 'Otro'], { error: 'Select a category' }),
   marca: z.string().optional(),
-  costo_mxn: z.number({ error: 'El costo es requerido' }).min(0.01, 'El costo debe ser mayor a 0'),
-  fecha_compra: z.string().min(1, 'La fecha de compra es requerida'),
-  cantidad: z.number({ error: 'La cantidad es requerida' }).int().min(1, 'La cantidad mínima es 1'),
+  costo_mxn: z.number({ error: 'Cost is required' }).min(0.01, 'Cost must be greater than 0'),
+  fecha_compra: z.string().min(1, 'Purchase date is required'),
+  cantidad: z.number({ error: 'Quantity is required' }).int().min(1, 'Minimum quantity is 1'),
 })
 
 type FormValues = z.infer<typeof officeItemSchema>
@@ -53,11 +53,11 @@ export function OfficeFormPage() {
         fecha_compra: values.fecha_compra,
         cantidad: values.cantidad,
       })
-      toast('Artículo de oficina creado correctamente', 'success')
+      toast('Office item created successfully', 'success')
       navigate(`/oficina/${created.id}`)
     } catch (err) {
       toast(
-        err instanceof Error ? err.message : 'Error al crear el artículo',
+        err instanceof Error ? err.message : 'Error creating item',
         'error'
       )
     }
@@ -70,18 +70,18 @@ export function OfficeFormPage() {
           <button
             onClick={() => navigate(-1)}
             className="text-gray-400 hover:text-gray-600 transition-colors"
-            aria-label="Volver"
+            aria-label="Go back"
           >
             ←
           </button>
-          <h1 className="text-2xl font-semibold text-gray-900">Nuevo Artículo de Oficina</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">New Office Item</h1>
         </div>
 
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="bg-white rounded-xl border border-gray-200 p-6 space-y-4"
         >
-          <FormField label="Nombre" error={errors.nombre?.message} required>
+          <FormField label="Name" error={errors.nombre?.message} required>
             <input
               {...register('nombre')}
               type="text"
@@ -90,7 +90,7 @@ export function OfficeFormPage() {
             />
           </FormField>
 
-          <FormField label="Categoría" error={errors.categoria?.message} required>
+          <FormField label="Category" error={errors.categoria?.message} required>
             <select
               {...register('categoria')}
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full bg-white"
@@ -102,7 +102,7 @@ export function OfficeFormPage() {
             </select>
           </FormField>
 
-          <FormField label="Marca" error={errors.marca?.message}>
+          <FormField label="Brand" error={errors.marca?.message}>
             <input
               {...register('marca')}
               type="text"
@@ -120,13 +120,13 @@ export function OfficeFormPage() {
                 onChange={(mxn) => {
                   setValue('costo_mxn', mxn)
                 }}
-                label="Costo"
+                label="Cost"
                 error={errors.costo_mxn?.message}
               />
             )}
           />
 
-          <FormField label="Fecha de compra" error={errors.fecha_compra?.message} required>
+          <FormField label="Purchase date" error={errors.fecha_compra?.message} required>
             <input
               {...register('fecha_compra')}
               type="date"
@@ -134,7 +134,7 @@ export function OfficeFormPage() {
             />
           </FormField>
 
-          <FormField label="Cantidad" error={errors.cantidad?.message} required>
+          <FormField label="Quantity" error={errors.cantidad?.message} required>
             <input
               {...register('cantidad', { valueAsNumber: true })}
               type="number"
@@ -150,14 +150,14 @@ export function OfficeFormPage() {
               onClick={() => navigate(-1)}
               className="flex-1 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Cancelar
+              Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting}
               className="flex-1 px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
             >
-              {isSubmitting ? 'Guardando...' : 'Crear artículo'}
+              {isSubmitting ? 'Saving...' : 'Create item'}
             </button>
           </div>
         </form>

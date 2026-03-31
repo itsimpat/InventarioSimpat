@@ -31,7 +31,7 @@ export function OfficeListPage() {
     },
     {
       key: 'categoria',
-      header: 'Categoría',
+      header: 'Category',
       render: (row: OfficeItem) => (
         <span className="text-gray-700">{row.categoria}</span>
       ),
@@ -61,7 +61,7 @@ export function OfficeListPage() {
     },
     {
       key: 'fecha_compra',
-      header: 'Fecha compra',
+      header: 'Purchase date',
       sortable: true,
       render: (row: OfficeItem) => (
         <span className="text-gray-700">{formatDate(row.fecha_compra)}</span>
@@ -74,12 +74,12 @@ export function OfficeListPage() {
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold text-gray-900">Inventario de Oficina</h1>
+          <h1 className="text-2xl font-semibold text-gray-900">Office Inventory</h1>
           <button
             onClick={() => navigate('/oficina/nuevo')}
             className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
           >
-            + Nuevo Artículo
+            + New Item
           </button>
         </div>
 
@@ -90,7 +90,7 @@ export function OfficeListPage() {
             onChange={(e) => setCategoria(e.target.value as OfficeItemCategory | '')}
             className={INPUT_CLASS}
           >
-            <option value="">Todas las categorías</option>
+            <option value="">All categories</option>
             <option value="Silla">Silla</option>
             <option value="Mesa">Mesa</option>
             <option value="TV">TV</option>
@@ -104,7 +104,7 @@ export function OfficeListPage() {
           data={items}
           isLoading={isLoading}
           keyExtractor={(row) => row.id}
-          emptyMessage="No hay artículos de oficina registrados"
+          emptyMessage="No office items registered"
           onRowClick={(row) => navigate(`/oficina/${row.id}`)}
         />
       </div>

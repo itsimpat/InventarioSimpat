@@ -1,20 +1,20 @@
 export type EquipmentStatus =
-  | 'Asignado'
-  | 'En Bodega'
-  | 'En Reparación'
-  | 'Vendido'
-  | 'Dado de Baja'
-  | 'Solicitado'
+  | 'Assigned'
+  | 'In Storage'
+  | 'Under Repair'
+  | 'Sold'
+  | 'Decommissioned'
+  | 'Requested'
 
-export type PeripheralType = 'Monitor' | 'Teclado' | 'Audífonos' | 'Mouse' | 'Otro'
+export type PeripheralType = 'Monitor' | 'Keyboard' | 'Headphones' | 'Mouse' | 'Other'
 
-export type LicenseType = 'Mensual' | 'Anual'
+export type LicenseType = 'Monthly' | 'Annual'
 
 export type LicenseCategory = 'IY' | 'General'
 
-export type OfficeItemCategory = 'Silla' | 'Mesa' | 'TV' | 'Otro'
+export type OfficeItemCategory = 'Chair' | 'Desk' | 'TV' | 'Other'
 
-export type HistoryEventType = 'Reasignación' | 'Reparación' | 'Mantenimiento' | 'Otro'
+export type HistoryEventType = 'Reassignment' | 'Repair' | 'Maintenance' | 'Other'
 
 export type EntityType = 'Equipment' | 'Peripheral' | 'OfficeItem'
 

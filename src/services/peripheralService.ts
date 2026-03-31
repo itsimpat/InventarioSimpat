@@ -7,7 +7,7 @@ import { historyEventService } from './historyEventService'
 type PeripheralFilters = {
   tipo?: string
   status?: string
-  ownership?: 'Bodega' | 'Colaborador'
+  ownership?: 'Storage' | 'Collaborator'
   collaboratorId?: string
 }
 
@@ -23,9 +23,9 @@ export const peripheralService = {
     }
     if (filters?.collaboratorId) {
       query = query.eq('colaborador_id', filters.collaboratorId)
-    } else if (filters?.ownership === 'Bodega') {
+    } else if (filters?.ownership === 'Storage') {
       query = query.is('colaborador_id', null)
-    } else if (filters?.ownership === 'Colaborador') {
+    } else if (filters?.ownership === 'Collaborator') {
       query = query.not('colaborador_id', 'is', null)
     }
 
@@ -42,7 +42,7 @@ export const peripheralService = {
       .single()
 
     if (error) throw new Error(error.message)
-    if (!data) throw new Error(`Periférico ${id} no encontrado`)
+    if (!data) throw new Error(`Peripheral ${id} not found`)
     return data as Peripheral
   },
 
@@ -57,7 +57,7 @@ export const peripheralService = {
       .single()
 
     if (error) throw new Error(error.message)
-    if (!created) throw new Error('No se pudo crear el periférico')
+    if (!created) throw new Error('Failed to create peripheral')
     return created as Peripheral
   },
 
@@ -77,7 +77,7 @@ export const peripheralService = {
       .single()
 
     if (error) throw new Error(error.message)
-    if (!updated) throw new Error('No se pudo actualizar el periférico')
+    if (!updated) throw new Error('Failed to update peripheral')
     return updated as Peripheral
   },
 
@@ -90,7 +90,7 @@ export const peripheralService = {
       .single()
 
     if (error) throw new Error(error.message)
-    if (!updated) throw new Error('No se pudo cambiar el estatus')
+    if (!updated) throw new Error('Failed to change status')
     return updated as Peripheral
   },
 
@@ -104,19 +104,19 @@ export const peripheralService = {
 
     const { data: updated, error } = await insforge.database
       .from('peripherals')
-      .update({ colaborador_id: collaboratorId, estatus: 'Asignado' as EquipmentStatus })
+      .update({ colaborador_id: collaboratorId, estatus: 'Assigned' as EquipmentStatus })
       .eq('id', peripheralId)
       .select()
       .single()
 
     if (error) throw new Error(error.message)
-    if (!updated) throw new Error('No se pudo asignar el periférico')
+    if (!updated) throw new Error('Failed to assign peripheral')
 
     await historyEventService.create({
       entidad_tipo: 'Peripheral',
       entidad_id: peripheralId,
-      tipo_evento: 'Reasignación',
-      descripcion: 'Periférico asignado a colaborador',
+      tipo_evento: 'Reassignment',
+      descripcion: 'Peripheral assigned to collaborator',
       fecha_inicio: new Date().toISOString(),
       fecha_fin: null,
       tecnico_nombre: null,
@@ -131,25 +131,25 @@ export const peripheralService = {
     return updated as Peripheral
   },
 
-  async returnToBodega(peripheralId: string, registradoPor: string): Promise<Peripheral> {
+  async returnToStorage(peripheralId: string, registradoPor: string): Promise<Peripheral> {
     const current = await this.getById(peripheralId)
     const colaboradorAnteriorId = current.colaborador_id
 
     const { data: updated, error } = await insforge.database
       .from('peripherals')
-      .update({ colaborador_id: null, estatus: 'En Bodega' as EquipmentStatus })
+      .update({ colaborador_id: null, estatus: 'In Storage' as EquipmentStatus })
       .eq('id', peripheralId)
       .select()
       .single()
 
     if (error) throw new Error(error.message)
-    if (!updated) throw new Error('No se pudo regresar a bodega')
+    if (!updated) throw new Error('Failed to return to storage')
 
     await historyEventService.create({
       entidad_tipo: 'Peripheral',
       entidad_id: peripheralId,
-      tipo_evento: 'Reasignación',
-      descripcion: 'Periférico regresado a bodega',
+      tipo_evento: 'Reassignment',
+      descripcion: 'Peripheral returned to storage',
       fecha_inicio: new Date().toISOString(),
       fecha_fin: null,
       tecnico_nombre: null,

@@ -35,7 +35,7 @@ export function CollaboratorDetailPage() {
     return (
       <Layout>
         <div className="flex items-center justify-center h-48 text-gray-400">
-          Cargando...
+          Loading...
         </div>
       </Layout>
     )
@@ -45,7 +45,7 @@ export function CollaboratorDetailPage() {
     return (
       <Layout>
         <div className="flex items-center justify-center h-48 text-gray-400">
-          Colaborador no encontrado
+          Collaborator not found
         </div>
       </Layout>
     )
@@ -55,12 +55,12 @@ export function CollaboratorDetailPage() {
     if (!collaborator) return
     try {
       await deactivateMutation.mutateAsync(collaborator.id)
-      toast(`${collaborator.nombre} ha sido desactivado`, 'success')
+      toast(`${collaborator.nombre} has been deactivated`, 'success')
       setShowDeactivateModal(false)
       void refetch()
     } catch (err) {
       toast(
-        err instanceof Error ? err.message : 'Error al desactivar el colaborador',
+        err instanceof Error ? err.message : 'Error deactivating collaborator',
         'error'
       )
     }
@@ -70,16 +70,16 @@ export function CollaboratorDetailPage() {
     if (!collaborator) return
     const monto = parseFloat(budgetValue)
     if (isNaN(monto) || monto < 0) {
-      toast('Monto inválido', 'error')
+      toast('Invalid amount', 'error')
       return
     }
     try {
       await upsertBudget.mutateAsync({ collaboratorId: collaborator.id, montoTotal: monto })
-      toast('Presupuesto IY actualizado', 'success')
+      toast('IY budget updated', 'success')
       setEditingBudget(false)
     } catch (err) {
       toast(
-        err instanceof Error ? err.message : 'Error al actualizar el presupuesto',
+        err instanceof Error ? err.message : 'Error updating budget',
         'error'
       )
     }
@@ -95,33 +95,33 @@ export function CollaboratorDetailPage() {
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <button
-              onClick={() => navigate('/colaboradores')}
+              onClick={() => navigate('/collaborators')}
               className="text-gray-400 hover:text-gray-600 transition-colors"
-              aria-label="Volver"
+              aria-label="Go back"
             >
               ←
             </button>
             <div>
               <div className="flex items-center gap-3">
                 <h1 className="text-2xl font-semibold text-gray-900">{collaborator.nombre}</h1>
-                <StatusBadge status={collaborator.activo ? 'Asignado' : 'Dado de Baja'} />
+                <StatusBadge status={collaborator.activo ? 'Assigned' : 'Decommissioned'} />
               </div>
               <p className="text-sm text-gray-500 mt-0.5">{collaborator.puesto}</p>
             </div>
           </div>
           <div className="flex gap-2">
             <button
-              onClick={() => navigate(`/colaboradores/${collaborator.id}/editar`)}
+              onClick={() => navigate(`/collaborators/${collaborator.id}/edit`)}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Editar
+              Edit
             </button>
             {collaborator.activo && (
               <button
                 onClick={() => setShowDeactivateModal(true)}
                 className="px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
               >
-                Desactivar
+                Deactivate
               </button>
             )}
           </div>
@@ -129,14 +129,14 @@ export function CollaboratorDetailPage() {
 
         {/* Info grid */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Información general</h2>
+          <h2 className="text-base font-semibold text-gray-900 mb-4">General information</h2>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Área</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Area</p>
               <p className="text-sm text-gray-800">{collaborator.area}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Puesto</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Position</p>
               <p className="text-sm text-gray-800">{collaborator.puesto}</p>
             </div>
             <div>
@@ -144,7 +144,7 @@ export function CollaboratorDetailPage() {
               <p className="text-sm text-gray-800">{collaborator.email}</p>
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Fecha de ingreso</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Start date</p>
               <p className="text-sm text-gray-800">{formatDate(collaborator.fecha_ingreso)}</p>
             </div>
           </div>
@@ -153,11 +153,11 @@ export function CollaboratorDetailPage() {
         {/* IY Budget */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-semibold text-gray-900">Presupuesto IY (Improve Yourself)</h2>
+            <h2 className="text-base font-semibold text-gray-900">IY Budget (Improve Yourself)</h2>
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Monto total</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Total amount</p>
               {editingBudget ? (
                 <div className="flex items-center gap-2">
                   <input
@@ -175,13 +175,13 @@ export function CollaboratorDetailPage() {
                     disabled={upsertBudget.isPending}
                     className="px-3 py-1 bg-indigo-600 text-white text-xs rounded hover:bg-indigo-700 disabled:opacity-50 transition-colors"
                   >
-                    Guardar
+                    Save
                   </button>
                   <button
                     onClick={() => setEditingBudget(false)}
                     className="px-3 py-1 text-gray-500 text-xs hover:text-gray-700 transition-colors"
                   >
-                    Cancelar
+                    Cancel
                   </button>
                 </div>
               ) : (
@@ -196,15 +196,15 @@ export function CollaboratorDetailPage() {
                     }}
                     className="text-xs text-indigo-600 hover:text-indigo-700 transition-colors"
                   >
-                    Editar
+                    Edit
                   </button>
                 </div>
               )}
             </div>
             <div>
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Licencias IY activas</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Active IY licenses</p>
               <p className="text-sm text-gray-800">
-                {licenses.filter((l) => l.categoria === 'IY' && l.activa).length} licencia(s)
+                {licenses.filter((l) => l.categoria === 'IY' && l.activa).length} license(s)
               </p>
             </div>
           </div>
@@ -212,10 +212,10 @@ export function CollaboratorDetailPage() {
 
         {/* Equipment */}
         <AssignedSection
-          title="Equipos asignados"
+          title="Assigned equipment"
           count={equipment.length}
-          emptyText="Sin equipos asignados"
-          addLink="/equipos/nuevo"
+          emptyText="No equipment assigned"
+          addLink="/equipment/new"
         >
           {equipment.map((e) => (
             <EquipmentCard key={e.id} equipment={e} />
@@ -224,10 +224,10 @@ export function CollaboratorDetailPage() {
 
         {/* Peripherals */}
         <AssignedSection
-          title="Periféricos asignados"
+          title="Assigned peripherals"
           count={peripherals.length}
-          emptyText="Sin periféricos asignados"
-          addLink="/perifericos/nuevo"
+          emptyText="No peripherals assigned"
+          addLink="/peripherals/new"
         >
           {peripherals.map((p) => (
             <PeripheralCard key={p.id} peripheral={p} />
@@ -236,17 +236,17 @@ export function CollaboratorDetailPage() {
 
         {/* Licenses */}
         <AssignedSection
-          title="Licencias"
+          title="Licenses"
           count={licenses.length}
-          emptyText="Sin licencias asignadas"
-          addLink="/licencias/nueva"
+          emptyText="No licenses assigned"
+          addLink="/licenses/new"
         >
           {activeLicenses.map((l) => (
             <LicenseCard key={l.id} license={l} />
           ))}
           {inactiveLicenses.length > 0 && activeLicenses.length > 0 && (
             <div className="col-span-full border-t border-gray-100 pt-2 mt-1">
-              <p className="text-xs text-gray-400 mb-2">Inactivas</p>
+              <p className="text-xs text-gray-400 mb-2">Inactive</p>
             </div>
           )}
           {inactiveLicenses.map((l) => (
@@ -258,18 +258,18 @@ export function CollaboratorDetailPage() {
       {/* Deactivate modal */}
       <ConfirmModal
         isOpen={showDeactivateModal}
-        title="Desactivar colaborador"
+        title="Deactivate collaborator"
         message={
           <span>
-            ¿Desactivar a <strong>{collaborator.nombre}</strong>? Su historial se conservará.{' '}
+            Deactivate <strong>{collaborator.nombre}</strong>? Their history will be preserved.{' '}
             {licenses.some((l) => l.categoria === 'IY' && l.activa) && (
               <span className="text-yellow-600">
-                Tiene licencias IY activas — recuerda reasignarlas o desactivarlas.
+                They have active IY licenses — remember to reassign or deactivate them.
               </span>
             )}
           </span>
         }
-        confirmLabel="Desactivar"
+        confirmLabel="Deactivate"
         confirmVariant="danger"
         onConfirm={handleDeactivate}
         onCancel={() => setShowDeactivateModal(false)}
@@ -309,7 +309,7 @@ function AssignedSection({
           to={addLink}
           className="text-xs text-indigo-600 hover:text-indigo-700 transition-colors"
         >
-          + Agregar
+          + Add
         </Link>
       </div>
       {count === 0 ? (
@@ -327,7 +327,7 @@ function EquipmentCard({ equipment: e }: { equipment: Equipment }) {
   const specs = e.especificaciones as Record<string, string>
   return (
     <Link
-      to={`/equipos/${e.id}`}
+      to={`/equipment/${e.id}`}
       className="block border border-gray-200 rounded-lg p-4 hover:border-indigo-300 hover:bg-indigo-50/30 transition-colors"
     >
       <div className="flex items-start justify-between gap-2">
@@ -335,7 +335,7 @@ function EquipmentCard({ equipment: e }: { equipment: Equipment }) {
           <p className="text-sm font-medium text-gray-900 truncate">
             {e.marca} {e.modelo}
           </p>
-          <p className="text-xs text-gray-500 mt-0.5">Compra {e.anio_compra}</p>
+          <p className="text-xs text-gray-500 mt-0.5">Purchased {e.anio_compra}</p>
         </div>
         <StatusBadge status={e.estatus} />
       </div>
@@ -352,7 +352,7 @@ function EquipmentCard({ equipment: e }: { equipment: Equipment }) {
 function PeripheralCard({ peripheral: p }: { peripheral: Peripheral }) {
   return (
     <Link
-      to={`/perifericos/${p.id}`}
+      to={`/peripherals/${p.id}`}
       className="block border border-gray-200 rounded-lg p-4 hover:border-indigo-300 hover:bg-indigo-50/30 transition-colors"
     >
       <div className="flex items-start justify-between gap-2">
@@ -376,7 +376,7 @@ function LicenseCard({ license: l }: { license: License }) {
 
   return (
     <Link
-      to={`/licencias/${l.id}`}
+      to={`/licenses/${l.id}`}
       className={`block border rounded-lg p-4 hover:bg-indigo-50/30 transition-colors ${
         l.activa ? 'border-gray-200 hover:border-indigo-300' : 'border-gray-100 opacity-60'
       }`}
@@ -393,13 +393,13 @@ function LicenseCard({ license: l }: { license: License }) {
             l.activa ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
           }`}
         >
-          {l.activa ? 'Activa' : 'Inactiva'}
+          {l.activa ? 'Active' : 'Inactive'}
         </span>
       </div>
       <div className="flex items-center justify-between mt-2">
         <p className="text-xs text-gray-400">{formatUSD(l.costo_usd)} USD</p>
         <p className={`text-xs ${isExpiringSoon ? 'text-amber-600 font-medium' : 'text-gray-400'}`}>
-          Renueva {formatDate(l.fecha_renovacion)}
+          Renews {formatDate(l.fecha_renovacion)}
         </p>
       </div>
     </Link>

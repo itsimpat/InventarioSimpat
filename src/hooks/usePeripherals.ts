@@ -5,7 +5,7 @@ import type { Peripheral } from '../types'
 type PeripheralFilters = {
   tipo?: string
   status?: string
-  ownership?: 'Bodega' | 'Colaborador'
+  ownership?: 'Storage' | 'Collaborator'
   collaboratorId?: string
 }
 
@@ -79,7 +79,7 @@ export function useAssignPeripheral() {
   })
 }
 
-export function useReturnToBodega() {
+export function useReturnToStorage() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: ({
@@ -88,7 +88,7 @@ export function useReturnToBodega() {
     }: {
       peripheralId: string
       registradoPor: string
-    }) => peripheralService.returnToBodega(peripheralId, registradoPor),
+    }) => peripheralService.returnToStorage(peripheralId, registradoPor),
     onSuccess: (_, { peripheralId }) => {
       void queryClient.invalidateQueries({ queryKey: ['peripherals'] })
       void queryClient.invalidateQueries({ queryKey: ['peripherals', peripheralId] })

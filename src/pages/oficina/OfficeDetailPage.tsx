@@ -30,17 +30,17 @@ export function OfficeDetailPage() {
     if (!id || qtyInput < 1) return
     try {
       await updateQuantityMutation.mutateAsync({ id, quantity: qtyInput })
-      toast('Cantidad actualizada', 'success')
+      toast('Quantity updated', 'success')
       setEditingQty(false)
     } catch (err) {
-      toast(err instanceof Error ? err.message : 'Error al actualizar la cantidad', 'error')
+      toast(err instanceof Error ? err.message : 'Error updating quantity', 'error')
     }
   }
 
   if (isLoading) {
     return (
       <Layout>
-        <div className="flex items-center justify-center h-48 text-gray-400">Cargando...</div>
+        <div className="flex items-center justify-center h-48 text-gray-400">Loading...</div>
       </Layout>
     )
   }
@@ -48,7 +48,7 @@ export function OfficeDetailPage() {
   if (!item) {
     return (
       <Layout>
-        <div className="text-center py-12 text-gray-500">Artículo no encontrado.</div>
+        <div className="text-center py-12 text-gray-500">Item not found.</div>
       </Layout>
     )
   }
@@ -61,7 +61,7 @@ export function OfficeDetailPage() {
           <button
             onClick={() => navigate(-1)}
             className="text-gray-400 hover:text-gray-600 transition-colors mt-1"
-            aria-label="Volver"
+            aria-label="Go back"
           >
             ←
           </button>
@@ -75,32 +75,32 @@ export function OfficeDetailPage() {
         <div className="bg-white rounded-xl border border-gray-200 divide-y divide-gray-100">
           <div className="grid grid-cols-2">
             <div className="px-6 py-4">
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Marca</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Brand</p>
               <p className="text-sm font-medium text-gray-900">{item.marca || '—'}</p>
             </div>
             <div className="px-6 py-4">
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Categoría</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Category</p>
               <p className="text-sm font-medium text-gray-900">{item.categoria}</p>
             </div>
           </div>
           <div className="grid grid-cols-2">
             <div className="px-6 py-4">
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Costo MXN</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Cost (MXN)</p>
               <p className="text-sm font-medium text-gray-900">{formatMXN(item.costo_mxn)}</p>
             </div>
             <div className="px-6 py-4">
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Costo USD</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Cost (USD)</p>
               <p className="text-sm font-medium text-gray-900">{formatUSD(item.costo_usd)}</p>
             </div>
           </div>
           <div className="grid grid-cols-2">
             <div className="px-6 py-4">
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Fecha de compra</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Purchase date</p>
               <p className="text-sm font-medium text-gray-900">{formatDate(item.fecha_compra)}</p>
             </div>
             {/* Quantity inline edit */}
             <div className="px-6 py-4">
-              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Cantidad</p>
+              <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Quantity</p>
               {editingQty ? (
                 <div className="flex items-center gap-2">
                   <input
@@ -115,13 +115,13 @@ export function OfficeDetailPage() {
                     disabled={updateQuantityMutation.isPending}
                     className="px-2 py-1 text-xs font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
                   >
-                    {updateQuantityMutation.isPending ? '...' : 'Guardar'}
+                    {updateQuantityMutation.isPending ? '...' : 'Save'}
                   </button>
                   <button
                     onClick={() => setEditingQty(false)}
                     className="px-2 py-1 text-xs font-medium text-gray-500 hover:text-gray-700 transition-colors"
                   >
-                    Cancelar
+                    Cancel
                   </button>
                 </div>
               ) : (
@@ -131,7 +131,7 @@ export function OfficeDetailPage() {
                     onClick={startEditQty}
                     className="text-xs text-indigo-600 hover:text-indigo-800 underline transition-colors"
                   >
-                    Editar
+                    Edit
                   </button>
                 </div>
               )}
@@ -144,23 +144,23 @@ export function OfficeDetailPage() {
           <button
             onClick={() => {
               // TODO: Abrir EventFormModal del Agente 2 cuando esté disponible
-              toast('Módulo de mantenimiento disponible próximamente', 'info')
+              toast('Maintenance module coming soon', 'info')
             }}
             className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
           >
-            Registrar Mantenimiento
+            Log Maintenance
           </button>
         </div>
 
         {/* Maintenance history */}
         <div className="bg-white rounded-xl border border-gray-200">
           <div className="px-6 py-4 border-b border-gray-100">
-            <h2 className="text-base font-semibold text-gray-900">Historial de mantenimientos</h2>
+            <h2 className="text-base font-semibold text-gray-900">Maintenance history</h2>
           </div>
           {/* TODO: HistoryTimeline del Agente 2 cuando esté disponible */}
           <EmptyState
-            title="Sin historial de mantenimientos"
-            description="Los mantenimientos registrados para este artículo aparecerán aquí"
+            title="No maintenance history"
+            description="Maintenance records for this item will appear here"
           />
         </div>
       </div>

@@ -44,16 +44,16 @@ function ActivitySkeleton() {
 }
 
 const EVENT_TYPE_COLORS: Record<string, string> = {
-  Reasignación: 'bg-blue-100 text-blue-700',
-  Reparación: 'bg-yellow-100 text-yellow-700',
-  Mantenimiento: 'bg-purple-100 text-purple-700',
-  Otro: 'bg-gray-100 text-gray-700',
+  Reassignment: 'bg-blue-100 text-blue-700',
+  Repair: 'bg-yellow-100 text-yellow-700',
+  Maintenance: 'bg-purple-100 text-purple-700',
+  Other: 'bg-gray-100 text-gray-700',
 }
 
 const ENTITY_TYPE_ROUTES: Record<string, string> = {
-  Equipment: '/equipos',
-  Peripheral: '/perifericos',
-  OfficeItem: '/oficina',
+  Equipment: '/equipment',
+  Peripheral: '/peripherals',
+  OfficeItem: '/office',
 }
 
 export function DashboardPage() {
@@ -67,13 +67,13 @@ export function DashboardPage() {
         {/* Greeting */}
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">
-            Bienvenido,{' '}
+            Welcome,{' '}
             <span className="text-indigo-600">
               {user?.profile?.name ?? user?.email}
             </span>
           </h1>
           <p className="text-sm text-gray-500 mt-1">
-            Panel de control — Simpat Tech Inventario
+            Control panel — Simpat Tech Inventory
           </p>
         </div>
 
@@ -91,7 +91,7 @@ export function DashboardPage() {
             <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
               <div className="flex items-start justify-between mb-3">
                 <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                  Total Equipos
+                  Total Equipment
                 </p>
                 <div className="p-2 bg-indigo-50 rounded-lg">
                   <svg
@@ -112,7 +112,7 @@ export function DashboardPage() {
                 {kpis?.totalEquipos ?? 0}
               </p>
               <p className="text-xs text-gray-400 mt-1">
-                {kpis?.totalEquiposActivos ?? 0} activos
+                {kpis?.totalEquiposActivos ?? 0} active
               </p>
             </div>
 
@@ -120,7 +120,7 @@ export function DashboardPage() {
             <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
               <div className="flex items-start justify-between mb-3">
                 <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                  Licencias Activas
+                  Active Licenses
                 </p>
                 <div className="p-2 bg-green-50 rounded-lg">
                   <svg
@@ -142,14 +142,14 @@ export function DashboardPage() {
               <p className="text-3xl font-bold text-green-600">
                 {kpis?.licenciasActivas ?? 0}
               </p>
-              <p className="text-xs text-gray-400 mt-1">licencias vigentes</p>
+              <p className="text-xs text-gray-400 mt-1">active licenses</p>
             </div>
 
             {/* Alertas */}
             <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
               <div className="flex items-start justify-between mb-3">
                 <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                  Alertas
+                  Alerts
                 </p>
                 <div className="p-2 bg-yellow-50 rounded-lg">
                   <svg
@@ -169,14 +169,14 @@ export function DashboardPage() {
                 </div>
               </div>
               <p className="text-3xl font-bold text-yellow-600">0</p>
-              <p className="text-xs text-gray-400 mt-1">vencimientos próximos</p>
+              <p className="text-xs text-gray-400 mt-1">upcoming expirations</p>
             </div>
 
             {/* Inversion Total */}
             <div className="bg-white rounded-xl border border-gray-200 p-5 shadow-sm">
               <div className="flex items-start justify-between mb-3">
                 <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">
-                  Inversión Total
+                  Total Investment
                 </p>
                 <div className="p-2 bg-blue-50 rounded-lg">
                   <svg
@@ -198,7 +198,7 @@ export function DashboardPage() {
               <p className="text-2xl font-bold text-blue-600 leading-tight">
                 {formatUSD(kpis?.totalInversionUSD ?? 0)}
               </p>
-              <p className="text-xs text-gray-400 mt-1">activos totales USD</p>
+              <p className="text-xs text-gray-400 mt-1">total assets USD</p>
             </div>
           </div>
         )}
@@ -206,12 +206,12 @@ export function DashboardPage() {
         {/* Recent Activity */}
         <div className="bg-white rounded-xl border border-gray-200">
           <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between">
-            <h2 className="text-base font-semibold text-gray-900">Actividad reciente</h2>
+            <h2 className="text-base font-semibold text-gray-900">Recent activity</h2>
             <Link
-              to="/reportes"
+              to="/reports"
               className="text-sm text-indigo-600 hover:text-indigo-700 font-medium"
             >
-              Ver reportes
+              View reports
             </Link>
           </div>
 
@@ -219,8 +219,8 @@ export function DashboardPage() {
             <ActivitySkeleton />
           ) : !activity || activity.length === 0 ? (
             <EmptyState
-              title="Sin actividad reciente"
-              description="Las acciones realizadas en el sistema aparecerán aquí"
+              title="No recent activity"
+              description="Actions performed in the system will appear here"
             />
           ) : (
             <ul className="divide-y divide-gray-50">
@@ -233,7 +233,7 @@ export function DashboardPage() {
                     <div className="mt-0.5 shrink-0">
                       <span
                         className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                          EVENT_TYPE_COLORS[event.tipo_evento] ?? EVENT_TYPE_COLORS['Otro']
+                          EVENT_TYPE_COLORS[event.tipo_evento] ?? EVENT_TYPE_COLORS['Other']
                         }`}
                       >
                         {event.tipo_evento}

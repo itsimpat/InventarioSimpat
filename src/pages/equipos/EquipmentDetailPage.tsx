@@ -19,12 +19,12 @@ import { formatUSD, formatMXN } from '../../utils/currency'
 import type { EquipmentStatus } from '../../types'
 
 const EQUIPMENT_STATUSES: EquipmentStatus[] = [
-  'Asignado',
-  'En Bodega',
-  'En Reparación',
-  'Vendido',
-  'Dado de Baja',
-  'Solicitado',
+  'Assigned',
+  'In Storage',
+  'Under Repair',
+  'Sold',
+  'Decommissioned',
+  'Requested',
 ]
 
 export function EquipmentDetailPage() {
@@ -42,7 +42,7 @@ export function EquipmentDetailPage() {
   const unassignEquipment = useUnassignEquipment()
 
   const [showStatusModal, setShowStatusModal] = useState(false)
-  const [selectedStatus, setSelectedStatus] = useState<EquipmentStatus>('En Bodega')
+  const [selectedStatus, setSelectedStatus] = useState<EquipmentStatus>('In Storage')
   const [showAssignModal, setShowAssignModal] = useState(false)
   const [selectedCollaborator, setSelectedCollaborator] = useState('')
   const [showUnassignModal, setShowUnassignModal] = useState(false)
@@ -63,7 +63,7 @@ export function EquipmentDetailPage() {
   if (!equipment) {
     return (
       <Layout>
-        <div className="text-center py-20 text-gray-500">Equipo no encontrado.</div>
+        <div className="text-center py-20 text-gray-500">Equipment not found.</div>
       </Layout>
     )
   }
@@ -74,10 +74,10 @@ export function EquipmentDetailPage() {
     if (!id) return
     try {
       await changeStatus.mutateAsync({ id, status: selectedStatus })
-      toast('Estatus actualizado', 'success')
+      toast('Status updated', 'success')
       setShowStatusModal(false)
     } catch (err) {
-      toast(err instanceof Error ? err.message : 'Error al cambiar estatus', 'error')
+      toast(err instanceof Error ? err.message : 'Error changing status', 'error')
     }
   }
 
@@ -89,11 +89,11 @@ export function EquipmentDetailPage() {
         collaboratorId: selectedCollaborator,
         registradoPor,
       })
-      toast('Equipo asignado correctamente', 'success')
+      toast('Equipment assigned successfully', 'success')
       setShowAssignModal(false)
       setSelectedCollaborator('')
     } catch (err) {
-      toast(err instanceof Error ? err.message : 'Error al asignar equipo', 'error')
+      toast(err instanceof Error ? err.message : 'Error assigning equipment', 'error')
     }
   }
 
@@ -101,10 +101,10 @@ export function EquipmentDetailPage() {
     if (!id) return
     try {
       await unassignEquipment.mutateAsync({ equipmentId: id, registradoPor })
-      toast('Equipo desasignado correctamente', 'success')
+      toast('Equipment unassigned successfully', 'success')
       setShowUnassignModal(false)
     } catch (err) {
-      toast(err instanceof Error ? err.message : 'Error al desasignar equipo', 'error')
+      toast(err instanceof Error ? err.message : 'Error unassigning equipment', 'error')
     }
   }
 
@@ -118,7 +118,7 @@ export function EquipmentDetailPage() {
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <button
-              onClick={() => navigate('/equipos')}
+              onClick={() => navigate('/equipment')}
               className="text-gray-400 hover:text-gray-600 transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -136,10 +136,10 @@ export function EquipmentDetailPage() {
           </div>
           <div className="flex gap-2">
             <button
-              onClick={() => navigate(`/equipos/${id}/editar`)}
+              onClick={() => navigate(`/equipment/${id}/edit`)}
               className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
             >
-              Editar
+              Edit
             </button>
             <button
               onClick={() => {
@@ -148,32 +148,32 @@ export function EquipmentDetailPage() {
               }}
               className="px-3 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
             >
-              Cambiar Estatus
+              Change Status
             </button>
           </div>
         </div>
 
         {/* Info grid */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Información</h2>
+          <h2 className="text-base font-semibold text-gray-900 mb-4">Information</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-            <InfoItem label="Año de compra" value={String(equipment.anio_compra)} />
-            <InfoItem label="Costo (MXN)" value={formatMXN(equipment.costo_mxn)} />
-            <InfoItem label="Costo (USD)" value={formatUSD(equipment.costo_usd)} />
+            <InfoItem label="Purchase year" value={String(equipment.anio_compra)} />
+            <InfoItem label="Cost (MXN)" value={formatMXN(equipment.costo_mxn)} />
+            <InfoItem label="Cost (USD)" value={formatUSD(equipment.costo_usd)} />
             {specs.cpu && <InfoItem label="CPU" value={specs.cpu} />}
             {specs.ram && <InfoItem label="RAM" value={specs.ram} />}
-            {specs.almacenamiento && <InfoItem label="Almacenamiento" value={specs.almacenamiento} />}
-            {specs.pantalla && <InfoItem label="Pantalla" value={specs.pantalla} />}
+            {specs.almacenamiento && <InfoItem label="Storage" value={specs.almacenamiento} />}
+            {specs.pantalla && <InfoItem label="Display" value={specs.pantalla} />}
           </div>
         </div>
 
         {/* Admin credentials section */}
         {(equipment.admin_user || equipment.admin_password) && (
           <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h2 className="text-base font-semibold text-gray-900 mb-4">Cuenta de Administrador IT</h2>
+            <h2 className="text-base font-semibold text-gray-900 mb-4">IT Admin Account</h2>
             <div className="grid grid-cols-2 gap-6">
               {equipment.admin_user && (
-                <InfoItem label="Usuario administrador" value={equipment.admin_user} />
+                <InfoItem label="Admin username" value={equipment.admin_user} />
               )}
               {equipment.admin_password && (
                 <AdminPasswordItem password={equipment.admin_password} />
@@ -184,7 +184,7 @@ export function EquipmentDetailPage() {
 
         {/* Collaborator section */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-base font-semibold text-gray-900 mb-4">Colaborador Asignado</h2>
+          <h2 className="text-base font-semibold text-gray-900 mb-4">Assigned Collaborator</h2>
           {collaborator ? (
             <div className="flex items-center justify-between">
               <div>
@@ -199,19 +199,19 @@ export function EquipmentDetailPage() {
                   }}
                   className="px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  Reasignar
+                  Reassign
                 </button>
                 <button
                   onClick={() => setShowUnassignModal(true)}
                   className="px-3 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 transition-colors"
                 >
-                  Desasignar
+                  Unassign
                 </button>
               </div>
             </div>
           ) : (
             <div className="flex items-center justify-between">
-              <p className="text-gray-400 italic">Sin asignar</p>
+              <p className="text-gray-400 italic">Unassigned</p>
               <button
                 onClick={() => {
                   setSelectedCollaborator('')
@@ -219,7 +219,7 @@ export function EquipmentDetailPage() {
                 }}
                 className="px-3 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 transition-colors"
               >
-                Asignar
+                Assign
               </button>
             </div>
           )}
@@ -228,12 +228,12 @@ export function EquipmentDetailPage() {
         {/* History section */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-base font-semibold text-gray-900">Historial</h2>
+            <h2 className="text-base font-semibold text-gray-900">History</h2>
             <button
               onClick={() => setShowEventModal(true)}
               className="px-3 py-2 text-sm font-medium text-indigo-600 border border-indigo-300 rounded-lg hover:bg-indigo-50 transition-colors"
             >
-              + Registrar Evento
+              + Log Event
             </button>
           </div>
           <HistoryTimeline tipo="Equipment" entityId={id ?? ''} />
@@ -241,7 +241,7 @@ export function EquipmentDetailPage() {
       </div>
 
       {/* Change status modal */}
-      <Modal isOpen={showStatusModal} onClose={() => setShowStatusModal(false)} title="Cambiar Estatus" size="sm">
+      <Modal isOpen={showStatusModal} onClose={() => setShowStatusModal(false)} title="Change Status" size="sm">
         <div className="space-y-4">
           <select
             value={selectedStatus}
@@ -258,14 +258,14 @@ export function EquipmentDetailPage() {
               disabled={changeStatus.isPending}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
             >
-              Cancelar
+              Cancel
             </button>
             <button
               onClick={handleChangeStatus}
               disabled={changeStatus.isPending}
               className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
             >
-              {changeStatus.isPending ? 'Guardando...' : 'Confirmar'}
+              {changeStatus.isPending ? 'Saving...' : 'Confirm'}
             </button>
           </div>
         </div>
@@ -275,7 +275,7 @@ export function EquipmentDetailPage() {
       <Modal
         isOpen={showAssignModal}
         onClose={() => setShowAssignModal(false)}
-        title={collaborator ? 'Reasignar Equipo' : 'Asignar Equipo'}
+        title={collaborator ? 'Reassign Equipment' : 'Assign Equipment'}
         size="sm"
       >
         <div className="space-y-4">
@@ -284,7 +284,7 @@ export function EquipmentDetailPage() {
             onChange={(e) => setSelectedCollaborator(e.target.value)}
             className={inputClass}
           >
-            <option value="">Selecciona un colaborador...</option>
+            <option value="">Select a collaborator...</option>
             {collaborators.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.nombre} — {c.area}
@@ -297,14 +297,14 @@ export function EquipmentDetailPage() {
               disabled={assignEquipment.isPending}
               className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-50 transition-colors"
             >
-              Cancelar
+              Cancel
             </button>
             <button
               onClick={handleAssign}
               disabled={assignEquipment.isPending || !selectedCollaborator}
               className="px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 disabled:opacity-50 transition-colors"
             >
-              {assignEquipment.isPending ? 'Asignando...' : 'Confirmar'}
+              {assignEquipment.isPending ? 'Assigning...' : 'Confirm'}
             </button>
           </div>
         </div>
@@ -313,9 +313,9 @@ export function EquipmentDetailPage() {
       {/* Unassign confirm modal */}
       <ConfirmModal
         isOpen={showUnassignModal}
-        title="Desasignar Equipo"
-        message={`¿Estás seguro de que quieres desasignar este equipo de ${collaborator?.nombre ?? 'el colaborador'}? El equipo pasará a En Bodega.`}
-        confirmLabel="Desasignar"
+        title="Unassign Equipment"
+        message={`Are you sure you want to unassign this equipment from ${collaborator?.nombre ?? 'the collaborator'}? The equipment will be moved to In Storage.`}
+        confirmLabel="Unassign"
         confirmVariant="danger"
         onConfirm={handleUnassign}
         onCancel={() => setShowUnassignModal(false)}
@@ -348,7 +348,7 @@ function AdminPasswordItem({ password }: { password: string }) {
   const toggle = useCallback(() => setVisible((v) => !v), [])
   return (
     <div>
-      <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Contraseña administrador</p>
+      <p className="text-xs font-medium text-gray-500 uppercase tracking-wide">Admin password</p>
       <div className="mt-1 flex items-center gap-2">
         <p className="text-sm font-medium text-gray-900 font-mono">
           {visible ? password : '••••••••'}
@@ -358,7 +358,7 @@ function AdminPasswordItem({ password }: { password: string }) {
           onClick={toggle}
           className="text-xs text-indigo-600 hover:text-indigo-800 transition-colors"
         >
-          {visible ? 'Ocultar' : 'Mostrar'}
+          {visible ? 'Hide' : 'Show'}
         </button>
       </div>
     </div>

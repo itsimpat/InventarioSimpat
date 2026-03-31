@@ -72,11 +72,11 @@ function EquipmentTable({ items }: { items: Equipment[] }) {
       <table className="w-full text-sm">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Marca</th>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Modelo</th>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Año</th>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Estatus</th>
-            <th className="px-5 py-2 text-right text-xs font-semibold text-gray-500 uppercase">Costo USD</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Brand</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Model</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Year</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+            <th className="px-5 py-2 text-right text-xs font-semibold text-gray-500 uppercase">Cost (USD)</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-50">
@@ -102,11 +102,11 @@ function PeripheralTable({ items }: { items: Peripheral[] }) {
       <table className="w-full text-sm">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Tipo</th>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Marca</th>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Modelo</th>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Estatus</th>
-            <th className="px-5 py-2 text-right text-xs font-semibold text-gray-500 uppercase">Costo USD</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Type</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Brand</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Model</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
+            <th className="px-5 py-2 text-right text-xs font-semibold text-gray-500 uppercase">Cost (USD)</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-50">
@@ -132,11 +132,11 @@ function LicenseTable({ items }: { items: License[] }) {
       <table className="w-full text-sm">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Producto</th>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Tipo</th>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Categoría</th>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Renovación</th>
-            <th className="px-5 py-2 text-right text-xs font-semibold text-gray-500 uppercase">Costo USD</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Product</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Type</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Category</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Renewal</th>
+            <th className="px-5 py-2 text-right text-xs font-semibold text-gray-500 uppercase">Cost (USD)</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-50">
@@ -172,11 +172,11 @@ function OfficeTable({ items }: { items: OfficeItem[] }) {
       <table className="w-full text-sm">
         <thead className="bg-gray-50">
           <tr>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Nombre</th>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Categoría</th>
-            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Marca</th>
-            <th className="px-5 py-2 text-center text-xs font-semibold text-gray-500 uppercase">Cantidad</th>
-            <th className="px-5 py-2 text-right text-xs font-semibold text-gray-500 uppercase">Costo USD (total)</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Name</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Category</th>
+            <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">Brand</th>
+            <th className="px-5 py-2 text-center text-xs font-semibold text-gray-500 uppercase">Qty</th>
+            <th className="px-5 py-2 text-right text-xs font-semibold text-gray-500 uppercase">Cost (USD, total)</th>
           </tr>
         </thead>
         <tbody className="divide-y divide-gray-50">
@@ -203,14 +203,14 @@ export function ReporteGlobal() {
   if (isLoading) return <GlobalSkeleton />
 
   if (isError || !report) {
-    return <EmptyState title="No se pudo cargar el reporte global" />
+    return <EmptyState title="Could not load the global report" />
   }
 
   return (
     <div className="space-y-4">
       {/* Equipos */}
       <CollapsibleSection
-        title={`Equipos (${report.equipos.items.length})`}
+        title={`Equipment (${report.equipos.items.length})`}
         subtotal={report.equipos.totalUSD}
         defaultOpen
       >
@@ -219,7 +219,7 @@ export function ReporteGlobal() {
 
       {/* Periféricos */}
       <CollapsibleSection
-        title={`Periféricos (${report.perifericos.items.length})`}
+        title={`Peripherals (${report.perifericos.items.length})`}
         subtotal={report.perifericos.totalUSD}
       >
         <PeripheralTable items={report.perifericos.items} />
@@ -227,7 +227,7 @@ export function ReporteGlobal() {
 
       {/* Licencias */}
       <CollapsibleSection
-        title={`Licencias activas (${report.licencias.items.length})`}
+        title={`Active licenses (${report.licencias.items.length})`}
         subtotal={report.licencias.totalUSD}
       >
         <LicenseTable items={report.licencias.items} />
@@ -235,7 +235,7 @@ export function ReporteGlobal() {
 
       {/* Inventario Oficina */}
       <CollapsibleSection
-        title={`Inventario Oficina (${report.oficina.items.length})`}
+        title={`Office Inventory (${report.oficina.items.length})`}
         subtotal={report.oficina.totalUSD}
       >
         <OfficeTable items={report.oficina.items} />
@@ -244,15 +244,15 @@ export function ReporteGlobal() {
       {/* Grand Total */}
       <div className="bg-green-600 rounded-xl p-5 text-white">
         <p className="text-sm font-medium text-green-200 uppercase tracking-wide mb-1">
-          Grand Total — Todos los activos de Simpat Tech
+          Grand Total — All Simpat Tech assets
         </p>
         <p className="text-4xl font-bold">{formatUSD(report.grandTotalUSD)}</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4">
           {[
-            { label: 'Equipos', value: report.equipos.totalUSD },
-            { label: 'Periféricos', value: report.perifericos.totalUSD },
-            { label: 'Licencias', value: report.licencias.totalUSD },
-            { label: 'Oficina', value: report.oficina.totalUSD },
+            { label: 'Equipment', value: report.equipos.totalUSD },
+            { label: 'Peripherals', value: report.perifericos.totalUSD },
+            { label: 'Licenses', value: report.licencias.totalUSD },
+            { label: 'Office', value: report.oficina.totalUSD },
           ].map((item) => (
             <div key={item.label} className="bg-green-700/50 rounded-lg p-3">
               <p className="text-xs text-green-300 mb-0.5">{item.label}</p>

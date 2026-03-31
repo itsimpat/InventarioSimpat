@@ -73,15 +73,15 @@ export function ReporteIY() {
 
   if (isError) {
     return (
-      <EmptyState title="No se pudo cargar el reporte IY" />
+      <EmptyState title="Could not load the IY report" />
     )
   }
 
   if (!rows || rows.length === 0) {
     return (
       <EmptyState
-        title="Sin presupuestos IY configurados"
-        description="Asigna un presupuesto Improve Yourself a los colaboradores para ver el reporte"
+        title="No IY budgets configured"
+        description="Assign an Improve Yourself budget to collaborators to view the report"
       />
     )
   }
@@ -97,45 +97,45 @@ export function ReporteIY() {
       {/* Summary */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Presupuesto Total IY</p>
+          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Total IY Budget</p>
           <p className="text-2xl font-bold text-purple-600">{formatUSD(totalBudget)}</p>
-          <p className="text-xs text-gray-400 mt-0.5">{rows.length} colaboradores</p>
+          <p className="text-xs text-gray-400 mt-0.5">{rows.length} collaborators</p>
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Total Gastado</p>
+          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Total Spent</p>
           <p className="text-2xl font-bold text-gray-800">{formatUSD(totalSpent)}</p>
           <ProgressBar percentage={overallPct} />
         </div>
         <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Disponible</p>
+          <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Available</p>
           <p className="text-2xl font-bold text-green-600">{formatUSD(totalAvailable)}</p>
-          <p className="text-xs text-gray-400 mt-0.5">sin asignar en licencias IY activas</p>
+          <p className="text-xs text-gray-400 mt-0.5">unassigned in active IY licenses</p>
         </div>
       </div>
 
       {/* Table */}
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="px-5 py-3 border-b border-gray-100 bg-gray-50">
-          <h3 className="text-sm font-semibold text-gray-700">Detalle por colaborador</h3>
+          <h3 className="text-sm font-semibold text-gray-700">Detail by collaborator</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead className="bg-gray-50">
               <tr>
                 <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase">
-                  Colaborador
+                  Collaborator
                 </th>
                 <th className="px-5 py-2 text-right text-xs font-semibold text-gray-500 uppercase">
-                  Presupuesto
+                  Budget
                 </th>
                 <th className="px-5 py-2 text-right text-xs font-semibold text-gray-500 uppercase">
-                  Gastado
+                  Spent
                 </th>
                 <th className="px-5 py-2 text-right text-xs font-semibold text-gray-500 uppercase">
-                  Disponible
+                  Available
                 </th>
                 <th className="px-5 py-2 text-left text-xs font-semibold text-gray-500 uppercase min-w-[160px]">
-                  % Uso
+                  % Used
                 </th>
               </tr>
             </thead>

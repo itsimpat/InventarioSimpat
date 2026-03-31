@@ -42,9 +42,9 @@ const KIND_TO_ENTITY_TYPE: Record<EntityKind, EntityType> = {
 }
 
 const KIND_TO_LABEL: Record<EntityKind, string> = {
-  equipment: 'Equipos',
-  peripheral: 'Periféricos',
-  office: 'Inventario Oficina',
+  equipment: 'Equipment',
+  peripheral: 'Peripherals',
+  office: 'Office Inventory',
 }
 
 const KIND_TO_ROUTE: Record<EntityKind, string> = {
@@ -55,9 +55,9 @@ const KIND_TO_ROUTE: Record<EntityKind, string> = {
 
 function getEntityNombre(entity: Record<string, unknown>, kind: EntityKind): string {
   if (kind === 'office') {
-    return (entity.nombre as string) ?? 'Elemento'
+    return (entity.nombre as string) ?? 'Item'
   }
-  return `${entity.marca ?? ''} ${entity.modelo ?? ''}`.trim() || 'Elemento'
+  return `${entity.marca ?? ''} ${entity.modelo ?? ''}`.trim() || 'Item'
 }
 
 function ClosingRepairForm({
@@ -84,7 +84,7 @@ function ClosingRepairForm({
       if (error) throw new Error(error.message)
     },
     onSuccess: () => {
-      toast('Reparación cerrada correctamente', 'success')
+      toast('Repair closed successfully', 'success')
       void queryClient.invalidateQueries({ queryKey: ['historyEvents', entityTipo, entityId] })
     },
     onError: (err: Error) => {
@@ -112,10 +112,10 @@ function ClosingRepairForm({
           </svg>
         </div>
         <div>
-          <h3 className="font-semibold text-yellow-800">Reparación en curso</h3>
+          <h3 className="font-semibold text-yellow-800">Repair in progress</h3>
           <p className="text-sm text-yellow-700 mt-0.5">
-            Inicio: {formatDate(repairEvent.fecha_inicio)}
-            {repairEvent.tecnico_nombre ? ` · Técnico: ${repairEvent.tecnico_nombre}` : ''}
+            Start: {formatDate(repairEvent.fecha_inicio)}
+            {repairEvent.tecnico_nombre ? ` · Technician: ${repairEvent.tecnico_nombre}` : ''}
           </p>
           {repairEvent.descripcion && (
             <p className="text-sm text-yellow-700">{repairEvent.descripcion}</p>
@@ -126,7 +126,7 @@ function ClosingRepairForm({
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Fecha de cierre
+            Closing date
           </label>
           <input
             type="date"
@@ -137,13 +137,13 @@ function ClosingRepairForm({
         </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Notas de cierre (opcional)
+            Closing notes (optional)
           </label>
           <input
             type="text"
             value={notas}
             onChange={(e) => setNotas(e.target.value)}
-            placeholder="Ej: Cambio de pantalla completado"
+            placeholder="E.g.: Screen replacement completed"
             className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
         </div>
@@ -155,7 +155,7 @@ function ClosingRepairForm({
           disabled={!fechaFin || mutation.isPending}
           className="px-4 py-2 bg-yellow-600 text-white text-sm font-medium rounded-lg hover:bg-yellow-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
-          {mutation.isPending ? 'Guardando...' : 'Marcar como cerrada'}
+          {mutation.isPending ? 'Saving...' : 'Mark as closed'}
         </button>
       </div>
     </div>
@@ -228,20 +228,20 @@ export function HistorialPage() {
             {entityNombre}
           </Link>
           <span>/</span>
-          <span className="text-gray-900 font-medium">Historial</span>
+          <span className="text-gray-900 font-medium">History</span>
         </nav>
 
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold text-gray-900">
-              Historial de{' '}
+              History of{' '}
               <span className="text-indigo-600">
                 {entityLoading ? '...' : entityNombre}
               </span>
             </h1>
             <p className="text-sm text-gray-500 mt-1">
-              Todos los eventos registrados para este elemento
+              All events recorded for this item
             </p>
           </div>
           <button
@@ -258,7 +258,7 @@ export function HistorialPage() {
             >
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4v16m8-8H4" />
             </svg>
-            Registrar Evento
+            Log Event
           </button>
         </div>
 
@@ -273,14 +273,14 @@ export function HistorialPage() {
 
         {/* Timeline */}
         <div className="bg-white rounded-xl border border-gray-200 p-6">
-          <h2 className="text-base font-semibold text-gray-900 mb-6">Eventos</h2>
+          <h2 className="text-base font-semibold text-gray-900 mb-6">Events</h2>
           {!entityId ? (
-            <EmptyState title="ID de entidad no válido" />
+            <EmptyState title="Invalid entity ID" />
           ) : (
             <Suspense
               fallback={
                 <div className="text-gray-400 text-sm p-4 animate-pulse">
-                  Cargando historial...
+                  Loading history...
                 </div>
               }
             >

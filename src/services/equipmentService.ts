@@ -46,7 +46,7 @@ export const equipmentService = {
       .single()
 
     if (error) throw new Error(error.message)
-    if (!data) throw new Error(`Equipo ${id} no encontrado`)
+    if (!data) throw new Error(`Equipment ${id} not found`)
     return data as Equipment
   },
 
@@ -61,7 +61,7 @@ export const equipmentService = {
       .single()
 
     if (error) throw new Error(error.message)
-    if (!created) throw new Error('No se pudo crear el equipo')
+    if (!created) throw new Error('Failed to create equipment')
     return created as Equipment
   },
 
@@ -81,7 +81,7 @@ export const equipmentService = {
       .single()
 
     if (error) throw new Error(error.message)
-    if (!updated) throw new Error('No se pudo actualizar el equipo')
+    if (!updated) throw new Error('Failed to update equipment')
     return updated as Equipment
   },
 
@@ -94,7 +94,7 @@ export const equipmentService = {
       .single()
 
     if (error) throw new Error(error.message)
-    if (!updated) throw new Error('No se pudo cambiar el estatus')
+    if (!updated) throw new Error('Failed to change status')
     return updated as Equipment
   },
 
@@ -108,19 +108,19 @@ export const equipmentService = {
 
     const { data: updated, error } = await insforge.database
       .from('equipment')
-      .update({ colaborador_id: collaboratorId, estatus: 'Asignado' as EquipmentStatus })
+      .update({ colaborador_id: collaboratorId, estatus: 'Assigned' as EquipmentStatus })
       .eq('id', equipmentId)
       .select()
       .single()
 
     if (error) throw new Error(error.message)
-    if (!updated) throw new Error('No se pudo asignar el equipo')
+    if (!updated) throw new Error('Failed to assign equipment')
 
     await historyEventService.create({
       entidad_tipo: 'Equipment',
       entidad_id: equipmentId,
-      tipo_evento: 'Reasignación',
-      descripcion: 'Equipo asignado a colaborador',
+      tipo_evento: 'Reassignment',
+      descripcion: 'Equipment assigned to collaborator',
       fecha_inicio: new Date().toISOString(),
       fecha_fin: null,
       tecnico_nombre: null,
@@ -141,19 +141,19 @@ export const equipmentService = {
 
     const { data: updated, error } = await insforge.database
       .from('equipment')
-      .update({ colaborador_id: null, estatus: 'En Bodega' as EquipmentStatus })
+      .update({ colaborador_id: null, estatus: 'In Storage' as EquipmentStatus })
       .eq('id', equipmentId)
       .select()
       .single()
 
     if (error) throw new Error(error.message)
-    if (!updated) throw new Error('No se pudo desasignar el equipo')
+    if (!updated) throw new Error('Failed to unassign equipment')
 
     await historyEventService.create({
       entidad_tipo: 'Equipment',
       entidad_id: equipmentId,
-      tipo_evento: 'Reasignación',
-      descripcion: 'Equipo regresado a bodega',
+      tipo_evento: 'Reassignment',
+      descripcion: 'Equipment returned to storage',
       fecha_inicio: new Date().toISOString(),
       fecha_fin: null,
       tecnico_nombre: null,

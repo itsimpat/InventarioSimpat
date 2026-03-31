@@ -76,7 +76,7 @@ export const reportService = {
     const perifericos = (perifericosRes.data ?? []) as Peripheral[]
     const oficina = (oficinaRes.data ?? []) as OfficeItem[]
 
-    const activeStatuses = ['Asignado', 'En Bodega', 'Solicitado', 'En Reparación']
+    const activeStatuses = ['Assigned', 'In Storage', 'Requested', 'Under Repair']
     const totalEquiposActivos = equipos.filter((e) => activeStatuses.includes(e.estatus)).length
 
     const totalEquiposUSD = equipos.reduce((sum, e) => sum + (e.costo_usd ?? 0), 0)

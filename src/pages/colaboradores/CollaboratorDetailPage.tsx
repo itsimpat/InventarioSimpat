@@ -31,6 +31,25 @@ export function CollaboratorDetailPage() {
   const [editingBudget, setEditingBudget] = useState(false)
   const [budgetValue, setBudgetValue] = useState('')
 
+  const activeLicenses = useMemo(() => licenses.filter((l) => l.activa), [licenses])
+  const inactiveLicenses = useMemo(() => licenses.filter((l) => !l.activa), [licenses])
+
+  const totalEquipmentUSD = useMemo(
+    () =>
+      equipment.reduce((sum, e) => sum + e.costo_usd, 0) +
+      peripherals.reduce((sum, p) => sum + p.costo_usd, 0),
+    [equipment, peripherals]
+  )
+
+  const monthlyLicensesUSD = useMemo(
+    () =>
+      activeLicenses.reduce((sum, l) => {
+        const monthly = l.tipo === 'Annual' ? l.costo_usd / 12 : l.costo_usd
+        return sum + monthly
+      }, 0),
+    [activeLicenses]
+  )
+
   if (isLoading) {
     return (
       <Layout>
@@ -84,25 +103,6 @@ export function CollaboratorDetailPage() {
       )
     }
   }
-
-  const activeLicenses = licenses.filter((l) => l.activa)
-  const inactiveLicenses = licenses.filter((l) => !l.activa)
-
-  const totalEquipmentUSD = useMemo(
-    () =>
-      equipment.reduce((sum, e) => sum + e.costo_usd, 0) +
-      peripherals.reduce((sum, p) => sum + p.costo_usd, 0),
-    [equipment, peripherals]
-  )
-
-  const monthlyLicensesUSD = useMemo(
-    () =>
-      activeLicenses.reduce((sum, l) => {
-        const monthly = l.tipo === 'Annual' ? l.costo_usd / 12 : l.costo_usd
-        return sum + monthly
-      }, 0),
-    [activeLicenses]
-  )
 
   return (
     <Layout>

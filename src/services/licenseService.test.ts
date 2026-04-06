@@ -126,14 +126,14 @@ describe('licenseService.create', () => {
   it('calcula costo_usd con Banxico al crear', async () => {
     const created = { ...licBase, costo_usd: 340 / 17 }
     mockFrom.mockReturnValue(makeBuilder({ data: created, error: null }))
-    const { id: _id, created_at: _c, updated_at: _u, costo_usd: _usd, ...payload } = licBase
+    const { id: _id, created_at: _c, updated_at: _u, costo_mxn: _mxn, ...payload } = licBase
     const result = await licenseService.create(payload)
     expect(result.costo_usd).toBeCloseTo(20)
   })
 
   it('lanza error cuando InsForge falla al crear', async () => {
     mockFrom.mockReturnValue(makeBuilder({ data: null, error: { message: 'insert error' } }))
-    const { id: _id, created_at: _c, updated_at: _u, costo_usd: _usd, ...payload } = licBase
+    const { id: _id, created_at: _c, updated_at: _u, costo_mxn: _mxn, ...payload } = licBase
     await expect(licenseService.create(payload)).rejects.toThrow('insert error')
   })
 })

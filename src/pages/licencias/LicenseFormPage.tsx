@@ -213,7 +213,7 @@ export function LicenseFormPage() {
             <Controller
               name="costo_usd"
               control={control}
-              render={({ field }) => (
+              render={() => (
                 <CurrencyInput
                   valueMXN={0}
                   onChange={(_mxn, usd) => {

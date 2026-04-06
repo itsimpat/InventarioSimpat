@@ -42,7 +42,7 @@ export function useExpiringSoonLicenses(daysAhead: number) {
 export function useCreateLicense() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (data: Omit<License, 'id' | 'created_at' | 'updated_at'>) =>
+    mutationFn: (data: Omit<License, 'id' | 'created_at' | 'updated_at' | 'costo_mxn'>) =>
       licenseService.create(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['licenses'] })

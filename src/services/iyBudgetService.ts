@@ -10,12 +10,8 @@ export const iyBudgetService = {
       .single()
 
     if (error) {
-      // If not found, return null rather than throwing
-      if (error.message?.toLowerCase().includes('not found') ||
-          error.message?.toLowerCase().includes('no rows')) {
-        return null
-      }
-      throw new Error(error.message)
+      // .single() returns 406 when no row exists — treat as not found
+      return null
     }
 
     return data ? (data as IYBudget) : null

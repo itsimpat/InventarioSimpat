@@ -7,14 +7,11 @@ export const iyBudgetService = {
       .from('iy_budgets')
       .select()
       .eq('colaborador_id', collaboratorId)
-      .single()
 
-    if (error) {
-      // .single() returns 406 when no row exists — treat as not found
-      return null
-    }
+    if (error) throw new Error(error.message)
 
-    return data ? (data as IYBudget) : null
+    const rows = data as IYBudget[] | null
+    return rows?.[0] ?? null
   },
 
   async upsert(collaboratorId: string, montoTotal: number): Promise<IYBudget> {

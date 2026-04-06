@@ -14,7 +14,7 @@ const eventBase = {
   id: 'h1',
   entidad_tipo: 'Equipment' as const,
   entidad_id: 'e1',
-  tipo_evento: 'Reasignación' as const,
+  tipo_evento: 'Reassignment' as const,
   descripcion: 'Equipo asignado',
   fecha_inicio: '2025-01-15T10:00:00Z',
   fecha_fin: null,

@@ -25,9 +25,11 @@ const equipBase = {
   costo_mxn: 40000,
   costo_usd: 2352.94,
   especificaciones: { ram: '16GB' },
-  estatus: 'En Bodega' as const,
+  estatus: 'In Storage' as const,
   colaborador_id: null,
   fecha_compra: '2023-01-15',
+  admin_user: null,
+  admin_password: null,
   created_at: '2023-01-15',
   updated_at: '2023-01-15',
 }
@@ -60,8 +62,8 @@ describe('equipmentService.getAll', () => {
   it('aplica filtro de estatus en el query', async () => {
     const builder = makeBuilder({ data: [equipBase], error: null })
     mockFrom.mockReturnValue(builder)
-    await equipmentService.getAll({ status: 'En Bodega' })
-    expect(builder.eq).toHaveBeenCalledWith('estatus', 'En Bodega')
+    await equipmentService.getAll({ status: 'In Storage' })
+    expect(builder.eq).toHaveBeenCalledWith('estatus', 'In Storage')
   })
 
   it('aplica filtro de colaborador en el query', async () => {
@@ -125,31 +127,31 @@ describe('equipmentService.update', () => {
 
 describe('equipmentService.changeStatus', () => {
   it('cambia el estatus del equipo', async () => {
-    const updated = { ...equipBase, estatus: 'Asignado' as const }
+    const updated = { ...equipBase, estatus: 'Assigned' as const }
     mockFrom.mockReturnValue(makeBuilder({ data: updated, error: null }))
-    const result = await equipmentService.changeStatus('e1', 'Asignado')
-    expect(result.estatus).toBe('Asignado')
+    const result = await equipmentService.changeStatus('e1', 'Assigned')
+    expect(result.estatus).toBe('Assigned')
   })
 
   it('lanza error cuando InsForge falla', async () => {
     mockFrom.mockReturnValue(makeBuilder({ data: null, error: { message: 'update error' } }))
-    await expect(equipmentService.changeStatus('e1', 'Vendido')).rejects.toThrow('update error')
+    await expect(equipmentService.changeStatus('e1', 'Sold')).rejects.toThrow('update error')
   })
 })
 
 describe('equipmentService.assign', () => {
   it('asigna el equipo y crea evento en historial', async () => {
-    const assigned = { ...equipBase, colaborador_id: 'c1', estatus: 'Asignado' as const }
+    const assigned = { ...equipBase, colaborador_id: 'c1', estatus: 'Assigned' as const }
     mockFrom
       .mockReturnValueOnce(makeBuilder({ data: equipBase, error: null }))   // getById
       .mockReturnValueOnce(makeBuilder({ data: assigned, error: null }))    // update
     const result = await equipmentService.assign('e1', 'c1', 'admin@simpat.com')
     expect(result.colaborador_id).toBe('c1')
-    expect(result.estatus).toBe('Asignado')
+    expect(result.estatus).toBe('Assigned')
     expect(historyEventService.create).toHaveBeenCalledWith(
       expect.objectContaining({
         entidad_tipo: 'Equipment',
-        tipo_evento: 'Reasignación',
+        tipo_evento: 'Reassignment',
         colaborador_nuevo_id: 'c1',
       })
     )
@@ -158,17 +160,17 @@ describe('equipmentService.assign', () => {
 
 describe('equipmentService.unassign', () => {
   it('desasigna el equipo y lo regresa a bodega', async () => {
-    const equip = { ...equipBase, colaborador_id: 'c1', estatus: 'Asignado' as const }
-    const unassigned = { ...equipBase, colaborador_id: null, estatus: 'En Bodega' as const }
+    const equip = { ...equipBase, colaborador_id: 'c1', estatus: 'Assigned' as const }
+    const unassigned = { ...equipBase, colaborador_id: null, estatus: 'In Storage' as const }
     mockFrom
       .mockReturnValueOnce(makeBuilder({ data: equip, error: null }))       // getById
       .mockReturnValueOnce(makeBuilder({ data: unassigned, error: null }))  // update
     const result = await equipmentService.unassign('e1', 'admin@simpat.com')
     expect(result.colaborador_id).toBeNull()
-    expect(result.estatus).toBe('En Bodega')
+    expect(result.estatus).toBe('In Storage')
     expect(historyEventService.create).toHaveBeenCalledWith(
       expect.objectContaining({
-        tipo_evento: 'Reasignación',
+        tipo_evento: 'Reassignment',
         colaborador_nuevo_id: null,
         colaborador_anterior_id: 'c1',
       })

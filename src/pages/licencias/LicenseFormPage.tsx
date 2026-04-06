@@ -16,7 +16,7 @@ import { fetchExchangeRate } from '../../utils/banxico'
 
 const licenseSchema = z.object({
   nombre_producto: z.string().min(1, 'Product name is required'),
-  tipo: z.enum(['Mensual', 'Anual'], { error: 'Select a type' }),
+  tipo: z.enum(['Monthly', 'Annual'], { error: 'Select a type' }),
   categoria: z.enum(['IY', 'General'], { error: 'Select a category' }),
   costo_mxn: z.number({ error: 'Cost is required' }).min(0.01, 'Cost must be greater than 0'),
   fecha_renovacion: z.string().min(1, 'Renewal date is required'),
@@ -52,7 +52,7 @@ export function LicenseFormPage() {
     resolver: zodResolver(licenseSchema),
     defaultValues: {
       nombre_producto: '',
-      tipo: 'Mensual',
+      tipo: 'Monthly',
       categoria: 'General',
       costo_mxn: 0,
       fecha_renovacion: '',
@@ -182,8 +182,8 @@ export function LicenseFormPage() {
               {...register('tipo')}
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full bg-white"
             >
-              <option value="Mensual">Mensual</option>
-              <option value="Anual">Anual</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Annual">Annual</option>
             </select>
           </FormField>
 

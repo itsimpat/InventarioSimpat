@@ -63,7 +63,7 @@ export function PeripheralsListPage() {
   const navigate = useNavigate()
   const [tipoFilter, setTipoFilter] = useState<PeripheralType | ''>('')
   const [statusFilter, setStatusFilter] = useState<EquipmentStatus | ''>('')
-  const [ownershipFilter, setOwnershipFilter] = useState<'Bodega' | 'Colaborador' | ''>('')
+  const [ownershipFilter, setOwnershipFilter] = useState<'Storage' | 'Collaborator' | ''>('')
 
   const { data: peripherals = [], isLoading } = usePeripheralList({
     tipo: tipoFilter || undefined,
@@ -116,12 +116,12 @@ export function PeripheralsListPage() {
 
           <select
             value={ownershipFilter}
-            onChange={(e) => setOwnershipFilter(e.target.value as 'Bodega' | 'Colaborador' | '')}
+            onChange={(e) => setOwnershipFilter(e.target.value as 'Storage' | 'Collaborator' | '')}
             className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white"
           >
             <option value="">All ownership</option>
-            <option value="Bodega">Bodega</option>
-            <option value="Colaborador">Colaborador</option>
+            <option value="Storage">Storage</option>
+            <option value="Collaborator">Collaborator</option>
           </select>
         </div>
 

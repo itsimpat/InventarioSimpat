@@ -8,15 +8,15 @@ import { usePeripheral, useCreatePeripheral, useUpdatePeripheral } from '../../h
 import { useCollaborators } from '../../hooks/useCollaborators'
 import type { Peripheral, PeripheralType, EquipmentStatus } from '../../types'
 
-const PERIPHERAL_TYPES: PeripheralType[] = ['Monitor', 'Teclado', 'Audífonos', 'Mouse', 'Otro']
+const PERIPHERAL_TYPES: PeripheralType[] = ['Monitor', 'Keyboard', 'Headphones', 'Mouse', 'Other']
 
 const EQUIPMENT_STATUSES: EquipmentStatus[] = [
-  'Asignado',
-  'En Bodega',
-  'En Reparación',
-  'Vendido',
-  'Dado de Baja',
-  'Solicitado',
+  'Assigned',
+  'In Storage',
+  'Under Repair',
+  'Sold',
+  'Decommissioned',
+  'Requested',
 ]
 
 type FormState = {
@@ -39,7 +39,7 @@ const INITIAL_STATE: FormState = {
   costo_mxn: 0,
   costo_usd: 0,
   fecha_compra: new Date().toISOString().split('T')[0],
-  estatus: 'En Bodega',
+  estatus: 'In Storage',
   colaborador_id: '',
 }
 

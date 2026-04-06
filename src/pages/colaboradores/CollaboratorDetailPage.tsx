@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useNavigate, useParams, Link } from 'react-router-dom'
 import { Layout } from '../../components/Layout'
 import { StatusBadge } from '../../components/shared/StatusBadge'
@@ -88,6 +88,22 @@ export function CollaboratorDetailPage() {
   const activeLicenses = licenses.filter((l) => l.activa)
   const inactiveLicenses = licenses.filter((l) => !l.activa)
 
+  const totalEquipmentUSD = useMemo(
+    () =>
+      equipment.reduce((sum, e) => sum + e.costo_usd, 0) +
+      peripherals.reduce((sum, p) => sum + p.costo_usd, 0),
+    [equipment, peripherals]
+  )
+
+  const monthlyLicensesUSD = useMemo(
+    () =>
+      activeLicenses.reduce((sum, l) => {
+        const monthly = l.tipo === 'Annual' ? l.costo_usd / 12 : l.costo_usd
+        return sum + monthly
+      }, 0),
+    [activeLicenses]
+  )
+
   return (
     <Layout>
       <div className="max-w-3xl space-y-6">
@@ -124,6 +140,24 @@ export function CollaboratorDetailPage() {
                 Deactivate
               </button>
             )}
+          </div>
+        </div>
+
+        {/* Investment summary */}
+        <div className="grid grid-cols-2 gap-4">
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Equipment investment</p>
+            <p className="text-2xl font-semibold text-gray-900">{formatUSD(totalEquipmentUSD)}</p>
+            <p className="text-xs text-gray-400 mt-1">
+              {equipment.length} equipment · {peripherals.length} peripherals
+            </p>
+          </div>
+          <div className="bg-white rounded-xl border border-gray-200 p-5">
+            <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Monthly licenses</p>
+            <p className="text-2xl font-semibold text-gray-900">{formatUSD(monthlyLicensesUSD)}</p>
+            <p className="text-xs text-gray-400 mt-1">
+              {activeLicenses.length} active license{activeLicenses.length !== 1 ? 's' : ''}
+            </p>
           </div>
         </div>
 

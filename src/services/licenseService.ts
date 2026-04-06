@@ -1,6 +1,6 @@
 import { insforge } from '../lib/insforge'
 import { fetchExchangeRate } from '../utils/banxico'
-import { convertMXNtoUSD } from '../utils/currency'
+import { convertUSDtoMXN } from '../utils/currency'
 import type { License, LicenseCategory, LicenseType } from '../types'
 
 type LicenseFilters = {
@@ -79,13 +79,13 @@ export const licenseService = {
     return (data ?? []) as License[]
   },
 
-  async create(data: Omit<License, 'id' | 'created_at' | 'updated_at' | 'costo_usd'>): Promise<License> {
+  async create(data: Omit<License, 'id' | 'created_at' | 'updated_at' | 'costo_mxn'>): Promise<License> {
     const rate = await fetchExchangeRate()
-    const costo_usd = convertMXNtoUSD(data.costo_mxn, rate)
+    const costo_mxn = convertUSDtoMXN(data.costo_usd, rate)
 
     const { data: created, error } = await insforge.database
       .from('licenses')
-      .insert({ ...data, costo_usd })
+      .insert({ ...data, costo_mxn })
       .select()
       .single()
 

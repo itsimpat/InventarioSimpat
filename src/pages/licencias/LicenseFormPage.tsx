@@ -11,14 +11,11 @@ import { useToast } from '../../components/shared/Toast'
 import { useLicense, useCreateLicense, useUpdateLicense } from '../../hooks/useLicenses'
 import { useCollaborators } from '../../hooks/useCollaborators'
 import { useIYBudgetSummary } from '../../hooks/useIYBudgetSummary'
-import { convertMXNtoUSD } from '../../utils/currency'
-import { fetchExchangeRate } from '../../utils/banxico'
-
 const licenseSchema = z.object({
   nombre_producto: z.string().min(1, 'Product name is required'),
-  tipo: z.enum(['Monthly', 'Annual'], { error: 'Select a type' }),
+  tipo: z.enum(['Monthly', 'Annual', 'Quarterly'], { error: 'Select a type' }),
   categoria: z.enum(['IY', 'General'], { error: 'Select a category' }),
-  costo_mxn: z.number({ error: 'Cost is required' }).min(0.01, 'Cost must be greater than 0'),
+  costo_usd: z.number({ error: 'Cost is required' }).min(0.01, 'Cost must be greater than 0'),
   fecha_renovacion: z.string().min(1, 'Renewal date is required'),
   colaborador_id: z.string().min(1, 'Collaborator is required'),
   activa: z.boolean(),
@@ -54,7 +51,7 @@ export function LicenseFormPage() {
       nombre_producto: '',
       tipo: 'Monthly',
       categoria: 'General',
-      costo_mxn: 0,
+      costo_usd: 0,
       fecha_renovacion: '',
       colaborador_id: '',
       activa: true,
@@ -67,7 +64,7 @@ export function LicenseFormPage() {
         nombre_producto: existing.nombre_producto,
         tipo: existing.tipo,
         categoria: existing.categoria,
-        costo_mxn: existing.costo_mxn,
+        costo_usd: existing.costo_usd,
         fecha_renovacion: existing.fecha_renovacion.substring(0, 10),
         colaborador_id: existing.colaborador_id,
         activa: existing.activa,
@@ -87,17 +84,11 @@ export function LicenseFormPage() {
 
     // Validate IY budget if categoria = IY
     if (values.categoria === 'IY' && values.colaborador_id) {
-      try {
-        const rate = await fetchExchangeRate()
-        const costoUSD = convertMXNtoUSD(values.costo_mxn, rate)
-        if (!isLoadingBudget && costoUSD > montoDisponible) {
-          setIyBudgetError(
-            `Cost exceeds available IY budget. Available: $${montoDisponible.toFixed(2)} USD`
-          )
-          return
-        }
-      } catch {
-        // If we can't get the rate, allow submit — service will handle
+      if (!isLoadingBudget && values.costo_usd > montoDisponible) {
+        setIyBudgetError(
+          `Cost exceeds available IY budget. Available: $${montoDisponible.toFixed(2)} USD`
+        )
+        return
       }
     }
 
@@ -121,8 +112,7 @@ export function LicenseFormPage() {
           nombre_producto: values.nombre_producto,
           tipo: values.tipo,
           categoria: values.categoria,
-          costo_mxn: values.costo_mxn,
-          costo_usd: 0, // will be overwritten by service
+          costo_usd: values.costo_usd,
           fecha_renovacion: values.fecha_renovacion,
           colaborador_id: values.colaborador_id,
           activa: values.activa,
@@ -184,6 +174,7 @@ export function LicenseFormPage() {
             >
               <option value="Monthly">Monthly</option>
               <option value="Annual">Annual</option>
+              <option value="Quarterly">Quarterly</option>
             </select>
           </FormField>
 
@@ -220,16 +211,16 @@ export function LicenseFormPage() {
 
           {!isEdit && (
             <Controller
-              name="costo_mxn"
+              name="costo_usd"
               control={control}
               render={({ field }) => (
                 <CurrencyInput
-                  valueMXN={field.value}
-                  onChange={(mxn) => {
-                    setValue('costo_mxn', mxn)
+                  valueMXN={0}
+                  onChange={(_mxn, usd) => {
+                    setValue('costo_usd', usd)
                   }}
                   label="Cost"
-                  error={errors.costo_mxn?.message}
+                  error={errors.costo_usd?.message}
                 />
               )}
             />

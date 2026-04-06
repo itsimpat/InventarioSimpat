@@ -44,7 +44,7 @@ type Props = {
 export function CurrencyInput({ valueMXN, onChange, label = 'Costo', error }: Props) {
   const [rate, setRate] = useState<number | null>(getCachedRate())
   const [rateError, setRateError] = useState<string | null>(null)
-  const [currency, setCurrency] = useState<Currency>('MXN')
+  const [currency, setCurrency] = useState<Currency>('USD')
   // raw input value in the selected currency
   const [inputValue, setInputValue] = useState<string>(valueMXN > 0 ? String(valueMXN) : '')
 

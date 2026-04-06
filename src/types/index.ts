@@ -8,7 +8,7 @@ export type EquipmentStatus =
 
 export type PeripheralType = 'Monitor' | 'Keyboard' | 'Headphones' | 'Mouse' | 'Other'
 
-export type LicenseType = 'Monthly' | 'Annual'
+export type LicenseType = 'Monthly' | 'Annual' | 'Quarterly'
 
 export type LicenseCategory = 'IY' | 'General'
 

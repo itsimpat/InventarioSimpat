@@ -11,7 +11,7 @@ import {
   usePeripheral,
   useChangePeripheralStatus,
   useAssignPeripheral,
-  useReturnToBodega,
+  useReturnToStorage,
 } from '../../hooks/usePeripherals'
 import { useCollaborator, useCollaborators } from '../../hooks/useCollaborators'
 import { useAuth } from '../../contexts/AuthContext'
@@ -20,12 +20,12 @@ import { formatDate } from '../../utils/dates'
 import type { EquipmentStatus } from '../../types'
 
 const EQUIPMENT_STATUSES: EquipmentStatus[] = [
-  'Asignado',
-  'En Bodega',
-  'En Reparación',
-  'Vendido',
-  'Dado de Baja',
-  'Solicitado',
+  'Assigned',
+  'In Storage',
+  'Under Repair',
+  'Sold',
+  'Decommissioned',
+  'Requested',
 ]
 
 export function PeripheralDetailPage() {
@@ -40,10 +40,10 @@ export function PeripheralDetailPage() {
 
   const changeStatus = useChangePeripheralStatus()
   const assignPeripheral = useAssignPeripheral()
-  const returnToBodega = useReturnToBodega()
+  const returnToBodega = useReturnToStorage()
 
   const [showStatusModal, setShowStatusModal] = useState(false)
-  const [selectedStatus, setSelectedStatus] = useState<EquipmentStatus>('En Bodega')
+  const [selectedStatus, setSelectedStatus] = useState<EquipmentStatus>('In Storage')
   const [showAssignModal, setShowAssignModal] = useState(false)
   const [selectedCollaborator, setSelectedCollaborator] = useState('')
   const [showReturnModal, setShowReturnModal] = useState(false)
@@ -69,7 +69,7 @@ export function PeripheralDetailPage() {
     )
   }
 
-  const ownership = peripheral.colaborador_id ? 'Colaborador' : 'Bodega'
+  const ownership = peripheral.colaborador_id ? 'Collaborator' : 'Storage'
 
   async function handleChangeStatus() {
     if (!id) return

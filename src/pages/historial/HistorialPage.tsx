@@ -206,7 +206,7 @@ export function HistorialPage() {
   })
 
   const openRepair = events?.find(
-    (e) => e.tipo_evento === 'Reparación' && e.fecha_fin === null
+    (e) => e.tipo_evento === 'Repair' && e.fecha_fin === null
   ) ?? null
 
   const entityNombre =

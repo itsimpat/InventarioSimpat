@@ -16,7 +16,7 @@ const mockFrom = vi.mocked(insforge.database.from)
 const licBase = {
   id: 'l1',
   nombre_producto: 'GitHub Copilot',
-  tipo: 'Mensual' as const,
+  tipo: 'Monthly' as const,
   costo_mxn: 340,
   costo_usd: 20,
   fecha_renovacion: '2025-04-15',
@@ -46,8 +46,8 @@ describe('licenseService.getAll', () => {
   it('aplica filtro de tipo', async () => {
     const builder = makeBuilder({ data: [licBase], error: null })
     mockFrom.mockReturnValue(builder)
-    await licenseService.getAll({ tipo: 'Mensual' })
-    expect(builder.eq).toHaveBeenCalledWith('tipo', 'Mensual')
+    await licenseService.getAll({ tipo: 'Monthly' })
+    expect(builder.eq).toHaveBeenCalledWith('tipo', 'Monthly')
   })
 
   it('aplica filtro de categoria', async () => {

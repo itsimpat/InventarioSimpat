@@ -25,7 +25,7 @@ const periBase = {
   costo_mxn: 8500,
   costo_usd: 500,
   fecha_compra: '2023-06-01',
-  estatus: 'En Bodega' as const,
+  estatus: 'In Storage' as const,
   colaborador_id: null,
   created_at: '2023-06-01',
   updated_at: '2023-06-01',
@@ -50,21 +50,21 @@ describe('peripheralService.getAll', () => {
   it('aplica filtro de estatus en el query', async () => {
     const builder = makeBuilder({ data: [periBase], error: null })
     mockFrom.mockReturnValue(builder)
-    await peripheralService.getAll({ status: 'Asignado' })
-    expect(builder.eq).toHaveBeenCalledWith('estatus', 'Asignado')
+    await peripheralService.getAll({ status: 'Assigned' })
+    expect(builder.eq).toHaveBeenCalledWith('estatus', 'Assigned')
   })
 
   it('filtra por ownership Bodega usando is(null)', async () => {
     const builder = makeBuilder({ data: [periBase], error: null })
     mockFrom.mockReturnValue(builder)
-    await peripheralService.getAll({ ownership: 'Bodega' })
+    await peripheralService.getAll({ ownership: 'Storage' })
     expect(builder.is).toHaveBeenCalledWith('colaborador_id', null)
   })
 
   it('filtra por ownership Colaborador usando not(null)', async () => {
     const builder = makeBuilder({ data: [periBase], error: null })
     mockFrom.mockReturnValue(builder)
-    await peripheralService.getAll({ ownership: 'Colaborador' })
+    await peripheralService.getAll({ ownership: 'Collaborator' })
     expect(builder.not).toHaveBeenCalledWith('colaborador_id', 'is', null)
   })
 
@@ -78,7 +78,7 @@ describe('peripheralService.getAll', () => {
   it('collaboratorId tiene precedencia sobre ownership Bodega', async () => {
     const builder = makeBuilder({ data: [], error: null })
     mockFrom.mockReturnValue(builder)
-    await peripheralService.getAll({ collaboratorId: 'c1', ownership: 'Bodega' })
+    await peripheralService.getAll({ collaboratorId: 'c1', ownership: 'Storage' })
     expect(builder.eq).toHaveBeenCalledWith('colaborador_id', 'c1')
     expect(builder.is).not.toHaveBeenCalled()
   })
@@ -130,16 +130,16 @@ describe('peripheralService.update', () => {
 
 describe('peripheralService.changeStatus', () => {
   it('cambia el estatus', async () => {
-    const updated = { ...periBase, estatus: 'En Reparación' as const }
+    const updated = { ...periBase, estatus: 'Under Repair' as const }
     mockFrom.mockReturnValue(makeBuilder({ data: updated, error: null }))
-    const result = await peripheralService.changeStatus('p1', 'En Reparación')
-    expect(result.estatus).toBe('En Reparación')
+    const result = await peripheralService.changeStatus('p1', 'Under Repair')
+    expect(result.estatus).toBe('Under Repair')
   })
 })
 
 describe('peripheralService.assignToCollaborator', () => {
   it('asigna el periférico y crea evento de historial', async () => {
-    const assigned = { ...periBase, colaborador_id: 'c1', estatus: 'Asignado' as const }
+    const assigned = { ...periBase, colaborador_id: 'c1', estatus: 'Assigned' as const }
     mockFrom
       .mockReturnValueOnce(makeBuilder({ data: periBase, error: null }))    // getById
       .mockReturnValueOnce(makeBuilder({ data: assigned, error: null }))    // update
@@ -148,23 +148,23 @@ describe('peripheralService.assignToCollaborator', () => {
     expect(historyEventService.create).toHaveBeenCalledWith(
       expect.objectContaining({
         entidad_tipo: 'Peripheral',
-        tipo_evento: 'Reasignación',
+        tipo_evento: 'Reassignment',
         colaborador_nuevo_id: 'c1',
       })
     )
   })
 })
 
-describe('peripheralService.returnToBodega', () => {
+describe('peripheralService.returnToStorage', () => {
   it('regresa el periférico a bodega y crea evento de historial', async () => {
-    const assigned = { ...periBase, colaborador_id: 'c1', estatus: 'Asignado' as const }
-    const returned = { ...periBase, colaborador_id: null, estatus: 'En Bodega' as const }
+    const assigned = { ...periBase, colaborador_id: 'c1', estatus: 'Assigned' as const }
+    const returned = { ...periBase, colaborador_id: null, estatus: 'In Storage' as const }
     mockFrom
       .mockReturnValueOnce(makeBuilder({ data: assigned, error: null }))    // getById
       .mockReturnValueOnce(makeBuilder({ data: returned, error: null }))    // update
-    const result = await peripheralService.returnToBodega('p1', 'admin@simpat.com')
+    const result = await peripheralService.returnToStorage('p1', 'admin@simpat.com')
     expect(result.colaborador_id).toBeNull()
-    expect(result.estatus).toBe('En Bodega')
+    expect(result.estatus).toBe('In Storage')
     expect(historyEventService.create).toHaveBeenCalledWith(
       expect.objectContaining({
         colaborador_anterior_id: 'c1',

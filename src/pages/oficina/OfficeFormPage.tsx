@@ -10,7 +10,7 @@ import { useCreateOfficeItem } from '../../hooks/useOfficeItems'
 
 const officeItemSchema = z.object({
   nombre: z.string().min(1, 'Name is required'),
-  categoria: z.enum(['Silla', 'Mesa', 'TV', 'Otro'], { error: 'Select a category' }),
+  categoria: z.enum(['Chair', 'Desk', 'TV', 'Other'], { error: 'Select a category' }),
   marca: z.string().optional(),
   costo_mxn: z.number({ error: 'Cost is required' }).min(0.01, 'Cost must be greater than 0'),
   fecha_compra: z.string().min(1, 'Purchase date is required'),
@@ -34,7 +34,7 @@ export function OfficeFormPage() {
     resolver: zodResolver(officeItemSchema),
     defaultValues: {
       nombre: '',
-      categoria: 'Otro',
+      categoria: 'Other',
       marca: '',
       costo_mxn: 0,
       fecha_compra: '',
@@ -95,10 +95,10 @@ export function OfficeFormPage() {
               {...register('categoria')}
               className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full bg-white"
             >
-              <option value="Silla">Silla</option>
-              <option value="Mesa">Mesa</option>
+              <option value="Chair">Chair</option>
+              <option value="Desk">Desk</option>
               <option value="TV">TV</option>
-              <option value="Otro">Otro</option>
+              <option value="Other">Other</option>
             </select>
           </FormField>
 

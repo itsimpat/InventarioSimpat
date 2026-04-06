@@ -16,7 +16,7 @@ const mockFrom = vi.mocked(insforge.database.from)
 const itemBase = {
   id: 'o1',
   nombre: 'Silla ergonómica',
-  categoria: 'Silla' as const,
+  categoria: 'Chair' as const,
   marca: 'Herman Miller',
   costo_mxn: 15000,
   costo_usd: 882.35,
@@ -38,8 +38,8 @@ describe('officeItemService.getAll', () => {
   it('aplica filtro de categoría en el query', async () => {
     const builder = makeBuilder({ data: [itemBase], error: null })
     mockFrom.mockReturnValue(builder)
-    await officeItemService.getAll({ categoria: 'Silla' })
-    expect(builder.eq).toHaveBeenCalledWith('categoria', 'Silla')
+    await officeItemService.getAll({ categoria: 'Chair' })
+    expect(builder.eq).toHaveBeenCalledWith('categoria', 'Chair')
   })
 
   it('lanza error cuando InsForge falla', async () => {

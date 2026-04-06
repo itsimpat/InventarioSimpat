@@ -6,6 +6,7 @@ export function useIYBudget(collaboratorId: string) {
     queryKey: ['iy_budget', collaboratorId],
     queryFn: () => iyBudgetService.getByCollaboratorId(collaboratorId),
     enabled: !!collaboratorId,
+    retry: false,
   })
 }
 

@@ -1,6 +1,6 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider, QueryCache, MutationCache } from '@tanstack/react-query'
 import { AuthProvider } from './contexts/AuthContext'
 import { ToastProvider } from './components/shared/Toast'
 import { ProtectedRoute } from './components/ProtectedRoute'
@@ -12,8 +12,27 @@ import { CollaboratorsListPage } from './pages/colaboradores/CollaboratorsListPa
 import { CollaboratorFormPage } from './pages/colaboradores/CollaboratorFormPage'
 import { CollaboratorDetailPage } from './pages/colaboradores/CollaboratorDetailPage'
 import { AdminsPage } from './pages/admins/AdminsPage'
+import { insforge } from './lib/insforge'
 
-const queryClient = new QueryClient()
+function isSessionExpiredError(error: unknown): boolean {
+  const msg = error instanceof Error ? error.message.toLowerCase() : ''
+  return msg.includes('jwt') || msg.includes('expired') || msg.includes('unauthorized') || msg.includes('401')
+}
+
+function handleExpiredSession() {
+  insforge.auth.signOut().finally(() => {
+    window.location.href = '/login'
+  })
+}
+
+const queryClient = new QueryClient({
+  queryCache: new QueryCache({
+    onError: (error) => { if (isSessionExpiredError(error)) handleExpiredSession() },
+  }),
+  mutationCache: new MutationCache({
+    onError: (error) => { if (isSessionExpiredError(error)) handleExpiredSession() },
+  }),
+})
 
 // Placeholder for pages not yet created (other agents will replace these)
 const PlaceholderPage = () => (

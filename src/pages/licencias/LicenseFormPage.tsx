@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -7,8 +7,9 @@ import { Layout } from '../../components/Layout'
 import { FormField } from '../../components/shared/FormField'
 import { CurrencyInput } from '../../components/shared/CurrencyInput'
 import { IYBudgetCard } from '../../components/shared/IYBudgetCard'
+import { AutocompleteInput } from '../../components/shared/AutocompleteInput'
 import { useToast } from '../../components/shared/Toast'
-import { useLicense, useCreateLicense, useUpdateLicense } from '../../hooks/useLicenses'
+import { useLicense, useLicenses, useCreateLicense, useUpdateLicense } from '../../hooks/useLicenses'
 import { useCollaborators } from '../../hooks/useCollaborators'
 import { useIYBudgetSummary } from '../../hooks/useIYBudgetSummary'
 const licenseSchema = z.object({
@@ -34,6 +35,12 @@ export function LicenseFormPage() {
   const createMutation = useCreateLicense()
   const updateMutation = useUpdateLicense()
   const { data: collaborators = [] } = useCollaborators({ activo: true })
+  const { data: allLicenses = [] } = useLicenses()
+
+  const productNameSuggestions = useMemo(
+    () => [...new Set(allLicenses.map((l) => l.nombre_producto))].sort(),
+    [allLicenses]
+  )
 
   const [iyBudgetError, setIyBudgetError] = useState<string | null>(null)
 
@@ -159,11 +166,16 @@ export function LicenseFormPage() {
           className="bg-white rounded-xl border border-gray-200 p-6 space-y-4"
         >
           <FormField label="Product name" error={errors.nombre_producto?.message} required>
-            <input
-              {...register('nombre_producto')}
-              type="text"
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
-              placeholder="Ej: GitHub Copilot, Figma..."
+            <Controller
+              name="nombre_producto"
+              control={control}
+              render={({ field }) => (
+                <AutocompleteInput
+                  {...field}
+                  suggestions={productNameSuggestions}
+                  placeholder="Ej: GitHub Copilot, Figma..."
+                />
+              )}
             />
           </FormField>
 

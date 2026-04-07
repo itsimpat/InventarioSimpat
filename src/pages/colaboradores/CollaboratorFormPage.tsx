@@ -42,6 +42,7 @@ export function CollaboratorFormPage() {
   const {
     register,
     handleSubmit,
+    control,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({

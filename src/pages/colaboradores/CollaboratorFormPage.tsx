@@ -1,12 +1,13 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { Layout } from '../../components/Layout'
 import { FormField } from '../../components/shared/FormField'
+import { AutocompleteInput } from '../../components/shared/AutocompleteInput'
 import { useToast } from '../../components/shared/Toast'
-import { useCollaborator, useCreateCollaborator, useUpdateCollaborator } from '../../hooks/useCollaborators'
+import { useCollaborator, useCollaborators, useCreateCollaborator, useUpdateCollaborator } from '../../hooks/useCollaborators'
 
 const collaboratorSchema = z.object({
   nombre: z.string().min(1, 'Name is required'),
@@ -27,10 +28,21 @@ export function CollaboratorFormPage() {
   const { data: existing, isLoading: isLoadingExisting } = useCollaborator(id ?? '')
   const createMutation = useCreateCollaborator()
   const updateMutation = useUpdateCollaborator()
+  const { data: allCollaborators = [] } = useCollaborators()
+
+  const puestoSuggestions = useMemo(
+    () => [...new Set(allCollaborators.map((c) => c.puesto).filter(Boolean))].sort(),
+    [allCollaborators]
+  )
+  const areaSuggestions = useMemo(
+    () => [...new Set(allCollaborators.map((c) => c.area).filter(Boolean))].sort(),
+    [allCollaborators]
+  )
 
   const {
     register,
     handleSubmit,
+    control,
     reset,
     formState: { errors, isSubmitting },
   } = useForm<FormValues>({
@@ -118,20 +130,30 @@ export function CollaboratorFormPage() {
           </FormField>
 
           <FormField label="Area" error={errors.area?.message} required>
-            <input
-              {...register('area')}
-              type="text"
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
-              placeholder="e.g. Engineering, Marketing..."
+            <Controller
+              name="area"
+              control={control}
+              render={({ field }) => (
+                <AutocompleteInput
+                  {...field}
+                  suggestions={areaSuggestions}
+                  placeholder="e.g. Engineering, Marketing..."
+                />
+              )}
             />
           </FormField>
 
           <FormField label="Position" error={errors.puesto?.message} required>
-            <input
-              {...register('puesto')}
-              type="text"
-              className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 w-full"
-              placeholder="e.g. Frontend Developer"
+            <Controller
+              name="puesto"
+              control={control}
+              render={({ field }) => (
+                <AutocompleteInput
+                  {...field}
+                  suggestions={puestoSuggestions}
+                  placeholder="e.g. Frontend Developer"
+                />
+              )}
             />
           </FormField>
 

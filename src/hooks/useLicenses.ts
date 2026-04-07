@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { licenseService } from '../services/licenseService'
 import type { License, LicenseCategory, LicenseType } from '../types'
+import { groupLicensesByProduct } from '../utils/licenseGrouping'
+import type { ProductGroup } from '../utils/licenseGrouping'
 
 type LicenseFilters = {
   collaboratorId?: string
@@ -42,7 +44,7 @@ export function useExpiringSoonLicenses(daysAhead: number) {
 export function useCreateLicense() {
   const queryClient = useQueryClient()
   return useMutation({
-    mutationFn: (data: Omit<License, 'id' | 'created_at' | 'updated_at'>) =>
+    mutationFn: (data: Omit<License, 'id' | 'created_at' | 'updated_at' | 'costo_mxn'>) =>
       licenseService.create(data),
     onSuccess: () => {
       void queryClient.invalidateQueries({ queryKey: ['licenses'] })
@@ -88,4 +90,14 @@ export function useReassignLicense() {
       void queryClient.invalidateQueries({ queryKey: ['license', licenseId] })
     },
   })
+}
+
+export type { ProductGroup }
+
+export function useLicensesByProduct(filters?: LicenseFilters) {
+  const query = useLicenses(filters)
+  return {
+    ...query,
+    data: query.data ? groupLicensesByProduct(query.data) : undefined,
+  }
 }

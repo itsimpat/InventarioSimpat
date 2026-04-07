@@ -4,6 +4,7 @@ import { Layout } from '../../components/Layout'
 import { IYBudgetCard } from '../../components/shared/IYBudgetCard'
 import { ConfirmModal } from '../../components/shared/ConfirmModal'
 import { Modal } from '../../components/shared/Modal'
+import { RenewalBadge } from '../../components/shared/RenewalBadge'
 import { useToast } from '../../components/shared/Toast'
 import {
   useLicense,
@@ -13,32 +14,7 @@ import {
 import { useCollaborators } from '../../hooks/useCollaborators'
 import { useCollaborator } from '../../hooks/useCollaborators'
 import { formatUSD, formatMXN } from '../../utils/currency'
-import { formatDate, daysUntil } from '../../utils/dates'
-
-function RenewalBadge({ fecha }: { fecha: string }) {
-  const days = daysUntil(fecha)
-  const colorClass =
-    days < 7
-      ? 'bg-red-100 text-red-800'
-      : days <= 30
-      ? 'bg-yellow-100 text-yellow-800'
-      : 'bg-green-100 text-green-800'
-
-  const label =
-    days < 0
-      ? `Expired ${Math.abs(days)} day${Math.abs(days) === 1 ? '' : 's'} ago`
-      : days === 0
-      ? 'Expires today'
-      : days === 1
-      ? 'Expires in 1 day'
-      : `Expires in ${days} days`
-
-  return (
-    <span className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${colorClass}`}>
-      {label}
-    </span>
-  )
-}
+import { formatDate } from '../../utils/dates'
 
 export function LicenseDetailPage() {
   const navigate = useNavigate()

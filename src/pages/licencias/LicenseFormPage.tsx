@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -29,6 +29,8 @@ export function LicenseFormPage() {
   const navigate = useNavigate()
   const { id } = useParams<{ id: string }>()
   const isEdit = !!id
+  const [searchParams] = useSearchParams()
+  const productFromQuery = searchParams.get('product') ?? ''
   const { toast } = useToast()
 
   const { data: existing, isLoading: isLoadingExisting } = useLicense(id ?? '')
@@ -88,7 +90,7 @@ export function LicenseFormPage() {
   } = useForm<FormValues>({
     resolver: zodResolver(licenseSchema),
     defaultValues: {
-      nombre_producto: '',
+      nombre_producto: productFromQuery,
       tipo: 'Monthly',
       categoria: 'General',
       costo_usd: 0,

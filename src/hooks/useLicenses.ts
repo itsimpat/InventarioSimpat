@@ -1,6 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { licenseService } from '../services/licenseService'
 import type { License, LicenseCategory, LicenseType } from '../types'
+import { groupLicensesByProduct } from '../utils/licenseGrouping'
+import type { ProductGroup } from '../utils/licenseGrouping'
 
 type LicenseFilters = {
   collaboratorId?: string
@@ -88,4 +90,14 @@ export function useReassignLicense() {
       void queryClient.invalidateQueries({ queryKey: ['license', licenseId] })
     },
   })
+}
+
+export type { ProductGroup }
+
+export function useLicensesByProduct(filters?: LicenseFilters) {
+  const query = useLicenses(filters)
+  return {
+    ...query,
+    data: query.data ? groupLicensesByProduct(query.data) : undefined,
+  }
 }

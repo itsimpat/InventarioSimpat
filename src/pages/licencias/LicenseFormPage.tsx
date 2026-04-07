@@ -43,6 +43,39 @@ export function LicenseFormPage() {
   )
 
   const [iyBudgetError, setIyBudgetError] = useState<string | null>(null)
+  const [currencyInputKey, setCurrencyInputKey] = useState(0)
+  const [prefillCostUSD, setPrefillCostUSD] = useState(0)
+
+  function handleProductNameChange(value: string, fieldOnChange: (v: string) => void) {
+    fieldOnChange(value)
+    if (isEdit || !productNameSuggestions.includes(value)) return
+
+    const matching = allLicenses.filter((l) => l.nombre_producto === value)
+    if (matching.length === 0) return
+
+    const tipos = [...new Set(matching.map((l) => l.tipo))]
+    const categorias = [...new Set(matching.map((l) => l.categoria))]
+    const costos = [...new Set(matching.map((l) => l.costo_usd))]
+
+    const consistentTipo = tipos.length === 1 ? tipos[0] : null
+    if (consistentTipo) setValue('tipo', consistentTipo)
+    if (categorias.length === 1) setValue('categoria', categorias[0])
+
+    if (costos.length === 1) {
+      setValue('costo_usd', costos[0])
+      setPrefillCostUSD(costos[0])
+      setCurrencyInputKey((k) => k + 1)
+    }
+
+    if (consistentTipo) {
+      const today = new Date()
+      const renewal = new Date(today)
+      if (consistentTipo === 'Monthly') renewal.setMonth(renewal.getMonth() + 1)
+      else if (consistentTipo === 'Annual') renewal.setFullYear(renewal.getFullYear() + 1)
+      else if (consistentTipo === 'Quarterly') renewal.setMonth(renewal.getMonth() + 3)
+      setValue('fecha_renovacion', renewal.toISOString().substring(0, 10))
+    }
+  }
 
   const {
     register,
@@ -172,6 +205,7 @@ export function LicenseFormPage() {
               render={({ field }) => (
                 <AutocompleteInput
                   {...field}
+                  onChange={(v) => handleProductNameChange(v, field.onChange)}
                   suggestions={productNameSuggestions}
                   placeholder="Ej: GitHub Copilot, Figma..."
                 />
@@ -227,7 +261,9 @@ export function LicenseFormPage() {
               control={control}
               render={() => (
                 <CurrencyInput
+                  key={currencyInputKey}
                   valueMXN={0}
+                  valueUSD={prefillCostUSD > 0 ? prefillCostUSD : undefined}
                   onChange={(_mxn, usd) => {
                     setValue('costo_usd', usd)
                   }}

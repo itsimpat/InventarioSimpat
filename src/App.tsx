@@ -62,14 +62,17 @@ const PeripheralDetailPage = lazy(() =>
 )
 
 // Lazy imports for Agente 3 — Licencias
-const LicensesListPage = lazy(() =>
-  import('./pages/licencias/LicensesListPage').then((m) => ({ default: m.LicensesListPage })).catch(() => ({ default: PlaceholderPage }))
+const LicensesGalleryPage = lazy(() =>
+  import('./pages/licencias/LicensesGalleryPage').then((m) => ({ default: m.LicensesGalleryPage })).catch(() => ({ default: PlaceholderPage }))
 )
 const LicenseFormPage = lazy(() =>
   import('./pages/licencias/LicenseFormPage').then((m) => ({ default: m.LicenseFormPage })).catch(() => ({ default: PlaceholderPage }))
 )
 const LicenseDetailPage = lazy(() =>
   import('./pages/licencias/LicenseDetailPage').then((m) => ({ default: m.LicenseDetailPage })).catch(() => ({ default: PlaceholderPage }))
+)
+const LicenseProductDashboard = lazy(() =>
+  import('./pages/licencias/LicenseProductDashboard').then((m) => ({ default: m.LicenseProductDashboard })).catch(() => ({ default: PlaceholderPage }))
 )
 
 // Lazy imports for Agente 4 — Oficina, Reportes, Configuración, Historial
@@ -237,7 +240,7 @@ function App() {
                 path="/licenses"
                 element={
                   <ProtectedRoute>
-                    <SuspenseWrapper><LicensesListPage /></SuspenseWrapper>
+                    <SuspenseWrapper><LicensesGalleryPage /></SuspenseWrapper>
                   </ProtectedRoute>
                 }
               />
@@ -246,6 +249,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <SuspenseWrapper><LicenseFormPage /></SuspenseWrapper>
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/licenses/product/:name"
+                element={
+                  <ProtectedRoute>
+                    <SuspenseWrapper><LicenseProductDashboard /></SuspenseWrapper>
                   </ProtectedRoute>
                 }
               />

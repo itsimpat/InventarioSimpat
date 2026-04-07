@@ -66,4 +66,10 @@ describe('groupLicensesByProduct', () => {
   it('returns empty array for empty input', () => {
     expect(groupLicensesByProduct([])).toEqual([])
   })
+
+  it('deduplicates collaboratorIds when same collaborator has multiple active licenses', () => {
+    const l2 = { ...base, id: 'l2' } // same colaborador_id as base ('c1')
+    const result = groupLicensesByProduct([base, l2])
+    expect(result[0].collaboratorIds).toEqual(['c1'])
+  })
 })

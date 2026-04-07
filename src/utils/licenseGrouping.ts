@@ -34,6 +34,7 @@ export function groupLicensesByProduct(licenses: License[]): ProductGroup[] {
       group.activeCount++
       group.totalCostUSD += license.costo_usd
       group.collaboratorIds.push(license.colaborador_id)
+      // ISO 8601 date strings (YYYY-MM-DD) compare correctly lexicographically
       if (!group.nextRenewal || license.fecha_renovacion < group.nextRenewal.date) {
         group.nextRenewal = { date: license.fecha_renovacion, colaborador_id: license.colaborador_id }
       }
@@ -42,7 +43,9 @@ export function groupLicensesByProduct(licenses: License[]): ProductGroup[] {
     }
   }
 
-  return Array.from(map.values()).sort((a, b) =>
-    a.nombre_producto.localeCompare(b.nombre_producto)
-  )
+  const groups = Array.from(map.values())
+  for (const g of groups) {
+    g.collaboratorIds = [...new Set(g.collaboratorIds)]
+  }
+  return groups.sort((a, b) => a.nombre_producto.localeCompare(b.nombre_producto))
 }
